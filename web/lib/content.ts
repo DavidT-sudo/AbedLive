@@ -9,6 +9,7 @@ import {
   liveHighlights,
   openSkyIntro,
   openSkyEditions,
+  topTracks,
   beyondMusicItems,
   contactInfo,
   socialLinks,
@@ -104,6 +105,10 @@ export async function getOpenSkyEditions() {
     .orderBy(asc(openSkyEditions.sortOrder));
 }
 
+export async function getTopTracks() {
+  return db.select().from(topTracks).orderBy(asc(topTracks.sortOrder));
+}
+
 export async function getBeyondMusicItems() {
   return db
     .select()
@@ -143,6 +148,7 @@ export async function getHomepageData() {
     live,
     openSky,
     openSkyPosters,
+    topTracksList,
     beyondMusic,
     contact,
     socials,
@@ -156,6 +162,7 @@ export async function getHomepageData() {
     getLiveHighlights(),
     getOpenSkyIntro(),
     getOpenSkyEditions(),
+    getTopTracks(),
     getBeyondMusicItems(),
     getContactInfo(),
     getSocialLinks(),
@@ -171,6 +178,7 @@ export async function getHomepageData() {
     live,
     openSky,
     openSkyPosters,
+    topTracks: topTracksList,
     beyondMusic,
     contact,
     socials,

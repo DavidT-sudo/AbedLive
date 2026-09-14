@@ -10,6 +10,7 @@ import {
   liveHighlights,
   openSkyIntro,
   openSkyEditions,
+  topTracks,
   beyondMusicItems,
   contactInfo,
   socialLinks,
@@ -100,6 +101,7 @@ async function main() {
       year: 2025,
       isLatest: true,
       coverImageId: coverKgosiJeso.id,
+      spotifyUrl: "https://open.spotify.com/album/4xGLUVS2qFZj55Mixuxo2n",
       sortOrder: 0,
     },
     {
@@ -109,6 +111,7 @@ async function main() {
       note: "Studio",
       year: 2019,
       coverImageId: coverAsYouWill.id,
+      spotifyUrl: "https://open.spotify.com/album/3THhvMSqaPMdKPDB9pa9Ly",
       sortOrder: 1,
     },
     {
@@ -118,9 +121,14 @@ async function main() {
       note: "Live in concert",
       year: 2018,
       coverImageId: coverOTsholofelo.id,
+      spotifyUrl: "https://open.spotify.com/album/5NStkZM40JZTfh4DrP5erv",
       sortOrder: 2,
     },
     {
+      // No spotifyUrl: on Spotify this isn't a distinct release — "Phatsima"
+      // is a track on the O Tsholofelo album there, not a standalone 2017
+      // album. Left as its own release here since that's how it's
+      // documented in Abed's own bio material; don't invent a link for it.
       title: "Phatsima",
       subtitle: "",
       kind: "Album · Debut",
@@ -128,6 +136,35 @@ async function main() {
       year: 2017,
       coverImageId: coverPhatsima.id,
       sortOrder: 3,
+    },
+  ]);
+
+  console.log("Seeding top tracks...");
+  await db.insert(topTracks).values([
+    {
+      title: "Jeso Lefika",
+      spotifyUrl: "https://open.spotify.com/track/4pGpErjrNlONDpun9JitFF",
+      sortOrder: 0,
+    },
+    {
+      title: "Ona Le Nna",
+      spotifyUrl: "https://open.spotify.com/track/1HcWP1xgJTy6DQKyBkGv7N",
+      sortOrder: 1,
+    },
+    {
+      title: "Kgosi Jeso",
+      spotifyUrl: "https://open.spotify.com/track/35MMcM1Qan5GmHTEWofrDR",
+      sortOrder: 2,
+    },
+    {
+      title: "Phatsima",
+      spotifyUrl: "https://open.spotify.com/track/0zWIxm85kHJaRhCQG8YAeM",
+      sortOrder: 3,
+    },
+    {
+      title: "Latela",
+      spotifyUrl: "https://open.spotify.com/track/5aITl6CHsSjoPvvqVR0IgO",
+      sortOrder: 4,
     },
   ]);
 

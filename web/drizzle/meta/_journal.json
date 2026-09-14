@@ -15,6 +15,13 @@
       "when": 1789397397668,
       "tag": "0001_young_professor_monster",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789402715665,
+      "tag": "0002_foamy_maddog",
+      "breakpoints": true
     }
   ]
 }

@@ -1554,6 +1554,76 @@ img {
 }
 
 /* ---------------------------------------------------------------------------
+   Top tracks / Listen — a browsable grid of Spotify track embeds. Shared
+   between themes (components/site/top-tracks.tsx); .os-listen wraps it with
+   the Open Sky heading treatment.
+--------------------------------------------------------------------------- */
+.top-tracks__grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 640px) {
+  .top-tracks__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+@media (min-width: 1100px) {
+  .top-tracks__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.top-tracks__card {
+  background: var(--bg-alt);
+  border: 1px solid var(--ink-14);
+  border-radius: 12px;
+  padding: 10px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.top-tracks__card:hover {
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
+}
+.top-tracks__card .spotify-embed {
+  border-radius: 8px;
+}
+
+.os-listen {
+  padding: 44px var(--gutter);
+  background: var(--bg-alt);
+}
+@media (min-width: 860px) {
+  .os-listen {
+    padding: 96px var(--gutter);
+  }
+}
+.os-listen__head {
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+.os-listen__title {
+  margin-top: 10px;
+  font-family: var(--font-heading);
+  font-size: 30px;
+  color: #fff;
+}
+@media (min-width: 860px) {
+  .os-listen__title {
+    margin-top: 14px;
+    font-size: 44px;
+  }
+}
+.os-listen .top-tracks__card {
+  background: #09090b;
+  border-color: rgba(200, 149, 47, 0.22);
+}
+.os-listen .top-tracks__card:hover {
+  border-color: rgba(200, 149, 47, 0.55);
+}
+
+/* ---------------------------------------------------------------------------
    Purpose break
 --------------------------------------------------------------------------- */
 .purpose-break {

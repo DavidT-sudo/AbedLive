@@ -5,6 +5,7 @@ const CARDS = [
   { href: "/admin/awards", title: "Awards strip", desc: "The four accolades under the hero" },
   { href: "/admin/about", title: "About", desc: "Bio copy, facts and belief quote" },
   { href: "/admin/discography", title: "Discography", desc: "Releases, covers, years" },
+  { href: "/admin/top-tracks", title: "Top tracks", desc: "Browsable song collection (Spotify)" },
   { href: "/admin/live", title: "Live highlights", desc: "Shows and stage credits" },
   { href: "/admin/open-sky", title: "Open Sky Gathering", desc: "Intro copy and edition posters" },
   { href: "/admin/beyond-music", title: "Beyond Music", desc: "Profession, coaching, podcast" },

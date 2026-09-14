@@ -5,6 +5,7 @@ import { Hero } from "@/components/site/hero";
 import { AwardsStrip } from "@/components/site/awards-strip";
 import { About } from "@/components/site/about";
 import { Discography } from "@/components/site/discography";
+import { Listen } from "@/components/site/listen";
 import { PurposeBreak } from "@/components/site/purpose-break";
 import { LiveSection } from "@/components/site/live-section";
 import { BeyondMusic } from "@/components/site/beyond-music";
@@ -13,6 +14,7 @@ import { OpenSkyHero } from "@/components/site/open-sky/hero";
 import { OpenSkyMarquee } from "@/components/site/open-sky/marquee";
 import { OpenSkyStory } from "@/components/site/open-sky/story";
 import { OpenSkyDiscography } from "@/components/site/open-sky/discography";
+import { OpenSkyListen } from "@/components/site/open-sky/listen";
 import { OpenSkyLive } from "@/components/site/open-sky/live";
 import { OpenSkyFooter } from "@/components/site/open-sky/footer";
 
@@ -22,6 +24,7 @@ export const dynamic = "force-dynamic";
 const PRESS_NAV = [
   { href: "#about", label: "About" },
   { href: "#discography", label: "Discography" },
+  { href: "#tracks", label: "Listen" },
   { href: "#live", label: "Live" },
   { href: "#beyond-music", label: "Beyond Music" },
   { href: "#contact", label: "Bookings", emphasize: true },
@@ -53,6 +56,7 @@ export default async function HomePage() {
           <OpenSkyMarquee stats={data.stats} />
           <OpenSkyStory about={data.about} releaseCount={data.discography.length} />
           <OpenSkyDiscography releases={data.discography} />
+          <OpenSkyListen tracks={data.topTracks} />
           <OpenSkyLive openSky={data.openSky} posters={data.openSkyPosters} />
           <BeyondMusic items={data.beyondMusic} />
         </main>
@@ -74,6 +78,7 @@ export default async function HomePage() {
         <AwardsStrip stats={data.stats} />
         <About about={data.about} />
         <Discography releases={data.discography} />
+        <Listen tracks={data.topTracks} />
         <PurposeBreak
           slot={data.purposeBreak}
           tagline={data.contact?.footerTagline || "Purpose in every note"}

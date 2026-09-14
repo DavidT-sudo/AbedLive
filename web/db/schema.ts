@@ -98,6 +98,17 @@ export const releases = pgTable("releases", {
 });
 
 // ---------------------------------------------------------------------------
+// Top tracks — a browsable song collection (Spotify track embeds), separate
+// from the release-level discography above.
+// ---------------------------------------------------------------------------
+export const topTracks = pgTable("top_tracks", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: text("title").notNull(),
+  spotifyUrl: text("spotify_url"),
+  sortOrder: integer("sort_order").notNull().default(0),
+});
+
+// ---------------------------------------------------------------------------
 // Live — highlight cards (Shout Praise, We Praise, ...)
 // ---------------------------------------------------------------------------
 export const liveHighlights = pgTable("live_highlights", {

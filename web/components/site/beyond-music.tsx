@@ -10,7 +10,7 @@ export function BeyondMusic({
     <section className="section section--alt" id="beyond-music">
       <div className="section-head">
         <div className="section-head__title">
-          <span className="section-head__num">04</span>
+          <span className="section-head__num">05</span>
           <span className="section-head__label">BEYOND MUSIC</span>
         </div>
       </div>

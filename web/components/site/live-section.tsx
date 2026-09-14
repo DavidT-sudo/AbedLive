@@ -17,7 +17,7 @@ export function LiveSection({
     <section className="section" id="live">
       <div className="section-head">
         <div className="section-head__title">
-          <span className="section-head__num">03</span>
+          <span className="section-head__num">04</span>
           <span className="section-head__label">LIVE</span>
         </div>
         <span className="section-head__note">Stage &amp; festival</span>

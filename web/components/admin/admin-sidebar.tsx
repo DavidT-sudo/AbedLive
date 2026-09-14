@@ -14,6 +14,7 @@ const NAV = [
       { href: "/admin/awards", label: "Awards strip" },
       { href: "/admin/about", label: "About" },
       { href: "/admin/discography", label: "Discography" },
+      { href: "/admin/top-tracks", label: "Top tracks" },
       { href: "/admin/live", label: "Live highlights" },
       { href: "/admin/open-sky", label: "Open Sky Gathering" },
       { href: "/admin/beyond-music", label: "Beyond Music" },
