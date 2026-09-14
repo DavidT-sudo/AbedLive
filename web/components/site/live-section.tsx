@@ -3,6 +3,7 @@ import type {
   getOpenSkyIntro,
   getOpenSkyEditions,
 } from "@/lib/content";
+import { PosterCarousel } from "@/components/site/poster-carousel";
 
 export function LiveSection({
   highlights,
@@ -44,19 +45,9 @@ export function LiveSection({
               {openSky.ctaLabel}
             </a>
           </div>
-          {posters.length > 0 && (
-            <div className="open-sky__posters">
-              {posters.map((p) => (
-                <div className="open-sky__poster-wrap" key={p.id}>
-                  <img
-                    className="open-sky__poster"
-                    src={p.posterUrl ?? ""}
-                    alt={`Open Sky Gathering ${p.title}`}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="open-sky__posters">
+            <PosterCarousel items={posters} />
+          </div>
         </div>
       )}
     </section>

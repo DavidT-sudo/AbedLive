@@ -56,19 +56,20 @@ export function ScrollSnap() {
     function maybeSnap() {
       const sections = document.querySelectorAll<HTMLElement>(SECTION_SELECTOR);
       const viewportH = window.innerHeight;
-      let best: { top: number; distance: number } | null = null;
+      let bestTop = 0;
+      let bestDistance = Infinity;
 
       sections.forEach((el) => {
         const rect = el.getBoundingClientRect();
-        const target = window.scrollY + rect.top - HEADER_OFFSET;
         const distance = Math.abs(rect.top - HEADER_OFFSET);
-        if (!best || distance < best.distance) {
-          best = { top: target, distance };
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestTop = window.scrollY + rect.top - HEADER_OFFSET;
         }
       });
 
-      if (best && best.distance > 3 && best.distance < viewportH * SNAP_ZONE) {
-        animateTo(Math.max(0, best.top));
+      if (bestDistance > 3 && bestDistance < viewportH * SNAP_ZONE) {
+        animateTo(Math.max(0, bestTop));
       }
     }
 
