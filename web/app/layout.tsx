@@ -33,8 +33,14 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const settings = await getSiteSettings();
-  const theme = settings?.theme || "press";
+  // Falls back to the default theme if the database isn't reachable —
+  // notably during `next build`'s static-generation pass for pages like
+  // /admin/login, which would otherwise fail the whole build whenever the
+  // database happens to be unavailable at build time (e.g. the Docker
+  // builder stage, which never has real database credentials).
+  const theme = await getSiteSettings()
+    .then((settings) => settings?.theme || "press")
+    .catch(() => "press");
 
   return (
     <html

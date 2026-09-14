@@ -30,8 +30,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files (.env.example is the template and IS committed — see below)
 .env*
+!.env.example
 
 # local dev overrides (machine-specific port mappings, etc.)
 docker-compose.override.yml

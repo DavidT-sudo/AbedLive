@@ -47,41 +47,76 @@ There is no public sign-up — the first admin is created with
 
 The app ships as a multi-stage `Dockerfile` (Next.js `output: "standalone"`)
 plus a `docker-compose.yml` with Postgres and SeaweedFS included, so the
-whole stack is self-hosted and open-source end to end.
+whole stack is self-hosted and open-source end to end. `next build` never
+needs a real database connection (see `app/layout.tsx`), so the image
+builds cleanly with no secrets present at build time — every variable
+below is only read at container *runtime*.
 
-1. Copy `.env.example` to `.env` and fill in real secrets. In particular:
-   - `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` must match
-     `docker/seaweedfs-s3-config.json` (replace the `changeme` placeholders
-     in **both** places with the same values).
-   - `S3_PUBLIC_URL` should be the externally-reachable URL for the
-     SeaweedFS S3 gateway + bucket (e.g. behind a reverse proxy at
-     `https://media.abedlive.com/abedlive-media`), not `localhost`.
-   - `DATABASE_URL` / `BETTER_AUTH_URL` should point at the `postgres`
-     service and your real public domain respectively.
+### Required environment variables
 
-2. Bring the stack up:
+| Variable | Notes |
+| --- | --- |
+| `DATABASE_URL` | e.g. `postgresql://abedlive:changeme@postgres:5432/abedlive` — use the Postgres service's name as host inside Docker Compose |
+| `BETTER_AUTH_SECRET` | Generate with `openssl rand -base64 32` |
+| `BETTER_AUTH_URL` | Your real public URL, e.g. `https://abedlive.com` |
+| `S3_ENDPOINT` | e.g. `http://seaweedfs:8333` inside Compose |
+| `S3_REGION` | Any value works for SeaweedFS, e.g. `us-east-1` |
+| `S3_BUCKET` | e.g. `abedlive-media` |
+| `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` | Must match `docker/seaweedfs-s3-config.json` — replace the `changeme` placeholders in **both** places with the same real values |
+| `S3_PUBLIC_URL` | The externally-reachable URL for the bucket, e.g. `https://media.abedlive.com/abedlive-media` — never `localhost` in production |
+| `S3_FORCE_PATH_STYLE` | Keep as `"true"` for SeaweedFS |
+
+`cp .env.example .env` and fill these in — that file lists all of them
+with local-dev defaults.
+
+### Deploying
+
+1. In Coolify: **New Resource → Docker Compose**, point it at this GitHub
+   repo, and set the **Base Directory** to `web` (the app isn't at the repo
+   root — `docker-compose.yml` lives in `web/`). Coolify picks up
+   `docker-compose.yml` from there automatically.
+2. Enter the environment variables above in Coolify's UI — they get
+   injected into the `app` service. Attach your domain (Coolify handles
+   TLS via its built-in reverse proxy).
+3. Deploy. This brings up `postgres`, `seaweedfs`, and `app` — the
+   `migrate` service is intentionally excluded from normal startup (it's
+   profile-gated) since it's a one-off, not a long-running service.
+4. Run the one-off setup commands once, from a shell on the server Coolify
+   deployed to (SSH in, or use Coolify's terminal for that server) — `cd`
+   into the deployment directory Coolify created, then:
 
    ```bash
-   docker compose up -d postgres seaweedfs
    # create the media bucket (SeaweedFS doesn't auto-create it)
    docker compose run --rm seaweedfs weed shell -master=seaweedfs:9333 \
      <<< "s3.bucket.create -name abedlive-media"
+
+   # create tables and seed Abed's real content
    docker compose run --rm migrate
-   docker compose up -d app
-   ```
 
-3. Bootstrap the first admin:
-
-   ```bash
+   # bootstrap the first admin — see below
    docker compose run --rm migrate npm run admin:create -- \
      --email you@example.com --password "..." --name "Your Name"
    ```
 
-**On Coolify:** point a Coolify "Docker Compose" resource at this repo — it
-will pick up `docker-compose.yml` directly. Set the same environment
-variables in Coolify's UI (they're injected into the `app` service),
-attach a domain with Coolify's built-in reverse proxy/TLS, and run the
-`migrate` one-off command from Coolify's terminal the first time.
+You only need to repeat that last block (migrate/seed/admin:create) once,
+on first deploy — future deploys just rebuild and restart `app`.
+
+### Adding the first admin user
+
+There's no public sign-up page by design (this is a small brand site's
+CMS, not a multi-tenant app) — the first admin has to be created directly
+against the database with `npm run admin:create`, shown above for Coolify.
+Locally, or against any other externally-reachable database, it's the same
+command without Docker:
+
+```bash
+DATABASE_URL=... BETTER_AUTH_SECRET=... npm run admin:create -- \
+  --email you@example.com --password "..." --name "Your Name"
+```
+
+After that, sign in at `/admin` and add the rest of the team from
+`/admin/team` — that admin can create further `admin` or `editor` accounts
+through the normal UI, no shell access needed again.
 
 ## Deploying to Vercel instead
 
