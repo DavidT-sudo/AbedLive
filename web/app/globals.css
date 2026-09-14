@@ -65,6 +65,7 @@
 
 html {
   background: var(--bg);
+  scroll-snap-type: y proximity;
 }
 
 body {
@@ -330,15 +331,12 @@ img {
 /* Hero -------------------------------------------------------------------- */
 .os-hero {
   position: relative;
-  height: 760px;
+  min-height: 100vh; /* dvh fallback for browsers without it */
+  min-height: 100dvh;
   overflow: hidden;
   background: #09090b;
   font-family: var(--font-body);
-}
-@media (min-width: 860px) {
-  .os-hero {
-    height: 940px;
-  }
+  scroll-snap-align: start;
 }
 .os-hero__image {
   position: absolute;
@@ -553,11 +551,22 @@ img {
 /* Story --------------------------------------------------------------------- */
 .os-story {
   background: #09090b;
+  min-height: 100vh; /* dvh fallback for browsers without it */
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
 }
 @media (min-width: 860px) {
   .os-story {
     display: grid;
     grid-template-columns: 560px 1fr;
+  }
+  .os-story__copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 .os-story__portrait {
@@ -691,6 +700,12 @@ img {
 .os-discography {
   padding: 44px var(--gutter);
   background: var(--bg-alt);
+  min-height: 100vh; /* dvh fallback for browsers without it */
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
 }
 @media (min-width: 860px) {
   .os-discography {
@@ -800,6 +815,12 @@ img {
   padding: 44px var(--gutter);
   overflow: hidden;
   background: #09090b;
+  min-height: 100vh; /* dvh fallback for browsers without it */
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
 }
 @media (min-width: 860px) {
   .os-live {
@@ -1036,6 +1057,22 @@ img {
   }
 }
 
+/* Anchor-nav clearance for the fixed header on every snap-aligned section. */
+.os-hero,
+.os-story,
+.os-discography,
+.os-live {
+  scroll-margin-top: 64px;
+}
+@media (min-width: 860px) {
+  .os-hero,
+  .os-story,
+  .os-discography,
+  .os-live {
+    scroll-margin-top: 74px;
+  }
+}
+
 /* Beyond Music reuses the shared component; only add the vertical-divider
    treatment this direction wants on wide screens. */
 @media (min-width: 860px) {
@@ -1064,14 +1101,11 @@ img {
 --------------------------------------------------------------------------- */
 .hero {
   position: relative;
-  height: 640px;
+  min-height: 100vh; /* dvh fallback for browsers without it */
+  min-height: 100dvh;
   background: var(--bg-dark);
   overflow: hidden;
-}
-@media (min-width: 860px) {
-  .hero {
-    height: 864px;
-  }
+  scroll-snap-align: start;
 }
 .hero__image {
   position: absolute;
@@ -1214,10 +1248,18 @@ img {
 .section {
   padding: 64px var(--gutter);
   background: var(--bg);
+  min-height: 100vh; /* dvh fallback for browsers without it */
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
+  scroll-margin-top: 64px;
 }
 @media (min-width: 860px) {
   .section {
     padding: 104px var(--gutter) 96px;
+    scroll-margin-top: 74px;
   }
 }
 .section--alt {

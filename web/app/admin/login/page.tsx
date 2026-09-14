@@ -3,6 +3,7 @@
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import "../admin.css";
 
 function LoginForm() {
   const router = useRouter();
@@ -28,12 +29,17 @@ function LoginForm() {
 
   return (
     <form onSubmit={onSubmit} className="admin-auth-card">
-      <h1>Abed Live — Admin</h1>
+      <img className="admin-auth-card__mark" src="/media/signature-black.png" alt="Abed" />
+      <div>
+        <h1>Admin</h1>
+        <p className="admin-auth-card__subtitle">Sign in to edit abedlive.com</p>
+      </div>
       <label>
         Email
         <input
           type="email"
           required
+          autoFocus
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="email"
@@ -63,6 +69,9 @@ export default function LoginPage() {
       <Suspense fallback={null}>
         <LoginForm />
       </Suspense>
+      <a className="admin-auth-shell__back" href="/">
+        ← Back to abedlive.com
+      </a>
     </div>
   );
 }
