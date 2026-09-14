@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
   { href: "#about", label: "About" },
@@ -10,13 +10,57 @@ const NAV_LINKS = [
   { href: "#contact", label: "Bookings", emphasize: true },
 ];
 
-export function SiteHeader({ logoUrl }: { logoUrl: string }) {
+export function SiteHeader({
+  logoUrl,
+  logoUrlLight,
+}: {
+  logoUrl: string;
+  logoUrlLight: string;
+}) {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Mobile only (see globals.css): the header floats transparently over the
+  // hero on landing and only becomes the solid press-sheet bar once the
+  // user has scrolled well past it. Threshold is derived from the hero's
+  // own height so it still makes sense if that content changes.
+  useEffect(() => {
+    const hero = document.getElementById("top");
+    const threshold = hero ? hero.offsetHeight * 0.6 : 320;
+
+    let ticking = false;
+    const update = () => {
+      setScrolled(window.scrollY > threshold);
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Keep the menu's own panel readable — don't leave the bar glassy above it.
+  const solid = scrolled || open;
 
   return (
-    <header className="site-header">
+    <header className="site-header" data-scrolled={solid}>
       <a href="#top" onClick={() => setOpen(false)}>
-        <img className="site-header__logo" src={logoUrl} alt="Abed" />
+        <img
+          className="site-header__logo site-header__logo--dark"
+          src={logoUrl}
+          alt="Abed"
+        />
+        <img
+          className="site-header__logo site-header__logo--light"
+          src={logoUrlLight}
+          alt="Abed"
+        />
       </a>
       <nav className="site-header__nav" aria-label="Primary">
         {NAV_LINKS.map((link) => (

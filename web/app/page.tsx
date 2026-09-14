@@ -17,7 +17,10 @@ export default async function HomePage() {
 
   return (
     <>
-      <SiteHeader logoUrl="/media/signature-black.png" />
+      <SiteHeader
+        logoUrl="/media/signature-black.png"
+        logoUrlLight="/media/signature-white.png"
+      />
       <main>
         <Hero hero={data.hero} />
         <AwardsStrip stats={data.stats} />
