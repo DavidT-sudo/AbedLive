@@ -65,7 +65,11 @@
 
 html {
   background: var(--bg);
-  scroll-snap-type: y proximity;
+  /* Snapping between full-viewport sections is handled by the ScrollSnap
+     component (components/site/scroll-snap.tsx), not native CSS snap —
+     it needs a tunable idle-delay, snap zone and animation speed that
+     scroll-snap-type doesn't expose, so it can settle near a boundary
+     without ever yanking a reader away mid-section. */
 }
 
 body {
@@ -336,7 +340,16 @@ img {
   overflow: hidden;
   background: #09090b;
   font-family: var(--font-body);
-  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 90px var(--gutter) 74px;
+}
+@media (min-width: 860px) {
+  .os-hero {
+    padding: 110px var(--gutter) 90px;
+  }
 }
 .os-hero__image {
   position: absolute;
@@ -393,19 +406,12 @@ img {
   }
 }
 .os-hero__center {
-  position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
-  top: 150px;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-}
-@media (min-width: 860px) {
-  .os-hero__center {
-    top: 190px;
-  }
+  max-width: 100%;
 }
 .os-hero__kicker {
   font-size: 9.5px;
@@ -556,7 +562,6 @@ img {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  scroll-snap-align: start;
 }
 @media (min-width: 860px) {
   .os-story {
@@ -705,7 +710,6 @@ img {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  scroll-snap-align: start;
 }
 @media (min-width: 860px) {
   .os-discography {
@@ -820,7 +824,6 @@ img {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  scroll-snap-align: start;
 }
 @media (min-width: 860px) {
   .os-live {
@@ -1105,7 +1108,6 @@ img {
   min-height: 100dvh;
   background: var(--bg-dark);
   overflow: hidden;
-  scroll-snap-align: start;
 }
 .hero__image {
   position: absolute;
@@ -1253,7 +1255,6 @@ img {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  scroll-snap-align: start;
   scroll-margin-top: 64px;
 }
 @media (min-width: 860px) {

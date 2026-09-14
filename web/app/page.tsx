@@ -1,4 +1,5 @@
 import { getHomepageData } from "@/lib/content";
+import { ScrollSnap } from "@/components/site/scroll-snap";
 import { SiteHeader } from "@/components/site/site-header";
 import { Hero } from "@/components/site/hero";
 import { AwardsStrip } from "@/components/site/awards-strip";
@@ -40,6 +41,7 @@ export default async function HomePage() {
   if (theme === "open-sky") {
     return (
       <>
+        <ScrollSnap />
         <SiteHeader
           logoUrl="/media/signature-white.png"
           logoUrlLight="/media/signature-white.png"
@@ -61,6 +63,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <ScrollSnap />
       <SiteHeader
         logoUrl="/media/signature-black.png"
         logoUrlLight="/media/signature-white.png"
