@@ -19,15 +19,17 @@ services:
   seaweedfs:
     image: chrislusf/seaweedfs:latest
     restart: unless-stopped
+    entrypoint: ["/bin/sh", "/docker/seaweedfs-entrypoint.sh"]
     command:
       - server
       - -dir=/data
       - -s3
       - -s3.config=/etc/seaweedfs/s3.json
       - -s3.port=8333
+    env_file: .env
     volumes:
       - seaweed_data:/data
-      - ./docker/seaweedfs-s3-config.json:/etc/seaweedfs/s3.json:ro
+      - ./docker/seaweedfs-entrypoint.sh:/docker/seaweedfs-entrypoint.sh:ro
     ports:
       # S3 API — expose only if the app runs outside this compose network too.
       - "8333:8333"

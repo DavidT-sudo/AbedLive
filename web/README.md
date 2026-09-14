@@ -56,13 +56,16 @@ below is only read at container *runtime*.
 
 | Variable | Notes |
 | --- | --- |
-| `DATABASE_URL` | e.g. `postgresql://abedlive:changeme@postgres:5432/abedlive` — use the Postgres service's name as host inside Docker Compose |
+| `DATABASE_URL` | Local dev / `docker-compose.yml` only — set this. Building it yourself, e.g. `postgresql://abedlive:changeme@postgres:5432/abedlive`. **Do not set this one in Coolify** — `docker-compose.staging.yaml` builds it for you from `POSTGRES_USER`/`POSTGRES_PASSWORD`/`POSTGRES_DB` below, and a compose-level `environment:` value always wins over one from `env_file`/Coolify anyway, so setting it there would be silently ignored. |
+| `POSTGRES_USER` | Coolify / `docker-compose.staging.yaml` only. Defaults to `abedlive` if unset. |
+| `POSTGRES_PASSWORD` | Coolify / `docker-compose.staging.yaml` only. **Required** — the stack refuses to start without it (no `changeme` default in the staging file). Generate with `openssl rand -base64 24`. |
+| `POSTGRES_DB` | Coolify / `docker-compose.staging.yaml` only. Defaults to `abedlive` if unset. |
 | `BETTER_AUTH_SECRET` | Generate with `openssl rand -base64 32` |
 | `BETTER_AUTH_URL` | Your real public URL, e.g. `https://abedlive.com` |
 | `S3_ENDPOINT` | e.g. `http://seaweedfs:8333` inside Compose |
 | `S3_REGION` | Any value works for SeaweedFS, e.g. `us-east-1` |
 | `S3_BUCKET` | e.g. `abedlive-media` |
-| `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` | Must match `docker/seaweedfs-s3-config.json` — replace the `changeme` placeholders in **both** places with the same real values |
+| `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` | Pick any random values (e.g. `openssl rand -hex 16`, twice) — `seaweedfs` generates its S3 identity config from these at container start (`docker/seaweedfs-entrypoint.sh`), so nothing needs editing by hand and no real key ever gets committed to the repo |
 | `S3_PUBLIC_URL` | The externally-reachable URL for the bucket, e.g. `https://media.abedlive.com/abedlive-media` — never `localhost` in production |
 | `S3_FORCE_PATH_STYLE` | Keep as `"true"` for SeaweedFS |
 
