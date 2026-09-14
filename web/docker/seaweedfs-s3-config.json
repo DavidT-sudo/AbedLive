@@ -1,0 +1,18 @@
+{
+  "identities": [
+    {
+      "name": "abedlive-app",
+      "credentials": [
+        {
+          "accessKey": "changeme",
+          "secretKey": "changeme"
+        }
+      ],
+      "actions": ["Admin", "Read", "Write", "List", "Tagging"]
+    },
+    {
+      "name": "anonymous",
+      "actions": ["Read:abedlive-media"]
+    }
+  ]
+}

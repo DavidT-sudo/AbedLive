@@ -43,11 +43,14 @@ export function TeamManager({ currentUserId }: { currentUserId: string }) {
     e.preventDefault();
     setCreating(true);
     setError(null);
+    // Better Auth's client types default to "user" | "admin"; our server
+    // config uses "editor" | "admin" via defaultRole/adminRoles instead of
+    // full access-control statements, so the literal type doesn't match.
     const { error } = await authClient.admin.createUser({
       name,
       email,
       password,
-      role,
+      role: role as unknown as "admin",
     });
     setCreating(false);
     if (error) {
@@ -62,7 +65,7 @@ export function TeamManager({ currentUserId }: { currentUserId: string }) {
   }
 
   async function onSetRole(userId: string, newRole: string) {
-    await authClient.admin.setRole({ userId, role: newRole });
+    await authClient.admin.setRole({ userId, role: newRole as unknown as "admin" });
     load();
   }
 
