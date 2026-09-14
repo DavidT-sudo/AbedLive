@@ -34,10 +34,12 @@
 #     <PORT>` env var declared on the service (Coolify scans for it) —
 #     that's what was actually missing before, not the ports/expose
 #     choice. `postgres`, internal-only, gets neither.
-#   - `migrate` runs schema migrations automatically on every deploy
-#     (app waits for it to finish, see service_completed_successfully
-#     below) — db:seed is deliberately NOT part of that, it stays a
-#     manual one-time step.
+#   - `migrate` is profile-gated ("tools"), run manually per deploy —
+#     see web/README.md. NOT wired into `up`/app's depends_on: Coolify's
+#     Compose healthcheck monitor currently misreads a one-off job that
+#     exits(0) as "a service went down" and stops the whole stack in
+#     response (open upstream bug, coollabsio/coolify#7115) — that's
+#     what broke every deploy after auto-migrate-on-boot was added here.
 #
 # Required environment variables (set these in Coolify, then redeploy):
 # POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, plus everything already
@@ -111,14 +113,10 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # Runs on every `up`/deploy — applies pending schema migrations, then
-  # exits. `app` won't start until this exits 0 (service_completed_
-  # successfully below), so a bad migration fails the deploy loudly
-  # instead of starting app against a half-migrated schema.
-  # drizzle-kit migrate only applies *pending* migrations, so this is
-  # safe to run unconditionally on every deploy — unlike `db:seed`
-  # (inserts fixed rows, not upsert-safe), which stays a manual,
-  # one-time step: `docker compose run --rm migrate npm run db:seed`.
+  # One-off — see web/README.md for `docker compose run --rm migrate`.
+  # Excluded from normal startup by the "tools" profile: not part of
+  # the monitored stack, so a one-off exit(0) can't be misread as the
+  # whole resource going unhealthy (see header comment).
   migrate:
     build:
       context: .
@@ -130,7 +128,7 @@ services:
       postgres:
         condition: service_healthy
     command: sh -c "npm run db:migrate"
-    restart: "no"
+    profiles: ["tools"]
     mem_limit: 512m
     cpus: "1.0"
 
@@ -151,8 +149,6 @@ services:
         condition: service_healthy
       seaweedfs:
         condition: service_started
-      migrate:
-        condition: service_completed_successfully
     expose:
       - "3000"
     security_opt:

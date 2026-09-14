@@ -97,30 +97,37 @@ There are two compose files:
    TLS via its built-in reverse proxy) and a second domain to `seaweedfs`
    for `S3_PUBLIC_URL` (media is loaded straight from the S3 gateway in the
    browser, never proxied through `app`).
-3. Deploy. This brings up `postgres`, `seaweedfs`, `migrate`, then `app`
-   — `migrate` applies pending schema migrations on every deploy and
-   `app` won't start until it exits successfully, so a bad migration
-   fails the deploy loudly instead of running against a stale schema.
-4. First deploy only, run these two one-off commands from a shell on the
-   server Coolify deployed to (SSH in, or use Coolify's terminal for that
+3. Deploy. This brings up `postgres`, `seaweedfs`, and `app` — `migrate`
+   is intentionally excluded from normal startup (it's profile-gated).
+   Coolify's Docker Compose healthcheck monitor currently misreads a
+   one-off job that exits(0) as "a service went down" and stops the
+   whole stack in response (open upstream bug,
+   [coollabsio/coolify#7115](https://github.com/coollabsio/coolify/issues/7115)),
+   so — unlike plain `docker-compose.yml` — migrations here are run
+   manually, every deploy that changes the schema, not automatically.
+4. Run the setup commands once per deploy, from a shell on the server
+   Coolify deployed to (SSH in, or use Coolify's terminal for that
    server) — `cd` into the deployment directory Coolify created, then:
 
    ```bash
-   # create the media bucket (SeaweedFS doesn't auto-create it)
+   # apply pending schema migrations — every deploy that changes the schema
+   docker compose run --rm migrate
+
+   # first deploy only: create the media bucket (SeaweedFS doesn't auto-create it)
    docker compose run --rm seaweedfs weed shell -master=seaweedfs:9333 \
      <<< "s3.bucket.create -name abedlive-media"
 
-   # seed Abed's real content — not upsert-safe, run this once only
+   # first deploy only: seed Abed's real content — not upsert-safe, run once only
    docker compose run --rm migrate npm run db:seed
 
-   # bootstrap the first admin — see below
+   # first deploy only: bootstrap the first admin — see below
    docker compose run --rm migrate npm run admin:create -- \
      --email you@example.com --password "..." --name "Your Name"
    ```
 
-You only need to repeat that block (bucket/seed/admin:create) once, on
-first deploy — every deploy after that just needs a redeploy, migrations
-run automatically.
+The bucket/seed/admin:create block only runs once, on first deploy —
+but `docker compose run --rm migrate` needs to be repeated after every
+deploy that adds a new migration.
 
 ### Adding the first admin user
 
