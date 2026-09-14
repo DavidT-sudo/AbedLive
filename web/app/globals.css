@@ -167,6 +167,7 @@ img {
 @media (min-width: 860px) {
   .site-header__nav {
     display: flex;
+    align-items: center;
     gap: 40px;
     font-size: 10.5px;
     letter-spacing: 0.24em;
@@ -765,6 +766,41 @@ img {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
+  display: block;
+}
+.os-record__art--playable {
+  cursor: pointer;
+}
+.os-record__play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(9, 9, 11, 0.4);
+  color: #fff;
+  font-size: 18px;
+}
+@media (min-width: 860px) {
+  .os-record__play {
+    font-size: 24px;
+  }
+}
+@media (hover: hover) {
+  .os-record__play {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .os-record__art--playable:hover .os-record__play,
+  .os-record__art--playable:focus-visible .os-record__play {
+    opacity: 1;
+  }
+}
+.os-record--active .os-record__art {
+  border-color: var(--accent);
+}
+.os-record--active .os-record__play {
+  opacity: 1;
 }
 .os-record__badge {
   position: absolute;
@@ -1116,7 +1152,7 @@ img {
   height: 100%;
   object-fit: cover;
   object-position: 50% 20%;
-  filter: grayscale(1) contrast(1.08);
+  filter: contrast(1.08);
 }
 .hero__scrim {
   position: absolute;
@@ -1462,23 +1498,23 @@ img {
     padding: 26px 0;
   }
 }
-.release-embed {
-  padding-bottom: 16px;
-  max-width: 420px;
+.release-row--playable {
+  cursor: pointer;
 }
-@media (min-width: 860px) {
-  .release-embed {
-    padding-bottom: 26px;
-    margin-left: 146px;
-  }
+.release-row--active {
+  background: var(--ink-04, rgba(0, 0, 0, 0.03));
+}
+.release-row__cover-wrap {
+  position: relative;
+  flex: none;
+  overflow: hidden;
 }
 .release-row__cover {
   width: 68px;
   height: 68px;
   object-fit: cover;
-  flex: none;
-  filter: grayscale(1);
-  transition: filter 0.45s ease;
+  display: block;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
 }
 @media (min-width: 860px) {
   .release-row__cover {
@@ -1486,8 +1522,37 @@ img {
     height: 130px;
   }
 }
-.release-row:hover .release-row__cover {
-  filter: grayscale(0);
+.release-row--playable:hover .release-row__cover,
+.release-row--active .release-row__cover {
+  transform: scale(1.08);
+}
+.release-row__play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 13px;
+}
+@media (min-width: 860px) {
+  .release-row__play {
+    font-size: 18px;
+  }
+}
+@media (hover: hover) {
+  .release-row__play {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .release-row--playable:hover .release-row__play,
+  .release-row--playable:focus-visible .release-row__play {
+    opacity: 1;
+  }
+}
+.release-row--active .release-row__play {
+  opacity: 1;
 }
 .release-row__title {
   flex: 1;
@@ -1554,6 +1619,112 @@ img {
 }
 
 /* ---------------------------------------------------------------------------
+   Spotify drawer — a persistent, dismissible mini-player. Shared between
+   both themes/discography grids (components/site/spotify-drawer.tsx).
+   Docked full-width at the bottom on phones; a floating card pinned to the
+   bottom-right on wide screens, so it never disturbs the page layout it
+   floats over and stays open until the visitor closes it.
+--------------------------------------------------------------------------- */
+.spotify-drawer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 300;
+  background: #0d0d0d;
+  color: #fff;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.35);
+  animation: spotify-drawer-in 0.3s ease;
+  overflow: hidden;
+}
+@keyframes spotify-drawer-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@media (min-width: 860px) {
+  .spotify-drawer {
+    left: auto;
+    right: 24px;
+    bottom: 24px;
+    width: 380px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  }
+}
+.spotify-drawer__handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  cursor: ns-resize;
+  touch-action: none;
+}
+@media (min-width: 860px) {
+  .spotify-drawer__handle {
+    cursor: row-resize;
+  }
+}
+.spotify-drawer__grip {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  transition: background-color 0.2s ease;
+}
+.spotify-drawer__handle:hover .spotify-drawer__grip,
+.spotify-drawer__handle:focus-visible .spotify-drawer__grip {
+  background: rgba(255, 255, 255, 0.6);
+}
+.spotify-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 2px 16px 12px;
+}
+.spotify-drawer__info {
+  min-width: 0;
+}
+.spotify-drawer__title {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.spotify-drawer__subtitle {
+  margin-top: 2px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+.spotify-drawer__close {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+.spotify-drawer__close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.spotify-drawer__body {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ---------------------------------------------------------------------------
    Top tracks / Listen — a browsable grid of Spotify track embeds. Shared
    between themes (components/site/top-tracks.tsx); .os-listen wraps it with
    the Open Sky heading treatment.
@@ -1577,9 +1748,9 @@ img {
 }
 .top-tracks__card {
   background: var(--bg-alt);
-  border: 1px solid var(--ink-14);
-  border-radius: 12px;
-  padding: 10px;
+  /* border: 1px solid var(--ink-14);
+  border-radius: 12px; */
+  padding: 0px;
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 .top-tracks__card:hover {
@@ -1801,20 +1972,24 @@ img {
     gap: 20px;
   }
 }
-.open-sky__poster {
+.open-sky__poster-wrap {
   width: calc(33.333% - 8px);
   aspect-ratio: 4 / 5;
-  object-fit: cover;
-  filter: grayscale(1);
-  transition: filter 0.45s ease;
+  overflow: hidden;
 }
 @media (min-width: 860px) {
-  .open-sky__poster {
+  .open-sky__poster-wrap {
     width: calc(33.333% - 14px);
   }
 }
-.open-sky__poster:hover {
-  filter: grayscale(0);
+.open-sky__poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.open-sky__poster-wrap:hover .open-sky__poster {
+  transform: scale(1.08);
 }
 
 /* ---------------------------------------------------------------------------

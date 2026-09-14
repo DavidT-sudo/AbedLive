@@ -47,12 +47,13 @@ export function LiveSection({
           {posters.length > 0 && (
             <div className="open-sky__posters">
               {posters.map((p) => (
-                <img
-                  key={p.id}
-                  className="open-sky__poster"
-                  src={p.posterUrl ?? ""}
-                  alt={`Open Sky Gathering ${p.title}`}
-                />
+                <div className="open-sky__poster-wrap" key={p.id}>
+                  <img
+                    className="open-sky__poster"
+                    src={p.posterUrl ?? ""}
+                    alt={`Open Sky Gathering ${p.title}`}
+                  />
+                </div>
               ))}
             </div>
           )}
