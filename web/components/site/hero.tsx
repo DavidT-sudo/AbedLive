@@ -1,0 +1,34 @@
+import type { getHero } from "@/lib/content";
+
+export function Hero({ hero }: { hero: Awaited<ReturnType<typeof getHero>> }) {
+  if (!hero) return null;
+  return (
+    <section className="hero" id="top">
+      {hero.imageUrl && (
+        <img
+          className="hero__image"
+          src={hero.imageUrl}
+          alt={hero.imageAlt || ""}
+        />
+      )}
+      <div className="hero__scrim" />
+      <div className="hero__title">
+        <div className="hero__title-line">{hero.titleLine1}</div>
+        <div className="hero__title-line">{hero.titleLine2}</div>
+        <div className="hero__kicker">{hero.kicker}</div>
+      </div>
+      <div className="hero__meta">
+        <div className="hero__meta-block">
+          <span>{hero.locationLine}</span>
+          <span>{hero.genreLine}</span>
+        </div>
+        <div className="hero__meta-block hero__meta-block--right">
+          <span>{hero.releaseNote}</span>
+          <a className="hero__cta" href={hero.releaseCtaHref}>
+            {hero.releaseCtaLabel}
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
