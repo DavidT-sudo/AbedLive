@@ -1,0 +1,1 @@
+ALTER TABLE "releases" ADD COLUMN "spotify_url" text;
