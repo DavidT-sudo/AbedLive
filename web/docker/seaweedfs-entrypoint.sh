@@ -26,4 +26,11 @@ cat > /etc/seaweedfs/s3.json <<EOF
 }
 EOF
 
+# Accept both `weed shell ...` (explicit, e.g. `docker compose run
+# seaweedfs weed shell ...`) and `server ...` (implicit, this service's
+# own `command:`) without double-prefixing "weed" — matches the base
+# image's own entrypoint behavior that this script replaces.
+if [ "${1:-}" = "weed" ]; then
+  shift
+fi
 exec weed "$@"
