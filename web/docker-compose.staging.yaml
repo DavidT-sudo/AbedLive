@@ -1,0 +1,142 @@
+# Production-hardened compose file, meant to be hosted as a Coolify
+# "Docker Compose" resource (Base Directory: web). This is the
+# staging/production counterpart to docker-compose.yml, which stays
+# focused on local development — see web/README.md for the local setup
+# and the full Coolify deployment walkthrough (bucket creation, migrate,
+# admin:create), which applies here unchanged.
+#
+# What's different from docker-compose.yml:
+#   - A separate Compose project name (`AbedLive-staging`) so this
+#     stack's containers, network and volumes never collide with another
+#     stack (e.g. a real `production` deploy) on the same Docker host.
+#   - Postgres credentials come from environment variables you set in
+#     Coolify's UI (POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB)
+#     instead of the committed `changeme` dev default — the app and
+#     migrate services build DATABASE_URL from the same variables, so
+#     there's exactly one place to change the password.
+#   - Every long-running service gets a health check, a memory/CPU
+#     ceiling, rotated JSON logging (so a runaway container can't fill
+#     the host's disk), and `no-new-privileges` as a baseline hardening
+#     default.
+#   - `app` and `migrate` already build through the same multi-stage,
+#     `output: standalone` Dockerfile used locally (non-root user,
+#     production `next build`); the image also carries its own
+#     HEALTHCHECK now, which `docker ps` / Coolify picks up directly.
+#
+# Required environment variables (set these in Coolify, then redeploy):
+# POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, plus everything already
+# listed in web/README.md (BETTER_AUTH_SECRET, BETTER_AUTH_URL, S3_*).
+
+name: AbedLive-staging
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-abedlive}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in Coolify's environment variables}
+      POSTGRES_DB: ${POSTGRES_DB:-abedlive}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-abedlive}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    mem_reservation: 256m
+    cpus: "0.5"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  seaweedfs:
+    image: chrislusf/seaweedfs:latest
+    restart: unless-stopped
+    command:
+      - server
+      - -dir=/data
+      - -s3
+      - -s3.config=/etc/seaweedfs/s3.json
+      - -s3.port=8333
+    volumes:
+      - seaweed_data:/data
+      - ./docker/seaweedfs-s3-config.json:/etc/seaweedfs/s3.json:ro
+    ports:
+      # The S3 gateway has to stay reachable from the public internet:
+      # the browser loads media straight from S3_PUBLIC_URL, it's never
+      # proxied through `app`. Attach a domain to this service in
+      # Coolify (e.g. media.abedlive.com) the same way you do for `app`.
+      - "8333:8333"
+    healthcheck:
+      # Hits the master's built-in status page (always on, no auth) —
+      # not the S3 API itself, since that 403s without credentials.
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:9333/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    mem_reservation: 256m
+    cpus: "0.5"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # One-off setup (migrate + seed), not a long-running service — see
+  # web/README.md for `docker compose run --rm migrate`. Deliberately
+  # excluded from normal startup by the "tools" profile.
+  migrate:
+    build:
+      context: .
+      target: builder
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-abedlive}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in Coolify's environment variables}@postgres:5432/${POSTGRES_DB:-abedlive}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "npm run db:migrate && npm run db:seed"
+    profiles: ["tools"]
+    mem_limit: 512m
+    cpus: "1.0"
+
+  app:
+    build:
+      context: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-abedlive}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in Coolify's environment variables}@postgres:5432/${POSTGRES_DB:-abedlive}
+      S3_ENDPOINT: http://seaweedfs:8333
+    depends_on:
+      postgres:
+        condition: service_healthy
+      seaweedfs:
+        condition: service_started
+    ports:
+      - "3000:3000"
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    mem_reservation: 256m
+    cpus: "1.0"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  postgres_data:
+  seaweed_data:

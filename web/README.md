@@ -71,13 +71,29 @@ with local-dev defaults.
 
 ### Deploying
 
+There are two compose files:
+
+- `docker-compose.yml` — local development (what the steps above use).
+- `docker-compose.staging.yaml` — the staging/production one, for Coolify.
+  Same three services, but every long-running container gets a health
+  check, a memory/CPU ceiling, rotated logging, and `no-new-privileges`;
+  Postgres's credentials come from `POSTGRES_USER` / `POSTGRES_PASSWORD` /
+  `POSTGRES_DB` env vars instead of the committed `changeme` dev default
+  (the compose file refuses to start without `POSTGRES_PASSWORD` set); and
+  it runs under its own Compose project name (`AbedLive-staging`) so it
+  never collides with another stack on the same host. The app/migrate
+  images are the same multi-stage `Dockerfile` either way — it now also
+  carries its own `HEALTHCHECK`.
+
 1. In Coolify: **New Resource → Docker Compose**, point it at this GitHub
    repo, and set the **Base Directory** to `web` (the app isn't at the repo
-   root — `docker-compose.yml` lives in `web/`). Coolify picks up
-   `docker-compose.yml` from there automatically.
-2. Enter the environment variables above in Coolify's UI — they get
-   injected into the `app` service. Attach your domain (Coolify handles
-   TLS via its built-in reverse proxy).
+   root) and **Docker Compose Location** to `docker-compose.staging.yaml`.
+2. Enter the environment variables above — plus `POSTGRES_USER`,
+   `POSTGRES_PASSWORD`, `POSTGRES_DB` — in Coolify's UI; they get injected
+   into the relevant services. Attach your domain to `app` (Coolify handles
+   TLS via its built-in reverse proxy) and a second domain to `seaweedfs`
+   for `S3_PUBLIC_URL` (media is loaded straight from the S3 gateway in the
+   browser, never proxied through `app`).
 3. Deploy. This brings up `postgres`, `seaweedfs`, and `app` — the
    `migrate` service is intentionally excluded from normal startup (it's
    profile-gated) since it's a one-off, not a long-running service.
