@@ -58,7 +58,7 @@ below is only read at container *runtime*.
 | --- | --- |
 | `DATABASE_URL` | Local dev / `docker-compose.yml` only — set this. Building it yourself, e.g. `postgresql://abedlive:changeme@postgres:5432/abedlive`. **Do not set this one in Coolify** — `docker-compose.staging.yaml` builds it for you from `POSTGRES_USER`/`POSTGRES_PASSWORD`/`POSTGRES_DB` below, and a compose-level `environment:` value always wins over one from `env_file`/Coolify anyway, so setting it there would be silently ignored. |
 | `POSTGRES_USER` | Coolify / `docker-compose.staging.yaml` only. Defaults to `abedlive` if unset. |
-| `POSTGRES_PASSWORD` | Coolify / `docker-compose.staging.yaml` only. **Required** — the stack refuses to start without it (no `changeme` default in the staging file). Generate with `openssl rand -base64 24`. |
+| `POSTGRES_PASSWORD` | Coolify / `docker-compose.staging.yaml` only. **Required** — the stack refuses to start without it (no `changeme` default in the staging file). Generate with `openssl rand -hex 24` — **hex, not base64**: this value gets spliced straight into a `postgresql://user:PASSWORD@host/db` connection string, and base64's `/`/`+`/`=` characters corrupt that URL (looks like "wrong password" but isn't). |
 | `POSTGRES_DB` | Coolify / `docker-compose.staging.yaml` only. Defaults to `abedlive` if unset. |
 | `BETTER_AUTH_SECRET` | Generate with `openssl rand -base64 32` |
 | `BETTER_AUTH_URL` | Your real public URL, e.g. `https://abedlive.com` |
