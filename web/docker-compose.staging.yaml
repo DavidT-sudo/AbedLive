@@ -26,10 +26,12 @@
 #     from S3_ACCESS_KEY_ID/S3_SECRET_ACCESS_KEY (docker/seaweedfs-
 #     entrypoint.sh) instead of being a static file with real keys
 #     committed to the repo.
-#   - `app` and `seaweedfs` use `expose:`, not `ports:` — reachable to
-#     Coolify's proxy over the internal Docker network, never bound to a
-#     host port, so staging and production can run on the same server
-#     without fighting over host port 3000/8333.
+#   - `app` and `seaweedfs` (the two services that get a public domain)
+#     use `ports:`, matching every other working Coolify Docker Compose
+#     resource on this server — Coolify's proxy needs that entry to know
+#     what to attach a domain to; `expose:`-only doesn't register a
+#     route at all ("no available server"). `postgres`, internal-only,
+#     gets neither.
 #   - `migrate` runs schema migrations automatically on every deploy
 #     (app waits for it to finish, see service_completed_successfully
 #     below) — db:seed is deliberately NOT part of that, it stays a
@@ -81,15 +83,14 @@ services:
     volumes:
       - seaweed_data:/data
       - ./docker/seaweedfs-entrypoint.sh:/docker/seaweedfs-entrypoint.sh:ro
-    expose:
-      # Not published to the host — Coolify's proxy reaches this over the
-      # internal Docker network, so multiple stacks (staging + production)
-      # on one host never fight over the same host port. The S3 gateway
-      # still needs to be reachable from the public internet (the browser
-      # loads media straight from S3_PUBLIC_URL, never proxied through
-      # `app`): attach a domain to this service in Coolify (e.g.
+    ports:
+      # Coolify's proxy needs this published to attach a domain to the
+      # service — see the header comment. The S3 gateway has to be
+      # reachable from the public internet either way (the browser loads
+      # media straight from S3_PUBLIC_URL, never proxied through `app`):
+      # attach a domain to this service in Coolify (e.g.
       # media.abedlive.com) the same way you do for `app`.
-      - "8333"
+      - "8333:8333"
     healthcheck:
       # Hits the master's built-in status page (always on, no auth) —
       # not the S3 API itself, since that 403s without credentials.
@@ -148,14 +149,10 @@ services:
         condition: service_started
       migrate:
         condition: service_completed_successfully
-    expose:
-      # Not published to the host — Coolify's proxy reaches this over the
-      # internal Docker network. Publishing a fixed host port here would
-      # mean only one deploy (staging OR production) could ever bind it
-      # at a time on a shared host — that's the "port is already
-      # allocated" failure this replaces. Attach your domain to this
-      # service in Coolify; that's what actually exposes it publicly.
-      - "3000"
+    ports:
+      # Coolify's proxy needs this published to attach a domain to the
+      # service — see the header comment.
+      - "3000:3000"
     security_opt:
       - no-new-privileges:true
     mem_limit: 512m
