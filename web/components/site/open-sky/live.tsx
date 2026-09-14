@@ -1,4 +1,5 @@
 import type { getOpenSkyIntro, getOpenSkyEditions } from "@/lib/content";
+import { PosterCarousel } from "@/components/site/poster-carousel";
 
 export function OpenSkyLive({
   openSky,
@@ -30,19 +31,9 @@ export function OpenSkyLive({
             </a>
           </div>
         </div>
-        {posters.length > 0 && (
-          <div className="os-live__posters">
-            {posters.map((p, i) => (
-              <img
-                key={p.id}
-                className="os-live__poster"
-                data-offset={i === 1 ? true : undefined}
-                src={p.posterUrl ?? ""}
-                alt={`Open Sky Gathering ${p.title}`}
-              />
-            ))}
-          </div>
-        )}
+        <div className="os-live__posters">
+          <PosterCarousel items={posters} />
+        </div>
       </div>
     </section>
   );
