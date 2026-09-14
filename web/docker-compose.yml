@@ -34,6 +34,10 @@ services:
       # S3 API — expose only if the app runs outside this compose network too.
       - "8333:8333"
 
+  # Runs on every `up` — applies pending schema migrations, then exits;
+  # `app` waits for it to finish (service_completed_successfully below).
+  # db:seed is NOT part of this — it's not upsert-safe, so it stays a
+  # manual one-time step: `docker compose run --rm migrate npm run db:seed`.
   migrate:
     build:
       context: .
@@ -42,8 +46,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: sh -c "npm run db:migrate && npm run db:seed"
-    profiles: ["tools"]
+    command: sh -c "npm run db:migrate"
+    restart: "no"
 
   app:
     build:
@@ -58,6 +62,8 @@ services:
         condition: service_healthy
       seaweedfs:
         condition: service_started
+      migrate:
+        condition: service_completed_successfully
     ports:
       - "3000:3000"
 

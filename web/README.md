@@ -97,28 +97,30 @@ There are two compose files:
    TLS via its built-in reverse proxy) and a second domain to `seaweedfs`
    for `S3_PUBLIC_URL` (media is loaded straight from the S3 gateway in the
    browser, never proxied through `app`).
-3. Deploy. This brings up `postgres`, `seaweedfs`, and `app` — the
-   `migrate` service is intentionally excluded from normal startup (it's
-   profile-gated) since it's a one-off, not a long-running service.
-4. Run the one-off setup commands once, from a shell on the server Coolify
-   deployed to (SSH in, or use Coolify's terminal for that server) — `cd`
-   into the deployment directory Coolify created, then:
+3. Deploy. This brings up `postgres`, `seaweedfs`, `migrate`, then `app`
+   — `migrate` applies pending schema migrations on every deploy and
+   `app` won't start until it exits successfully, so a bad migration
+   fails the deploy loudly instead of running against a stale schema.
+4. First deploy only, run these two one-off commands from a shell on the
+   server Coolify deployed to (SSH in, or use Coolify's terminal for that
+   server) — `cd` into the deployment directory Coolify created, then:
 
    ```bash
    # create the media bucket (SeaweedFS doesn't auto-create it)
    docker compose run --rm seaweedfs weed shell -master=seaweedfs:9333 \
      <<< "s3.bucket.create -name abedlive-media"
 
-   # create tables and seed Abed's real content
-   docker compose run --rm migrate
+   # seed Abed's real content — not upsert-safe, run this once only
+   docker compose run --rm migrate npm run db:seed
 
    # bootstrap the first admin — see below
    docker compose run --rm migrate npm run admin:create -- \
      --email you@example.com --password "..." --name "Your Name"
    ```
 
-You only need to repeat that last block (migrate/seed/admin:create) once,
-on first deploy — future deploys just rebuild and restart `app`.
+You only need to repeat that block (bucket/seed/admin:create) once, on
+first deploy — every deploy after that just needs a redeploy, migrations
+run automatically.
 
 ### Adding the first admin user
 
