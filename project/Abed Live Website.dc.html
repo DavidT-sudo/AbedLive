@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#e8e5df;font-family:Archivo,system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+a:hover{color:inherit}
+.dv-turn{padding:44px 48px 36px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 22px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px}
+.dv-tname{font:600 13px/1.2 Archivo,sans-serif;color:#1a1a1a}
+.dv-opts{display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:11px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px}
+.dv-olabel{display:flex;align-items:baseline;gap:9px;font:400 11.5px/1.3 Archivo,sans-serif;color:rgba(0,0,0,.55)}
+.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.1);box-shadow:0 2px 14px rgba(0,0,0,.09);overflow:hidden}
+.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}
+.dv-next{margin:26px 0 0;font:12px/1.6 Archivo,sans-serif;color:rgba(0,0,0,.5)}
+.dv-cap{font:400 10.5px/1 Archivo,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(0,0,0,.4)}
+@keyframes abmarq{to{transform:translateX(-50%)}}
+</style></helmet>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Two directions for abedlive.com — each drawn from the bio deck, shown wide (1440) and mobile (390)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>PRESS SHEET — the bio itself, made into a site. Paper &amp; ink, spaced capitals, justified columns, grayscale artwork that colours on hover.</div>
+<div style="display:flex;gap:34px;align-items:flex-start">
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<div class="dv-cap">Wide · 1440</div>
+<div class="dv-card" style="width:1440px;background:#f3f1ec">
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:0 56px;height:74px;border-bottom:1px solid rgba(13,13,13,.14);background:#f3f1ec">
+<img src="assets/signature-black.png" alt="Abed" style="height:30px;width:auto;display:block;margin-top:4px">
+<div style="display:flex;gap:40px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#0d0d0d;font-weight:500">
+<a href="#1a">About</a><a href="#1a">Discography</a><a href="#1a">Live</a><a href="#1a">Beyond Music</a>
+<a href="#1a" style="border-bottom:1px solid #0d0d0d;padding-bottom:2px">Bookings</a>
+</div>
+</div>
+
+<div style="position:relative;height:864px;background:#0d0d0d;overflow:hidden">
+<img src="assets/portrait-white-jacket.png" alt="Abednico Wadingalo on stage" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;filter:grayscale(1) contrast(1.08)">
+<div style="position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 45%,rgba(0,0,0,0) 30%,rgba(0,0,0,.72) 100%)"></div>
+<div style="position:absolute;left:0;right:0;top:196px;text-align:center;color:#fff">
+<div style="font-size:112px;line-height:1;font-weight:300;letter-spacing:.3em;text-indent:.3em">ABED</div>
+<div style="font-size:112px;line-height:1.08;font-weight:300;letter-spacing:.3em;text-indent:.3em">LIVE</div>
+<div style="margin-top:34px;font-size:11px;letter-spacing:.52em;text-indent:.52em;font-weight:500">• MUSICIAN •</div>
+</div>
+<div style="position:absolute;left:56px;right:56px;bottom:44px;display:flex;justify-content:space-between;align-items:flex-end;color:rgba(255,255,255,.82);font-size:10px;letter-spacing:.22em;text-transform:uppercase">
+<div style="display:grid;gap:7px"><span>Molepolole · Botswana</span><span>Contemporary Gospel · Afro-Jazz · Praise &amp; Worship</span></div>
+<div style="display:grid;gap:7px;text-align:right"><span>With Kgosi Jeso (Live) — out now</span><span style="color:#fff;border-bottom:1px solid rgba(255,255,255,.5);padding-bottom:3px;justify-self:end">Listen ↗</span></div>
+</div>
+</div>
+
+<div style="display:flex;justify-content:center;gap:0;padding:0;border-bottom:1px solid rgba(13,13,13,.14);background:#0d0d0d">
+<div style="display:flex;width:100%;color:#f3f1ec">
+<div style="flex:1;padding:26px 32px;border-right:1px solid rgba(243,241,236,.16);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;text-align:center">3× Botswana Gospel Awards nominee</div>
+<div style="flex:1;padding:26px 32px;border-right:1px solid rgba(243,241,236,.16);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;text-align:center">Winner — Best Contemporary Gospel</div>
+<div style="flex:1;padding:26px 32px;border-right:1px solid rgba(243,241,236,.16);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;text-align:center">Winner — Best Songwriter</div>
+<div style="flex:1;padding:26px 32px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;text-align:center">4 releases · 2017—2025</div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:300px 1fr;gap:0;padding:104px 56px 96px;background:#f3f1ec;color:#0d0d0d">
+<div>
+<div style="font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:rgba(13,13,13,.64)">01</div>
+<div style="margin-top:12px;font-size:20px;letter-spacing:.3em;font-weight:400">A B O U T</div>
+<div style="margin-top:2px;font-size:20px;letter-spacing:.3em;font-weight:400">M E</div>
+<div style="margin-top:44px;display:grid;gap:18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(13,13,13,.6);line-height:1.7">
+<div>Born<br><span style="color:#0d0d0d">16 February 1994</span></div>
+<div>Based in<br><span style="color:#0d0d0d">Molepolole, Botswana</span></div>
+<div>Role<br><span style="color:#0d0d0d">Director, Abed Live</span></div>
+<div>Training<br><span style="color:#0d0d0d">Self-taught</span></div>
+</div>
+</div>
+<div style="max-width:760px;margin-left:80px">
+<p style="margin:0;font-size:19px;line-height:1.82;text-align:justify;text-wrap:pretty">Abednico Wadingalo is a singer, songwriter and recording artist whose music blends Contemporary Gospel, Afro-Jazz, Praise and Worship. Born 16 February 1994 and based in Molepolole, his sound is rooted in faith, joy and the transformative power of salvation. A self-taught musician and director of Abed Live, he approaches his craft with a deep sense of purpose, infusing his performances with an uplifting energy that resonates with audiences.</p>
+<p style="margin:30px 0 0;font-size:19px;line-height:1.82;text-align:justify;text-wrap:pretty;color:rgba(13,13,13,.78)">Beyond music, Abed is a Real Estate Surveyor with a focus on Sustainable Development, embodying a balance between profession and passion. His work extends to vocal training through Transformative Drive, event management with Open Sky Gathering and the Abed Live Moments podcast series.</p>
+<div style="margin-top:56px;padding-top:36px;border-top:1px solid rgba(13,13,13,.18);display:flex;align-items:baseline;gap:24px">
+<span style="font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:rgba(13,13,13,.64);white-space:nowrap">His belief</span>
+<span style="font-size:30px;line-height:1.32;font-weight:300;letter-spacing:-.01em">“With God, it can only get better.”</span>
+</div>
+</div>
+</div>
+
+<div style="padding:0 56px 104px;background:#f3f1ec;color:#0d0d0d">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:22px;border-bottom:1px solid #0d0d0d">
+<div style="display:flex;align-items:baseline;gap:26px">
+<span style="font-size:11px;letter-spacing:.34em;color:rgba(13,13,13,.64)">02</span>
+<span style="font-size:20px;letter-spacing:.3em">D I S C O G R A P H Y</span>
+</div>
+<span style="font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(13,13,13,.64)">Four releases</span>
+</div>
+
+<div style="display:grid;grid-template-columns:130px 1fr 260px 190px 90px;align-items:center;gap:32px;padding:26px 0;border-bottom:1px solid rgba(13,13,13,.16)">
+<img src="assets/cover-kgosi-jeso.png" alt="With Kgosi Jeso (Live)" style="width:130px;height:130px;object-fit:cover;display:block;filter:grayscale(1);transition:filter .45s ease" style-hover="filter:grayscale(0)">
+<div><div style="font-size:38px;font-weight:300;letter-spacing:-.015em">With Kgosi Jeso <span style="color:rgba(13,13,13,.64)">(Live)</span></div></div>
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,13,13,.6)">Extended play · Live</div>
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,13,13,.6)">Latest offering</div>
+<div style="font-size:22px;font-weight:300;text-align:right">2025</div>
+</div>
+<div style="display:grid;grid-template-columns:130px 1fr 260px 190px 90px;align-items:center;gap:32px;padding:26px 0;border-bottom:1px solid rgba(13,13,13,.16)">
+<img src="assets/cover-as-you-will.png" alt="As You Will" style="width:130px;height:130px;object-fit:cover;display:block;filter:grayscale(1);transition:filter .45s ease" style-hover="filter:grayscale(0)">
+<div><div style="font-size:38px;font-weight:300;letter-spacing:-.015em">As You Will</div></div>
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,13,13,.6)">Single</div>
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,13,13,.6)">Studio</div>
+<div style="font-size:22px;font-weight:300;text-align:right">2019</div>
+</div>
+<div style="display:grid;grid-template-columns:130px 1fr 260px 190px 90px;align-items:center;gap:32px;padding:26px 0;border-bottom:1px solid rgba(13,13,13,.16)">
+<img src="assets/cover-o-tsholofelo.png" alt="O Tsholofelo Live DVD" style="width:130px;height:130px;object-fit:cover;display:block;filter:grayscale(1);transition:filter .45s ease" style-hover="filter:grayscale(0)">
+<div><div style="font-size:38px;font-weight:300;letter-spacing:-.015em">O Tsholofelo</div></div>
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,13,13,.6)">Live DVD</div>
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,13,13,.6)">Live in concert</div>
+<div style="font-size:22px;font-weight:300;text-align:right">2018</div>
+</div>
+<div style="display:grid;grid-template-columns:130px 1fr 260px 190px 90px;align-items:center;gap:32px;padding:26px 0;border-bottom:1px solid rgba(13,13,13,.16)">
+<img src="assets/cover-phatsima.png" alt="Phatsima" style="width:130px;height:130px;object-fit:cover;display:block;filter:grayscale(1);transition:filter .45s ease" style-hover="filter:grayscale(0)">
+<div><div style="font-size:38px;font-weight:300;letter-spacing:-.015em">Phatsima</div></div>
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,13,13,.6)">Album · Debut</div>
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,13,13,.6)">Studio</div>
+<div style="font-size:22px;font-weight:300;text-align:right">2017</div>
+</div>
+</div>
+
+<div style="position:relative;height:520px;background:#0a0a0a;overflow:hidden">
+<img src="assets/piano-hands.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85">
+<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+<div style="font-size:13px;letter-spacing:.6em;text-indent:.6em;color:rgba(255,255,255,.9);font-weight:400">P U R P O S E &nbsp; I N &nbsp; E V E R Y &nbsp; N O T E</div>
+</div>
+</div>
+
+<div style="padding:104px 56px;background:#f3f1ec;color:#0d0d0d">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:22px;border-bottom:1px solid #0d0d0d">
+<div style="display:flex;align-items:baseline;gap:26px">
+<span style="font-size:11px;letter-spacing:.34em;color:rgba(13,13,13,.64)">03</span>
+<span style="font-size:20px;letter-spacing:.3em">L I V E</span>
+</div>
+<span style="font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(13,13,13,.64)">Stage &amp; festival</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;margin-top:46px;background:rgba(13,13,13,.16)">
+<div style="background:#f3f1ec;padding:0 34px 0 0"><div style="font-size:24px;font-weight:300;line-height:1.3">Shout Praise<br>Music Concert</div><div style="margin-top:14px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(13,13,13,.64)">Worship leader</div></div>
+<div style="background:#f3f1ec;padding:0 34px"><div style="font-size:24px;font-weight:300;line-height:1.3">We Praise<br>Music Show</div><div style="margin-top:14px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(13,13,13,.64)">Featured artist</div></div>
+<div style="background:#f3f1ec;padding:0 0 0 34px"><div style="font-size:24px;font-weight:300;line-height:1.3">Contagious Youth<br>Week Festival</div><div style="margin-top:14px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(13,13,13,.64)">Headline set</div></div>
+</div>
+
+<div style="margin-top:76px;display:grid;grid-template-columns:400px 1fr;gap:64px;align-items:start">
+<div>
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:rgba(13,13,13,.64)">Event management · 2022—present</div>
+<div style="margin-top:16px;font-size:44px;font-weight:300;line-height:1.08;letter-spacing:-.02em">Open Sky<br>Gathering</div>
+<p style="margin:22px 0 0;font-size:16px;line-height:1.75;color:rgba(13,13,13,.72);text-wrap:pretty">Abed’s own gathering — four editions of praise, worship, poetry and coffee under an open sky in Molepolole.</p>
+<div style="margin-top:30px;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;border-bottom:1px solid #0d0d0d;display:inline-block;padding-bottom:4px">See all editions ↗</div>
+</div>
+<div style="display:flex;gap:20px">
+<img src="assets/poster-opensky-2.png" alt="Open Sky Gathering 2nd Edition" style="width:calc(33.333% - 14px);aspect-ratio:4/5;object-fit:cover;display:block;filter:grayscale(1);transition:filter .45s ease" style-hover="filter:grayscale(0)">
+<img src="assets/poster-opensky-3.png" alt="Open Sky Gathering 3rd Edition" style="width:calc(33.333% - 14px);aspect-ratio:4/5;object-fit:cover;display:block;filter:grayscale(1);transition:filter .45s ease" style-hover="filter:grayscale(0)">
+<img src="assets/poster-opensky-4.png" alt="Open Sky Gathering 4th Edition" style="width:calc(33.333% - 14px);aspect-ratio:4/5;object-fit:cover;display:block;filter:grayscale(1);transition:filter .45s ease" style-hover="filter:grayscale(0)">
+</div>
+</div>
+</div>
+
+<div style="padding:96px 56px;background:#e6e3dc;color:#0d0d0d;border-top:1px solid rgba(13,13,13,.14)">
+<div style="display:flex;align-items:baseline;gap:26px;padding-bottom:22px;border-bottom:1px solid #0d0d0d">
+<span style="font-size:11px;letter-spacing:.34em;color:rgba(13,13,13,.64)">04</span>
+<span style="font-size:20px;letter-spacing:.3em">B E Y O N D &nbsp; M U S I C</span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:56px;margin-top:46px">
+<div><div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(13,13,13,.64)">Profession</div><div style="margin-top:12px;font-size:26px;font-weight:300;line-height:1.28">Real Estate Surveyor</div><p style="margin:12px 0 0;font-size:15px;line-height:1.7;color:rgba(13,13,13,.7)">Focused on Sustainable Development — a balance between profession and passion.</p></div>
+<div><div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(13,13,13,.64)">Vocal training · 2020</div><div style="margin-top:12px;font-size:26px;font-weight:300;line-height:1.28">Transformative Drive</div><p style="margin:12px 0 0;font-size:15px;line-height:1.7;color:rgba(13,13,13,.7)">Coaching voices to sing with intention, technique and conviction.</p></div>
+<div><div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(13,13,13,.64)">Podcast series</div><div style="margin-top:12px;font-size:26px;font-weight:300;line-height:1.28">Abed Live Moments</div><p style="margin:12px 0 0;font-size:15px;line-height:1.7;color:rgba(13,13,13,.7)">Conversations from behind the music — process, faith and the road.</p></div>
+</div>
+</div>
+
+<div style="padding:96px 56px 56px;background:#0d0d0d;color:#f3f1ec">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start">
+<div>
+<div style="font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:rgba(243,241,236,.66)">Contact</div>
+<a href="#1a" style="display:block;margin-top:18px;font-size:40px;font-weight:300;letter-spacing:-.02em;border-bottom:1px solid rgba(243,241,236,.3);padding-bottom:12px">abedpraisebeat@gmail.com</a>
+<div style="margin-top:22px;font-size:18px;font-weight:300;color:rgba(243,241,236,.8)">+267 75 951 316 &nbsp;//&nbsp; 74 400 864</div>
+</div>
+<div>
+<div style="font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:rgba(243,241,236,.66)">Follow — @abedlive</div>
+<div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;font-size:16px;font-weight:300">
+<a href="#1a" style="border-bottom:1px solid rgba(243,241,236,.22);padding-bottom:8px">Instagram — abed_bw</a>
+<a href="#1a" style="border-bottom:1px solid rgba(243,241,236,.22);padding-bottom:8px">Facebook — ABed Live</a>
+<a href="#1a" style="border-bottom:1px solid rgba(243,241,236,.22);padding-bottom:8px">YouTube — abedlivebw</a>
+<a href="#1a" style="border-bottom:1px solid rgba(243,241,236,.22);padding-bottom:8px">X — Abednico</a>
+</div>
+</div>
+</div>
+<div style="margin-top:88px;padding-top:26px;border-top:1px solid rgba(243,241,236,.2);display:flex;align-items:center;justify-content:space-between">
+<img src="assets/signature-white.png" alt="Abed" style="height:34px;width:auto;display:block">
+<div style="font-size:10.5px;letter-spacing:.42em;text-transform:uppercase;color:rgba(243,241,236,.6)">Purpose in every note</div>
+<div style="font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,241,236,.64)">© 2025 Abed Live</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<div class="dv-cap">Mobile · 390</div>
+<div style="width:430px;padding:14px;background:#1b1b1b;border-radius:56px;box-shadow:0 10px 34px rgba(0,0,0,.28)">
+<div style="width:402px;background:#f3f1ec;border-radius:44px;overflow:hidden;position:relative">
+<div style="position:absolute;top:0;left:0;right:0;height:54px;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:0 26px;color:#fff;font-size:13px;font-weight:500;letter-spacing:.02em;mix-blend-mode:difference">
+<span>9:41</span><span style="font-size:11px;letter-spacing:.08em">▮▮▮ ⌁ ▊</span>
+</div>
+<div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:104px;height:30px;background:#000;border-radius:18px;z-index:4"></div>
+
+<div style="position:relative;height:660px;background:#0d0d0d;overflow:hidden">
+<img src="assets/portrait-white-jacket.png" alt="Abednico Wadingalo" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:52% 18%;filter:grayscale(1) contrast(1.08)">
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,.15) 38%,rgba(0,0,0,.88) 100%)"></div>
+<div style="position:absolute;top:74px;left:24px;right:24px;display:flex;align-items:center;justify-content:space-between;color:#fff">
+<img src="assets/signature-white.png" alt="Abed" style="height:24px;width:auto;display:block">
+<div style="display:grid;gap:5px;justify-items:end"><span style="width:22px;height:1px;background:#fff;display:block"></span><span style="width:22px;height:1px;background:#fff;display:block"></span></div>
+</div>
+<div style="position:absolute;left:24px;right:24px;bottom:34px;color:#fff">
+<div style="font-size:44px;line-height:1.04;font-weight:300;letter-spacing:.22em;text-indent:.22em">ABED</div>
+<div style="font-size:44px;line-height:1.12;font-weight:300;letter-spacing:.22em;text-indent:.22em">LIVE</div>
+<div style="margin-top:20px;font-size:9.5px;letter-spacing:.44em;text-indent:.44em;font-weight:500">• MUSICIAN •</div>
+<div style="margin-top:26px;padding-top:18px;border-top:1px solid rgba(255,255,255,.28);font-size:10px;letter-spacing:.18em;text-transform:uppercase;line-height:1.9;color:rgba(255,255,255,.85)">Contemporary Gospel · Afro-Jazz<br>Molepolole, Botswana</div>
+</div>
+</div>
+
+<div style="background:#0a0a0a;color:#f3f1ec;padding:20px 0;overflow:hidden">
+<div style="display:flex;width:max-content;gap:28px;animation:abmarq 22s linear infinite;font-size:10px;letter-spacing:.24em;text-transform:uppercase;white-space:nowrap">
+<span>3× Botswana Gospel Awards nominee</span><span>·</span><span>Best Contemporary Gospel</span><span>·</span><span>Best Songwriter</span><span>·</span>
+<span>3× Botswana Gospel Awards nominee</span><span>·</span><span>Best Contemporary Gospel</span><span>·</span><span>Best Songwriter</span><span>·</span>
+</div>
+</div>
+
+<div style="padding:52px 24px 46px;background:#f3f1ec;color:#0d0d0d">
+<div style="display:flex;align-items:baseline;gap:16px;padding-bottom:14px;border-bottom:1px solid #0d0d0d">
+<span style="font-size:10px;letter-spacing:.3em;color:rgba(13,13,13,.64)">01</span>
+<span style="font-size:15px;letter-spacing:.28em">A B O U T &nbsp; M E</span>
+</div>
+<p style="margin:24px 0 0;font-size:15.5px;line-height:1.78;text-wrap:pretty">Abednico Wadingalo is a singer, songwriter and recording artist whose music blends Contemporary Gospel, Afro-Jazz, Praise and Worship. Born 16 February 1994 and based in Molepolole, his sound is rooted in faith, joy and the transformative power of salvation.</p>
+<p style="margin:18px 0 0;font-size:15.5px;line-height:1.78;color:rgba(13,13,13,.75);text-wrap:pretty">A self-taught musician and director of Abed Live, he approaches his craft with a deep sense of purpose.</p>
+<div style="margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:20px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(13,13,13,.64);line-height:1.8">
+<div>Born<br><span style="color:#0d0d0d">16 Feb 1994</span></div>
+<div>Based in<br><span style="color:#0d0d0d">Molepolole, BW</span></div>
+<div>Role<br><span style="color:#0d0d0d">Director, Abed Live</span></div>
+<div>Training<br><span style="color:#0d0d0d">Self-taught</span></div>
+</div>
+<div style="margin-top:34px;padding-top:22px;border-top:1px solid rgba(13,13,13,.2);font-size:22px;font-weight:300;line-height:1.35">“With God, it can only get better.”</div>
+</div>
+
+<div style="padding:46px 24px;background:#e6e3dc;color:#0d0d0d">
+<div style="display:flex;align-items:baseline;gap:16px;padding-bottom:14px;border-bottom:1px solid #0d0d0d">
+<span style="font-size:10px;letter-spacing:.3em;color:rgba(13,13,13,.64)">02</span>
+<span style="font-size:15px;letter-spacing:.28em">D I S C O G R A P H Y</span>
+</div>
+<div style="display:flex;align-items:center;gap:18px;padding:18px 0;border-bottom:1px solid rgba(13,13,13,.16)">
+<img src="assets/cover-kgosi-jeso.png" alt="With Kgosi Jeso (Live)" style="width:74px;height:74px;object-fit:cover;display:block">
+<div style="flex:1"><div style="font-size:19px;font-weight:400;line-height:1.2">With Kgosi Jeso (Live)</div><div style="margin-top:6px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(13,13,13,.64)">EP · Live</div></div>
+<div style="font-size:15px;font-weight:300">2025</div>
+</div>
+<div style="display:flex;align-items:center;gap:18px;padding:18px 0;border-bottom:1px solid rgba(13,13,13,.16)">
+<img src="assets/cover-as-you-will.png" alt="As You Will" style="width:74px;height:74px;object-fit:cover;display:block">
+<div style="flex:1"><div style="font-size:19px;font-weight:400;line-height:1.2">As You Will</div><div style="margin-top:6px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(13,13,13,.64)">Single</div></div>
+<div style="font-size:15px;font-weight:300">2019</div>
+</div>
+<div style="display:flex;align-items:center;gap:18px;padding:18px 0;border-bottom:1px solid rgba(13,13,13,.16)">
+<img src="assets/cover-o-tsholofelo.png" alt="O Tsholofelo Live DVD" style="width:74px;height:74px;object-fit:cover;display:block">
+<div style="flex:1"><div style="font-size:19px;font-weight:400;line-height:1.2">O Tsholofelo</div><div style="margin-top:6px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(13,13,13,.64)">Live DVD</div></div>
+<div style="font-size:15px;font-weight:300">2018</div>
+</div>
+<div style="display:flex;align-items:center;gap:18px;padding:18px 0">
+<img src="assets/cover-phatsima.png" alt="Phatsima" style="width:74px;height:74px;object-fit:cover;display:block">
+<div style="flex:1"><div style="font-size:19px;font-weight:400;line-height:1.2">Phatsima</div><div style="margin-top:6px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(13,13,13,.64)">Album · Debut</div></div>
+<div style="font-size:15px;font-weight:300">2017</div>
+</div>
+</div>
+
+<div style="position:relative;height:230px;background:#0a0a0a;overflow:hidden">
+<img src="assets/piano-hands.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85">
+<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 24px;text-align:center">
+<div style="font-size:10px;letter-spacing:.42em;text-indent:.42em;color:rgba(255,255,255,.9)">PURPOSE IN EVERY NOTE</div>
+</div>
+</div>
+
+<div style="padding:46px 24px;background:#f3f1ec;color:#0d0d0d">
+<div style="display:flex;align-items:baseline;gap:16px;padding-bottom:14px;border-bottom:1px solid #0d0d0d">
+<span style="font-size:10px;letter-spacing:.3em;color:rgba(13,13,13,.64)">03</span>
+<span style="font-size:15px;letter-spacing:.28em">L I V E</span>
+</div>
+<div style="margin-top:26px;display:grid;gap:0">
+<div style="padding:16px 0;border-bottom:1px solid rgba(13,13,13,.16)"><div style="font-size:18px;font-weight:300">Shout Praise Music Concert</div><div style="margin-top:5px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(13,13,13,.64)">Worship leader</div></div>
+<div style="padding:16px 0;border-bottom:1px solid rgba(13,13,13,.16)"><div style="font-size:18px;font-weight:300">We Praise Music Show</div><div style="margin-top:5px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(13,13,13,.64)">Featured artist</div></div>
+<div style="padding:16px 0;border-bottom:1px solid rgba(13,13,13,.16)"><div style="font-size:18px;font-weight:300">Contagious Youth Week Festival</div><div style="margin-top:5px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(13,13,13,.64)">Headline set</div></div>
+</div>
+<div style="margin-top:36px"><div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(13,13,13,.64)">2022—present</div><div style="margin-top:10px;font-size:30px;font-weight:300;line-height:1.1">Open Sky<br>Gathering</div></div>
+<div style="margin-top:22px;display:flex;gap:12px">
+<img src="assets/poster-opensky-2.png" alt="Open Sky 2nd Edition" style="width:calc(50% - 6px);aspect-ratio:4/5;object-fit:cover;display:block">
+<img src="assets/poster-opensky-4.png" alt="Open Sky 4th Edition" style="width:calc(50% - 6px);aspect-ratio:4/5;object-fit:cover;display:block">
+</div>
+</div>
+
+<div style="padding:46px 24px 40px;background:#0d0d0d;color:#f3f1ec">
+<div style="font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(243,241,236,.66)">Bookings</div>
+<a href="#1a" style="display:block;margin-top:14px;font-size:20px;font-weight:300;border-bottom:1px solid rgba(243,241,236,.3);padding-bottom:12px">abedpraisebeat@gmail.com</a>
+<div style="margin-top:16px;font-size:15px;font-weight:300;color:rgba(243,241,236,.8)">+267 75 951 316 // 74 400 864</div>
+<div style="margin-top:30px;display:grid;gap:12px;font-size:13px">
+<a href="#1a" style="border-bottom:1px solid rgba(243,241,236,.18);padding-bottom:10px">Instagram — abed_bw</a>
+<a href="#1a" style="border-bottom:1px solid rgba(243,241,236,.18);padding-bottom:10px">Facebook — ABed Live</a>
+<a href="#1a" style="border-bottom:1px solid rgba(243,241,236,.18);padding-bottom:10px">YouTube — abedlivebw</a>
+</div>
+<div style="margin-top:40px;display:flex;align-items:center;justify-content:space-between">
+<img src="assets/signature-white.png" alt="Abed" style="height:26px;width:auto;display:block">
+<span style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,241,236,.64)">© 2025</span>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>OPEN SKY — ink ground, brass light and his own signature as the mark. Didone display, colour artwork glowing out of the dark, stage-lit sections.</div>
+<div style="display:flex;gap:34px;align-items:flex-start">
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<div class="dv-cap">Wide · 1440</div>
+<div class="dv-card" style="width:1440px;background:#09090b;font-family:Jost,system-ui,sans-serif">
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:80px;background:rgba(9,9,11,.9);border-bottom:1px solid rgba(200,149,47,.26)">
+<img src="assets/signature-white.png" alt="Abed" style="height:32px;width:auto;display:block;margin-top:4px">
+<div style="display:flex;align-items:center;gap:38px;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.72);font-weight:400">
+<a href="#1b">Story</a><a href="#1b">Music</a><a href="#1b">Open Sky</a><a href="#1b">Podcast</a>
+<a href="#1b" style="color:#09090b;background:#c8952f;padding:11px 22px;letter-spacing:.18em;font-weight:500">Book Abed</a>
+</div>
+</div>
+
+<div style="position:relative;height:880px;overflow:hidden;background:#09090b">
+<img src="assets/live-stage.png" alt="Abed Live on stage" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:.5">
+<div style="position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 8%,rgba(200,149,47,.28) 0%,rgba(9,9,11,0) 62%)"></div>
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,9,11,.5) 0%,rgba(9,9,11,.2) 40%,rgba(9,9,11,.97) 100%)"></div>
+<div style="position:absolute;left:52px;top:0;bottom:0;display:flex;align-items:center">
+<div style="font-family:Jost,sans-serif;font-size:10.5px;letter-spacing:.46em;text-transform:uppercase;color:rgba(200,149,47,.85);writing-mode:vertical-rl;transform:rotate(180deg)">Purpose in every note</div>
+</div>
+<div style="position:absolute;left:0;right:0;top:150px;display:flex;flex-direction:column;align-items:center;text-align:center">
+<div style="font-size:11px;letter-spacing:.5em;text-indent:.5em;color:rgba(200,149,47,.9);text-transform:uppercase">• Musician •</div>
+<img src="assets/signature-white.png" alt="Abed" style="width:560px;height:auto;display:block;margin-top:26px;filter:drop-shadow(0 0 40px rgba(200,149,47,.35))">
+<div style="margin-top:10px;font-family:'Bodoni Moda',serif;font-size:21px;letter-spacing:.44em;text-indent:.44em;color:#fff;text-transform:uppercase">Live</div>
+<div style="margin-top:40px;max-width:620px;font-size:18px;line-height:1.75;color:rgba(255,255,255,.78);font-weight:300">Contemporary Gospel, Afro-Jazz, Praise &amp; Worship from Molepolole, Botswana — rooted in faith, joy and the transformative power of salvation.</div>
+<div style="margin-top:40px;display:flex;gap:16px">
+<a href="#1b" style="background:#c8952f;color:#09090b;padding:16px 32px;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500">Hear Kgosi Jeso (Live)</a>
+<a href="#1b" style="border:1px solid rgba(255,255,255,.42);color:#fff;padding:16px 32px;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase">Watch a set</a>
+</div>
+</div>
+<div style="position:absolute;left:52px;right:52px;bottom:0;display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-top:1px solid rgba(200,149,47,.3);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.62)">
+<span>Est. 2017 · Four releases</span><span>Director · Abed Live</span><span>Open Sky Gathering · 4 editions</span><span style="color:#c8952f">Scroll ↓</span>
+</div>
+</div>
+
+<div style="background:#c8952f;color:#09090b;padding:18px 0;overflow:hidden">
+<div style="display:flex;width:max-content;gap:34px;animation:abmarq 30s linear infinite;font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;font-weight:500;white-space:nowrap">
+<span>Botswana Gospel Awards — Best Contemporary Gospel</span><span>✦</span><span>Best Songwriter</span><span>✦</span><span>Three-time nominee</span><span>✦</span><span>Shout Praise Music Concert</span><span>✦</span><span>We Praise Music Show</span><span>✦</span><span>Contagious Youth Week Festival</span><span>✦</span>
+<span>Botswana Gospel Awards — Best Contemporary Gospel</span><span>✦</span><span>Best Songwriter</span><span>✦</span><span>Three-time nominee</span><span>✦</span><span>Shout Praise Music Concert</span><span>✦</span><span>We Praise Music Show</span><span>✦</span><span>Contagious Youth Week Festival</span><span>✦</span>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:560px 1fr;gap:0;background:#09090b">
+<div style="position:relative;min-height:720px;overflow:hidden">
+<img src="assets/portrait-white-jacket.png" alt="Abednico Wadingalo" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%">
+<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(9,9,11,0) 55%,rgba(9,9,11,.9) 100%)"></div>
+</div>
+<div style="padding:96px 72px">
+<div style="font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#c8952f">The story</div>
+<div style="margin-top:20px;font-family:'Bodoni Moda',serif;font-size:56px;line-height:1.1;color:#fff;font-weight:400">Abednico<br>Wadingalo</div>
+<p style="margin:32px 0 0;font-size:18px;line-height:1.8;color:rgba(255,255,255,.8);font-weight:300;max-width:640px;text-wrap:pretty">A singer, songwriter and recording artist whose music blends Contemporary Gospel, Afro-Jazz, Praise and Worship. Born 16 February 1994 and based in Molepolole, his sound is rooted in faith, joy and the transformative power of salvation.</p>
+<p style="margin:20px 0 0;font-size:18px;line-height:1.8;color:rgba(255,255,255,.62);font-weight:300;max-width:640px;text-wrap:pretty">A self-taught musician and director of Abed Live, he approaches his craft with a deep sense of purpose — and carries it beyond the stage as a Real Estate Surveyor focused on Sustainable Development, a vocal coach through Transformative Drive, and host of the Abed Live Moments podcast.</p>
+<div style="margin-top:48px;padding:34px 0 0;border-top:1px solid rgba(200,149,47,.32)">
+<div style="font-family:'Bodoni Moda',serif;font-style:italic;font-size:34px;line-height:1.4;color:#c8952f">“With God, it can only get better.”</div>
+</div>
+<div style="margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px">
+<div><div style="font-family:'Bodoni Moda',serif;font-size:44px;color:#fff">3×</div><div style="margin-top:6px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55);line-height:1.7">Gospel Awards<br>nominee</div></div>
+<div><div style="font-family:'Bodoni Moda',serif;font-size:44px;color:#fff">2×</div><div style="margin-top:6px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55);line-height:1.7">Award<br>winner</div></div>
+<div><div style="font-family:'Bodoni Moda',serif;font-size:44px;color:#fff">4</div><div style="margin-top:6px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55);line-height:1.7">Releases<br>2017—2025</div></div>
+</div>
+</div>
+</div>
+
+<div style="padding:104px 52px;background:#0f0f12">
+<div style="display:flex;align-items:flex-end;justify-content:space-between">
+<div>
+<div style="font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#c8952f">Discography</div>
+<div style="margin-top:14px;font-family:'Bodoni Moda',serif;font-size:52px;color:#fff;line-height:1.1">The Records</div>
+</div>
+<a href="#1b" style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.7);border-bottom:1px solid rgba(200,149,47,.6);padding-bottom:5px">All releases ↗</a>
+</div>
+<div style="margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px">
+<div style="display:grid;gap:16px">
+<div style="position:relative;border:1px solid rgba(200,149,47,.34);padding:12px;background:#09090b"><img src="assets/cover-kgosi-jeso.png" alt="With Kgosi Jeso (Live)" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"><div style="position:absolute;top:22px;right:22px;background:#c8952f;color:#09090b;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;padding:6px 10px;font-weight:500">Latest</div></div>
+<div><div style="font-size:21px;color:#fff;font-weight:400">With Kgosi Jeso (Live)</div><div style="margin-top:7px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5)">2025 · Extended play</div></div>
+</div>
+<div style="display:grid;gap:16px">
+<div style="border:1px solid rgba(255,255,255,.12);padding:12px;background:#09090b"><img src="assets/cover-as-you-will.png" alt="As You Will" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"></div>
+<div><div style="font-size:21px;color:#fff;font-weight:400">As You Will</div><div style="margin-top:7px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5)">2019 · Single</div></div>
+</div>
+<div style="display:grid;gap:16px">
+<div style="border:1px solid rgba(255,255,255,.12);padding:12px;background:#09090b"><img src="assets/cover-o-tsholofelo.png" alt="O Tsholofelo Live DVD" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"></div>
+<div><div style="font-size:21px;color:#fff;font-weight:400">O Tsholofelo</div><div style="margin-top:7px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5)">2018 · Live DVD</div></div>
+</div>
+<div style="display:grid;gap:16px">
+<div style="border:1px solid rgba(255,255,255,.12);padding:12px;background:#09090b"><img src="assets/cover-phatsima.png" alt="Phatsima" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"></div>
+<div><div style="font-size:21px;color:#fff;font-weight:400">Phatsima</div><div style="margin-top:7px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5)">2017 · Debut album</div></div>
+</div>
+</div>
+</div>
+
+<div style="position:relative;padding:110px 52px;background:#09090b;overflow:hidden">
+<img src="assets/live-purple.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.3">
+<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(9,9,11,.97) 0%,rgba(9,9,11,.6) 60%,rgba(9,9,11,.9) 100%)"></div>
+<div style="position:relative;display:grid;grid-template-columns:1fr 620px;gap:72px;align-items:center">
+<div>
+<div style="font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#c8952f">Event management · 2022—present</div>
+<div style="margin-top:18px;font-family:'Bodoni Moda',serif;font-size:66px;line-height:1.04;color:#fff">Open Sky<br>Gathering</div>
+<p style="margin:28px 0 0;font-size:18px;line-height:1.8;color:rgba(255,255,255,.78);font-weight:300;max-width:480px;text-wrap:pretty">Four editions of praise, worship, poetry and coffee under an open sky — Abed’s own gathering, built to hold a crowd and a congregation at once.</p>
+<div style="margin-top:34px;display:flex;gap:14px">
+<a href="#1b" style="background:#c8952f;color:#09090b;padding:15px 28px;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500">Next edition</a>
+<a href="#1b" style="border:1px solid rgba(255,255,255,.4);color:#fff;padding:15px 28px;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase">Past editions</a>
+</div>
+</div>
+<div style="display:flex;gap:18px">
+<img src="assets/poster-opensky-2.png" alt="Open Sky Gathering 2nd Edition" style="width:calc(33.333% - 12px);aspect-ratio:3/4;object-fit:cover;display:block;border:1px solid rgba(200,149,47,.3)">
+<img src="assets/poster-opensky-3.png" alt="Open Sky Gathering 3rd Edition" style="width:calc(33.333% - 12px);aspect-ratio:3/4;object-fit:cover;display:block;border:1px solid rgba(200,149,47,.3);margin-top:36px">
+<img src="assets/poster-opensky-4.png" alt="Open Sky Gathering 4th Edition" style="width:calc(33.333% - 12px);aspect-ratio:3/4;object-fit:cover;display:block;border:1px solid rgba(200,149,47,.3)">
+</div>
+</div>
+</div>
+
+<div style="padding:96px 52px;background:#0f0f12;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background-color:rgba(200,149,47,.26)">
+<div style="background:#0f0f12;padding:0 40px 0 0"><div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#c8952f">Profession</div><div style="margin-top:14px;font-family:'Bodoni Moda',serif;font-size:30px;color:#fff;line-height:1.25">Real Estate<br>Surveyor</div><p style="margin:14px 0 0;font-size:15.5px;line-height:1.75;color:rgba(255,255,255,.62);font-weight:300">Sustainable Development — a balance between profession and passion.</p></div>
+<div style="background:#0f0f12;padding:0 40px"><div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#c8952f">Vocal training · 2020</div><div style="margin-top:14px;font-family:'Bodoni Moda',serif;font-size:30px;color:#fff;line-height:1.25">Transformative<br>Drive</div><p style="margin:14px 0 0;font-size:15.5px;line-height:1.75;color:rgba(255,255,255,.62);font-weight:300">Coaching voices to sing with intention, technique and conviction.</p></div>
+<div style="background:#0f0f12;padding:0 0 0 40px"><div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#c8952f">Podcast</div><div style="margin-top:14px;font-family:'Bodoni Moda',serif;font-size:30px;color:#fff;line-height:1.25">Abed Live<br>Moments</div><p style="margin:14px 0 0;font-size:15.5px;line-height:1.75;color:rgba(255,255,255,.62);font-weight:300">Conversations from behind the music — process, faith and the road.</p></div>
+</div>
+
+<div style="position:relative;padding:120px 52px 56px;background:#09090b;overflow:hidden">
+<div style="position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 120%,rgba(200,149,47,.3) 0%,rgba(9,9,11,0) 70%)"></div>
+<div style="position:relative;text-align:center">
+<div style="font-size:11px;letter-spacing:.44em;text-transform:uppercase;color:#c8952f">Bookings &amp; enquiries</div>
+<a href="#1b" style="display:inline-block;margin-top:26px;font-family:'Bodoni Moda',serif;font-size:60px;color:#fff;border-bottom:1px solid rgba(200,149,47,.55);padding-bottom:14px">abedpraisebeat@gmail.com</a>
+<div style="margin-top:28px;font-size:20px;color:rgba(255,255,255,.75);font-weight:300;letter-spacing:.04em">+267 75 951 316 &nbsp;//&nbsp; 74 400 864</div>
+<div style="margin-top:44px;display:flex;justify-content:center;gap:12px">
+<a href="#1b" style="border:1px solid rgba(255,255,255,.26);color:#fff;padding:13px 24px;font-size:11px;letter-spacing:.2em;text-transform:uppercase">Instagram — abed_bw</a>
+<a href="#1b" style="border:1px solid rgba(255,255,255,.26);color:#fff;padding:13px 24px;font-size:11px;letter-spacing:.2em;text-transform:uppercase">Facebook — ABed Live</a>
+<a href="#1b" style="border:1px solid rgba(255,255,255,.26);color:#fff;padding:13px 24px;font-size:11px;letter-spacing:.2em;text-transform:uppercase">YouTube — abedlivebw</a>
+<a href="#1b" style="border:1px solid rgba(255,255,255,.26);color:#fff;padding:13px 24px;font-size:11px;letter-spacing:.2em;text-transform:uppercase">X — Abednico</a>
+</div>
+</div>
+<div style="position:relative;margin-top:96px;padding-top:26px;border-top:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:space-between">
+<img src="assets/signature-white.png" alt="Abed" style="height:30px;width:auto;display:block">
+<div style="font-size:10.5px;letter-spacing:.4em;text-transform:uppercase;color:#c8952f">Purpose in every note</div>
+<div style="font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62)">© 2025 Abed Live · @abedlive</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<div class="dv-cap">Mobile · 390</div>
+<div style="width:430px;padding:14px;background:#1b1b1b;border-radius:56px;box-shadow:0 10px 34px rgba(0,0,0,.28)">
+<div style="width:402px;background:#09090b;border-radius:44px;overflow:hidden;position:relative;font-family:Jost,system-ui,sans-serif">
+<div style="position:absolute;top:0;left:0;right:0;height:54px;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:0 26px;color:#fff;font-size:13px;font-weight:500">
+<span>9:41</span><span style="font-size:11px;letter-spacing:.08em">▮▮▮ ⌁ ▊</span>
+</div>
+<div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:104px;height:30px;background:#000;border-radius:18px;z-index:4"></div>
+
+<div style="position:relative;height:700px;overflow:hidden">
+<img src="assets/live-stage.png" alt="Abed Live on stage" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:42% 42%;opacity:.55">
+<div style="position:absolute;inset:0;background:radial-gradient(80% 42% at 50% 12%,rgba(200,149,47,.34) 0%,rgba(9,9,11,0) 65%)"></div>
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,9,11,.62) 0%,rgba(9,9,11,.25) 34%,rgba(9,9,11,.98) 92%)"></div>
+<div style="position:absolute;top:72px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between">
+<span style="font-size:9.5px;letter-spacing:.4em;text-transform:uppercase;color:#c8952f">• Musician •</span>
+<div style="display:grid;gap:5px;justify-items:end"><span style="width:22px;height:1px;background:#c8952f;display:block"></span><span style="width:14px;height:1px;background:#c8952f;display:block"></span></div>
+</div>
+<div style="position:absolute;left:22px;right:22px;top:180px;text-align:center">
+<img src="assets/signature-white.png" alt="Abed" style="width:290px;height:auto;display:block;margin:0 auto;filter:drop-shadow(0 0 26px rgba(200,149,47,.4))">
+<div style="margin-top:6px;font-family:'Bodoni Moda',serif;font-size:14px;letter-spacing:.44em;text-indent:.44em;color:#fff;text-transform:uppercase">Live</div>
+</div>
+<div style="position:absolute;left:22px;right:22px;bottom:34px">
+<p style="margin:0;font-size:15px;line-height:1.7;color:rgba(255,255,255,.8);font-weight:300;text-align:center;text-wrap:pretty">Contemporary Gospel, Afro-Jazz, Praise &amp; Worship from Molepolole, Botswana.</p>
+<a href="#1b" style="display:block;margin-top:22px;background:#c8952f;color:#09090b;text-align:center;padding:17px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500">Hear Kgosi Jeso (Live)</a>
+<a href="#1b" style="display:block;margin-top:10px;border:1px solid rgba(255,255,255,.34);color:#fff;text-align:center;padding:17px;font-size:11px;letter-spacing:.2em;text-transform:uppercase">Watch a set</a>
+</div>
+</div>
+
+<div style="background:#c8952f;color:#09090b;padding:14px 0;overflow:hidden">
+<div style="display:flex;width:max-content;gap:26px;animation:abmarq 20s linear infinite;font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;white-space:nowrap">
+<span>Best Contemporary Gospel</span><span>✦</span><span>Best Songwriter</span><span>✦</span><span>3× Nominee</span><span>✦</span>
+<span>Best Contemporary Gospel</span><span>✦</span><span>Best Songwriter</span><span>✦</span><span>3× Nominee</span><span>✦</span>
+</div>
+</div>
+
+<div style="padding:44px 22px;background:#0f0f12">
+<div style="font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#c8952f">The story</div>
+<div style="margin-top:14px;font-family:'Bodoni Moda',serif;font-size:34px;line-height:1.14;color:#fff">Abednico<br>Wadingalo</div>
+<p style="margin:20px 0 0;font-size:15.5px;line-height:1.78;color:rgba(255,255,255,.78);font-weight:300;text-wrap:pretty">A singer, songwriter and recording artist. Born 16 February 1994 and based in Molepolole, his sound is rooted in faith, joy and the transformative power of salvation — a self-taught musician and director of Abed Live.</p>
+<div style="margin-top:26px;padding-top:22px;border-top:1px solid rgba(200,149,47,.3);font-family:'Bodoni Moda',serif;font-style:italic;font-size:23px;line-height:1.45;color:#c8952f">“With God, it can only get better.”</div>
+<div style="margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+<div><div style="font-family:'Bodoni Moda',serif;font-size:30px;color:#fff">3×</div><div style="margin-top:4px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);line-height:1.6">Awards<br>nominee</div></div>
+<div><div style="font-family:'Bodoni Moda',serif;font-size:30px;color:#fff">2×</div><div style="margin-top:4px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);line-height:1.6">Award<br>winner</div></div>
+<div><div style="font-family:'Bodoni Moda',serif;font-size:30px;color:#fff">4</div><div style="margin-top:4px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);line-height:1.6">Releases<br>since 2017</div></div>
+</div>
+</div>
+
+<div style="padding:44px 22px;background:#09090b">
+<div style="display:flex;align-items:flex-end;justify-content:space-between">
+<div><div style="font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#c8952f">Discography</div><div style="margin-top:10px;font-family:'Bodoni Moda',serif;font-size:30px;color:#fff">The Records</div></div>
+<span style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);border-bottom:1px solid rgba(200,149,47,.6);padding-bottom:4px">All ↗</span>
+</div>
+<div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<div><div style="border:1px solid rgba(200,149,47,.4);padding:8px;position:relative"><img src="assets/cover-kgosi-jeso.png" alt="With Kgosi Jeso (Live)" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"><span style="position:absolute;top:15px;right:15px;background:#c8952f;color:#09090b;font-size:8px;letter-spacing:.16em;text-transform:uppercase;padding:4px 7px;font-weight:500">New</span></div><div style="margin-top:10px;font-size:15px;color:#fff">With Kgosi Jeso</div><div style="margin-top:4px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5)">2025 · EP</div></div>
+<div><div style="border:1px solid rgba(255,255,255,.12);padding:8px"><img src="assets/cover-as-you-will.png" alt="As You Will" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"></div><div style="margin-top:10px;font-size:15px;color:#fff">As You Will</div><div style="margin-top:4px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5)">2019 · Single</div></div>
+<div><div style="border:1px solid rgba(255,255,255,.12);padding:8px"><img src="assets/cover-o-tsholofelo.png" alt="O Tsholofelo Live DVD" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"></div><div style="margin-top:10px;font-size:15px;color:#fff">O Tsholofelo</div><div style="margin-top:4px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5)">2018 · Live DVD</div></div>
+<div><div style="border:1px solid rgba(255,255,255,.12);padding:8px"><img src="assets/cover-phatsima.png" alt="Phatsima" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"></div><div style="margin-top:10px;font-size:15px;color:#fff">Phatsima</div><div style="margin-top:4px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5)">2017 · Album</div></div>
+</div>
+</div>
+
+<div style="position:relative;padding:44px 22px;overflow:hidden;background:#09090b">
+<img src="assets/live-purple.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.32">
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,9,11,.9) 0%,rgba(9,9,11,.7) 50%,rgba(9,9,11,.96) 100%)"></div>
+<div style="position:relative">
+<div style="font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#c8952f">2022—present</div>
+<div style="margin-top:12px;font-family:'Bodoni Moda',serif;font-size:38px;line-height:1.06;color:#fff">Open Sky<br>Gathering</div>
+<p style="margin:16px 0 0;font-size:15px;line-height:1.72;color:rgba(255,255,255,.78);font-weight:300;text-wrap:pretty">Four editions of praise, worship, poetry and coffee under an open sky.</p>
+<div style="margin-top:22px;display:flex;gap:12px">
+<img src="assets/poster-opensky-2.png" alt="Open Sky 2nd Edition" style="width:calc(50% - 6px);aspect-ratio:3/4;object-fit:cover;display:block;border:1px solid rgba(200,149,47,.3)">
+<img src="assets/poster-opensky-4.png" alt="Open Sky 4th Edition" style="width:calc(50% - 6px);aspect-ratio:3/4;object-fit:cover;display:block;border:1px solid rgba(200,149,47,.3)">
+</div>
+<a href="#1b" style="display:block;margin-top:18px;background:#c8952f;color:#09090b;text-align:center;padding:16px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500">Next edition</a>
+</div>
+</div>
+
+<div style="padding:44px 22px;background:#0f0f12">
+<div style="display:grid;gap:26px">
+<div><div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#c8952f">Profession</div><div style="margin-top:10px;font-family:'Bodoni Moda',serif;font-size:24px;color:#fff">Real Estate Surveyor</div><p style="margin:8px 0 0;font-size:14.5px;line-height:1.7;color:rgba(255,255,255,.62);font-weight:300">Sustainable Development — profession balanced with passion.</p></div>
+<div style="border-top:1px solid rgba(200,149,47,.22);padding-top:24px"><div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#c8952f">Vocal training · 2020</div><div style="margin-top:10px;font-family:'Bodoni Moda',serif;font-size:24px;color:#fff">Transformative Drive</div><p style="margin:8px 0 0;font-size:14.5px;line-height:1.7;color:rgba(255,255,255,.62);font-weight:300">Coaching voices with intention and conviction.</p></div>
+<div style="border-top:1px solid rgba(200,149,47,.22);padding-top:24px"><div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#c8952f">Podcast</div><div style="margin-top:10px;font-family:'Bodoni Moda',serif;font-size:24px;color:#fff">Abed Live Moments</div><p style="margin:8px 0 0;font-size:14.5px;line-height:1.7;color:rgba(255,255,255,.62);font-weight:300">Conversations from behind the music.</p></div>
+</div>
+</div>
+
+<div style="position:relative;padding:52px 22px 34px;background:#09090b;overflow:hidden">
+<div style="position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 118%,rgba(200,149,47,.32) 0%,rgba(9,9,11,0) 72%)"></div>
+<div style="position:relative;text-align:center">
+<div style="font-size:10px;letter-spacing:.36em;text-transform:uppercase;color:#c8952f">Bookings</div>
+<a href="#1b" style="display:inline-block;margin-top:16px;font-family:'Bodoni Moda',serif;font-size:23px;color:#fff;border-bottom:1px solid rgba(200,149,47,.55);padding-bottom:10px">abedpraisebeat@gmail.com</a>
+<div style="margin-top:18px;font-size:15px;color:rgba(255,255,255,.75);font-weight:300">+267 75 951 316 // 74 400 864</div>
+<div style="margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<a href="#1b" style="border:1px solid rgba(255,255,255,.26);color:#fff;padding:13px 8px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase">Instagram</a>
+<a href="#1b" style="border:1px solid rgba(255,255,255,.26);color:#fff;padding:13px 8px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase">Facebook</a>
+<a href="#1b" style="border:1px solid rgba(255,255,255,.26);color:#fff;padding:13px 8px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase">YouTube</a>
+<a href="#1b" style="border:1px solid rgba(255,255,255,.26);color:#fff;padding:13px 8px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase">X / Twitter</a>
+</div>
+</div>
+<div style="position:relative;margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);text-align:center">
+<img src="assets/signature-white.png" alt="Abed" style="height:24px;width:auto;display:block;margin:0 auto">
+<div style="margin-top:14px;font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:#c8952f">Purpose in every note</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: “build out <a class="dv-oid" href="#1a">1a</a> as a real scrolling site” · “keep <a class="dv-oid" href="#1b">1b</a>’s gold but use <a class="dv-oid" href="#1a">1a</a>’s type” · “add a shows / tickets page”</p>
+</section>
+
+</x-dc>
+</body>
+</html>
