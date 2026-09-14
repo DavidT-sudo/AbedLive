@@ -42,6 +42,13 @@ export default async function AdminDiscographyPage() {
                   </label>
                   <input type="file" name="cover" accept="image/*" />
                 </div>
+                <input
+                  name="spotifyUrl"
+                  defaultValue={r.spotifyUrl ?? ""}
+                  placeholder="Spotify link (track, album, or artist — open.spotify.com/...)"
+                  pattern="https://open\.spotify\.com/.*"
+                  title="Paste a link from open.spotify.com"
+                />
                 <div className="admin-actions">
                   <button className="admin-btn admin-btn--ghost" type="submit">Save</button>
                 </div>
@@ -65,6 +72,12 @@ export default async function AdminDiscographyPage() {
             <input name="year" type="number" placeholder="Year" required />
           </div>
           <input type="file" name="cover" accept="image/*" />
+          <input
+            name="spotifyUrl"
+            placeholder="Spotify link (track, album, or artist — open.spotify.com/...)"
+            pattern="https://open\.spotify\.com/.*"
+            title="Paste a link from open.spotify.com"
+          />
           <div className="admin-actions">
             <button className="admin-btn" type="submit">Add release</button>
           </div>

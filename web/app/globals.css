@@ -532,17 +532,29 @@ img {
     margin-top: 0;
   }
 }
+.release-item {
+  border-bottom: 1px solid var(--ink-16);
+}
 .release-row {
   display: flex;
   align-items: center;
   gap: 16px;
   padding: 16px 0;
-  border-bottom: 1px solid var(--ink-16);
 }
 @media (min-width: 860px) {
   .release-row {
     gap: 32px;
     padding: 26px 0;
+  }
+}
+.release-embed {
+  padding-bottom: 16px;
+  max-width: 420px;
+}
+@media (min-width: 860px) {
+  .release-embed {
+    padding-bottom: 26px;
+    margin-left: 146px;
   }
 }
 .release-row__cover {

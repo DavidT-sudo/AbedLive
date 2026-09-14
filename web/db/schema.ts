@@ -90,6 +90,10 @@ export const releases = pgTable("releases", {
   year: integer("year").notNull(),
   isLatest: boolean("is_latest").notNull().default(false),
   coverImageId: uuid("cover_image_id").references(() => media.id),
+  // A track, album, or artist URL from open.spotify.com — rendered as the
+  // official Spotify embed player. Validated/parsed in lib/spotify.ts before
+  // ever reaching an <iframe>, so a bad paste here can't inject raw HTML.
+  spotifyUrl: text("spotify_url"),
   sortOrder: integer("sort_order").notNull().default(0),
 });
 

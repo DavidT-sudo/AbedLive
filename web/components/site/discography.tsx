@@ -1,4 +1,5 @@
 import type { getReleases } from "@/lib/content";
+import { SpotifyEmbed } from "@/components/site/spotify-embed";
 
 export function Discography({
   releases,
@@ -19,25 +20,32 @@ export function Discography({
       </div>
       <div className="discography">
         {releases.map((r) => (
-          <div className="release-row" key={r.id}>
-            {r.coverUrl && (
-              <img
-                className="release-row__cover"
-                src={r.coverUrl}
-                alt={r.coverAlt || r.title}
-              />
-            )}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div className="release-row__title">
-                {r.title} {r.subtitle && <span>{r.subtitle}</span>}
+          <div className="release-item" key={r.id}>
+            <div className="release-row">
+              {r.coverUrl && (
+                <img
+                  className="release-row__cover"
+                  src={r.coverUrl}
+                  alt={r.coverAlt || r.title}
+                />
+              )}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="release-row__title">
+                  {r.title} {r.subtitle && <span>{r.subtitle}</span>}
+                </div>
+                <div className="release-row__meta-mobile">
+                  {r.kind} · {r.year}
+                </div>
               </div>
-              <div className="release-row__meta-mobile">
-                {r.kind} · {r.year}
-              </div>
+              <div className="release-row__kind">{r.kind}</div>
+              <div className="release-row__note">{r.note}</div>
+              <div className="release-row__year">{r.year}</div>
             </div>
-            <div className="release-row__kind">{r.kind}</div>
-            <div className="release-row__note">{r.note}</div>
-            <div className="release-row__year">{r.year}</div>
+            {r.spotifyUrl && (
+              <div className="release-embed">
+                <SpotifyEmbed url={r.spotifyUrl} />
+              </div>
+            )}
           </div>
         ))}
       </div>

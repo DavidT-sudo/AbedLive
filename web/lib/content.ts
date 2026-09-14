@@ -69,6 +69,7 @@ export async function getReleases() {
       isLatest: releases.isLatest,
       coverUrl: media.url,
       coverAlt: media.alt,
+      spotifyUrl: releases.spotifyUrl,
     })
     .from(releases)
     .leftJoin(media, eq(releases.coverImageId, media.id))

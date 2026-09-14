@@ -6,6 +6,14 @@ import { db } from "@/db";
 import { releases } from "@/db/schema";
 import { requireEditor } from "@/lib/session";
 import { uploadMediaFromForm } from "@/lib/media-actions";
+import { parseSpotifyUrl } from "@/lib/spotify";
+
+/** Only ever stores a value that parses as a real Spotify content URL. */
+function cleanSpotifyUrl(formData: FormData): string | null {
+  const raw = String(formData.get("spotifyUrl") || "").trim();
+  if (!raw) return null;
+  return parseSpotifyUrl(raw) ? raw : null;
+}
 
 function refresh() {
   revalidatePath("/");
@@ -27,6 +35,7 @@ export async function addRelease(formData: FormData) {
     year: Number(formData.get("year")) || new Date().getFullYear(),
     isLatest: formData.get("isLatest") === "on",
     coverImageId,
+    spotifyUrl: cleanSpotifyUrl(formData),
     sortOrder: maxOrder + 1,
   });
   refresh();
@@ -46,6 +55,7 @@ export async function updateRelease(id: string, formData: FormData) {
       note: String(formData.get("note") || ""),
       year: Number(formData.get("year")) || undefined,
       isLatest: formData.get("isLatest") === "on",
+      spotifyUrl: cleanSpotifyUrl(formData),
       ...(coverImageId ? { coverImageId } : {}),
     })
     .where(eq(releases.id, id));
