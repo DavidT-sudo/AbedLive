@@ -1,9 +1,11 @@
 /* ---------------------------------------------------------------------------
    Theme tokens
-   `data-theme="press"` is the only theme implemented today (design 1a —
-   "Press Sheet"). A future `data-theme="open-sky"` block (design 1b) can be
-   added here later — every color/font a component uses comes from a token
-   below, so re-skinning is a palette/font swap, not a markup rewrite.
+   `data-theme` picks the active design direction from the CMS (site
+   settings, admin-controlled — see app/layout.tsx). Every color/font a
+   shared component uses comes from a token below, so those components
+   re-skin for free; sections whose layout genuinely differs between
+   directions get their own `.os-*` components (components/site/open-sky/*)
+   instead of branching inside a shared one.
 --------------------------------------------------------------------------- */
 :root,
 [data-theme="press"] {
@@ -28,6 +30,27 @@
 
   --container: 1320px;
   --gutter: 24px;
+}
+
+[data-theme="open-sky"] {
+  --bg: #09090b;
+  --bg-alt: #0f0f12;
+  --bg-dark: #09090b;
+  --ink: #ffffff;
+  --ink-64: rgba(255, 255, 255, 0.64);
+  --ink-60: rgba(255, 255, 255, 0.6);
+  --ink-14: rgba(200, 149, 47, 0.22);
+  --ink-16: rgba(200, 149, 47, 0.26);
+  --ink-18: rgba(200, 149, 47, 0.3);
+  --line: rgba(200, 149, 47, 0.26);
+  --line-strong: rgba(200, 149, 47, 0.55);
+  --on-dark: #ffffff;
+  --on-dark-soft: rgba(255, 255, 255, 0.66);
+  --on-dark-line: rgba(255, 255, 255, 0.14);
+  --accent: #c8952f;
+
+  --font-heading: "Bodoni Moda", Georgia, serif;
+  --font-body: "Jost", system-ui, sans-serif;
 }
 
 @media (min-width: 860px) {
@@ -81,17 +104,26 @@ img {
 /* ---------------------------------------------------------------------------
    Header / nav
 --------------------------------------------------------------------------- */
+/* The header floats transparently over the hero on landing (dark glass)
+   at every width, and only becomes the solid press-sheet bar once
+   SiteHeader's scroll listener marks it [data-scrolled="true"] — see
+   site-header.tsx. Because it's always fixed (never reserves flow space),
+   the hero below is always full-bleed to the top of the viewport. */
 .site-header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 40;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 64px;
   padding: 0 var(--gutter);
-  background: var(--bg);
-  border-bottom: 1px solid var(--ink-14);
+  background: rgba(13, 13, 13, 0.32);
+  border-bottom: 1px solid transparent;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   transition: background-color 0.35s ease, border-color 0.35s ease,
     backdrop-filter 0.35s ease;
 }
@@ -100,25 +132,11 @@ img {
     height: 74px;
   }
 }
-/* Mobile only: float transparently over the hero on landing (dark glass),
-   and only become the solid press-sheet bar once SiteHeader's scroll
-   listener marks it [data-scrolled="true"] — see site-header.tsx. */
-@media (max-width: 859px) {
-  .site-header {
-    position: fixed;
-    left: 0;
-    right: 0;
-    background: rgba(13, 13, 13, 0.32);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom-color: transparent;
-  }
-  .site-header[data-scrolled="true"] {
-    background: var(--bg);
-    border-bottom-color: var(--ink-14);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
+.site-header[data-scrolled="true"] {
+  background: var(--bg);
+  border-bottom-color: var(--ink-14);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 .site-header__logo {
   height: 24px;
@@ -132,13 +150,11 @@ img {
 .site-header__logo--light {
   display: none;
 }
-@media (max-width: 859px) {
-  .site-header[data-scrolled="false"] .site-header__logo--dark {
-    display: none;
-  }
-  .site-header[data-scrolled="false"] .site-header__logo--light {
-    display: block;
-  }
+.site-header[data-scrolled="false"] .site-header__logo--dark {
+  display: none;
+}
+.site-header[data-scrolled="false"] .site-header__logo--light {
+  display: block;
 }
 .site-header__nav {
   display: none;
@@ -152,10 +168,18 @@ img {
     text-transform: uppercase;
     color: var(--ink);
     font-weight: 500;
+    transition: color 0.3s ease;
   }
   .site-header__nav a[data-current] {
     border-bottom: 1px solid var(--ink);
     padding-bottom: 2px;
+    transition: border-color 0.3s ease;
+  }
+  .site-header[data-scrolled="false"] .site-header__nav {
+    color: #fff;
+  }
+  .site-header[data-scrolled="false"] .site-header__nav a[data-current] {
+    border-bottom-color: #fff;
   }
 }
 .site-header__toggle {
@@ -224,6 +248,815 @@ img {
   .mobile-nav {
     display: none;
   }
+}
+.site-header__cta {
+  display: none;
+}
+.mobile-nav__cta {
+  margin-top: 8px;
+  text-align: center;
+  background: var(--accent);
+  color: var(--bg-dark);
+  padding: 16px;
+  font-weight: 500;
+  border-bottom: none !important;
+}
+@media (min-width: 860px) {
+  .site-header__cta {
+    display: inline-block;
+    background: var(--accent);
+    color: #09090b;
+    padding: 11px 22px;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Open Sky (design 1b) — sections whose layout diverges from Press Sheet
+   live in components/site/open-sky/* and are styled here under `.os-*`.
+   Shared components (header, beyond-music, mobile-nav, buttons) re-skin
+   automatically from the [data-theme="open-sky"] tokens above.
+--------------------------------------------------------------------------- */
+.os-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+@media (min-width: 860px) {
+  .os-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.34em;
+  }
+}
+.os-link {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 5px;
+  white-space: nowrap;
+}
+.os-btn {
+  display: block;
+  text-align: center;
+  padding: 15px 20px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+@media (min-width: 860px) {
+  .os-btn {
+    display: inline-block;
+    padding: 16px 32px;
+    font-size: 11.5px;
+    letter-spacing: 0.2em;
+  }
+}
+.os-btn--solid {
+  background: var(--accent);
+  color: #09090b;
+}
+.os-btn--outline {
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  color: #fff;
+}
+
+/* Hero -------------------------------------------------------------------- */
+.os-hero {
+  position: relative;
+  height: 760px;
+  overflow: hidden;
+  background: #09090b;
+  font-family: var(--font-body);
+}
+@media (min-width: 860px) {
+  .os-hero {
+    height: 940px;
+  }
+}
+.os-hero__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 42% 40%;
+  opacity: 0.55;
+}
+@media (min-width: 860px) {
+  .os-hero__image {
+    object-position: 50% 40%;
+    opacity: 0.5;
+  }
+}
+.os-hero__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    80% 42% at 50% 10%,
+    rgba(200, 149, 47, 0.32) 0%,
+    rgba(9, 9, 11, 0) 65%
+  );
+}
+.os-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(9, 9, 11, 0.6) 0%,
+    rgba(9, 9, 11, 0.2) 36%,
+    rgba(9, 9, 11, 0.97) 94%
+  );
+}
+.os-hero__tagline {
+  display: none;
+}
+@media (min-width: 860px) {
+  .os-hero__tagline {
+    display: block;
+    position: absolute;
+    left: var(--gutter);
+    top: 74px;
+    bottom: 74px;
+    display: flex;
+    align-items: center;
+    font-size: 10.5px;
+    letter-spacing: 0.46em;
+    text-transform: uppercase;
+    color: rgba(200, 149, 47, 0.85);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+}
+.os-hero__center {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  top: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+@media (min-width: 860px) {
+  .os-hero__center {
+    top: 190px;
+  }
+}
+.os-hero__kicker {
+  font-size: 9.5px;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+@media (min-width: 860px) {
+  .os-hero__kicker {
+    font-size: 11px;
+  }
+}
+.os-hero__signature {
+  width: 240px;
+  height: auto;
+  margin-top: 22px;
+  filter: drop-shadow(0 0 26px rgba(200, 149, 47, 0.4));
+}
+@media (min-width: 860px) {
+  .os-hero__signature {
+    width: 480px;
+    margin-top: 26px;
+  }
+}
+.os-hero__wordmark {
+  margin-top: 6px;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
+  text-transform: uppercase;
+  color: #fff;
+}
+@media (min-width: 860px) {
+  .os-hero__wordmark {
+    margin-top: 10px;
+    font-size: 21px;
+    letter-spacing: 0.44em;
+  }
+}
+.os-hero__body {
+  margin: 24px 0 0;
+  max-width: 560px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 300;
+  text-wrap: pretty;
+}
+@media (min-width: 860px) {
+  .os-hero__body {
+    margin-top: 40px;
+    font-size: 18px;
+    line-height: 1.75;
+  }
+}
+.os-hero__ctas {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+}
+@media (min-width: 860px) {
+  .os-hero__ctas {
+    margin-top: 40px;
+    flex-direction: row;
+    gap: 16px;
+    max-width: none;
+  }
+}
+.os-hero__meta {
+  display: none;
+}
+@media (min-width: 860px) {
+  .os-hero__meta {
+    display: flex;
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: 0;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 0;
+    border-top: 1px solid rgba(200, 149, 47, 0.3);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.62);
+  }
+  .os-hero__meta-scroll {
+    color: var(--accent);
+  }
+}
+
+/* Marquee ------------------------------------------------------------------ */
+.os-marquee {
+  background: var(--accent);
+  color: #09090b;
+  padding: 14px 0;
+  overflow: hidden;
+}
+@media (min-width: 860px) {
+  .os-marquee {
+    padding: 18px 0;
+  }
+}
+.os-marquee__track {
+  display: flex;
+  width: max-content;
+  gap: 26px;
+  white-space: nowrap;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 500;
+  animation: abmarq 22s linear infinite;
+}
+@media (min-width: 860px) {
+  .os-marquee__track {
+    gap: 34px;
+    font-size: 11.5px;
+    letter-spacing: 0.26em;
+    animation-duration: 30s;
+  }
+}
+.os-marquee__dot {
+  margin-left: 26px;
+}
+@media (min-width: 860px) {
+  .os-marquee__dot {
+    margin-left: 34px;
+  }
+}
+@keyframes abmarq {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Story --------------------------------------------------------------------- */
+.os-story {
+  background: #09090b;
+}
+@media (min-width: 860px) {
+  .os-story {
+    display: grid;
+    grid-template-columns: 560px 1fr;
+  }
+}
+.os-story__portrait {
+  position: relative;
+  height: 320px;
+  overflow: hidden;
+}
+@media (min-width: 860px) {
+  .os-story__portrait {
+    height: auto;
+    min-height: 720px;
+  }
+}
+.os-story__portrait img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+}
+.os-story__portrait-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(9, 9, 11, 0) 55%, rgba(9, 9, 11, 0.9) 100%);
+}
+@media (min-width: 860px) {
+  .os-story__portrait-scrim {
+    background: linear-gradient(90deg, rgba(9, 9, 11, 0) 55%, rgba(9, 9, 11, 0.9) 100%);
+  }
+}
+.os-story__copy {
+  padding: 44px var(--gutter);
+}
+@media (min-width: 860px) {
+  .os-story__copy {
+    padding: 96px 72px;
+  }
+}
+.os-story__title {
+  margin-top: 14px;
+  font-family: var(--font-heading);
+  font-size: 34px;
+  line-height: 1.14;
+  color: #fff;
+}
+@media (min-width: 860px) {
+  .os-story__title {
+    margin-top: 20px;
+    font-size: 56px;
+    line-height: 1.1;
+  }
+}
+.os-story__p {
+  margin: 20px 0 0;
+  font-size: 15.5px;
+  line-height: 1.78;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 300;
+  max-width: 640px;
+  text-wrap: pretty;
+}
+@media (min-width: 860px) {
+  .os-story__p {
+    margin-top: 32px;
+    font-size: 18px;
+    line-height: 1.8;
+  }
+}
+.os-story__p--soft {
+  color: rgba(255, 255, 255, 0.62);
+}
+.os-story__quote {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(200, 149, 47, 0.3);
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 23px;
+  line-height: 1.45;
+  color: var(--accent);
+}
+@media (min-width: 860px) {
+  .os-story__quote {
+    margin-top: 48px;
+    padding-top: 34px;
+    font-size: 34px;
+    line-height: 1.4;
+  }
+}
+.os-story__stats {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (min-width: 860px) {
+  .os-story__stats {
+    margin-top: 48px;
+    gap: 28px;
+  }
+}
+.os-story__stat-num {
+  font-family: var(--font-heading);
+  font-size: 30px;
+  color: #fff;
+}
+@media (min-width: 860px) {
+  .os-story__stat-num {
+    font-size: 44px;
+  }
+}
+.os-story__stat-label {
+  margin-top: 4px;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.6;
+}
+@media (min-width: 860px) {
+  .os-story__stat-label {
+    margin-top: 6px;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    line-height: 1.7;
+  }
+}
+
+/* Discography ---------------------------------------------------------------- */
+.os-discography {
+  padding: 44px var(--gutter);
+  background: var(--bg-alt);
+}
+@media (min-width: 860px) {
+  .os-discography {
+    padding: 104px var(--gutter);
+  }
+}
+.os-discography__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+.os-discography__title {
+  margin-top: 10px;
+  font-family: var(--font-heading);
+  font-size: 30px;
+  color: #fff;
+}
+@media (min-width: 860px) {
+  .os-discography__title {
+    margin-top: 14px;
+    font-size: 52px;
+  }
+}
+.os-discography__grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (min-width: 860px) {
+  .os-discography__grid {
+    margin-top: 56px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+  }
+}
+.os-record__art {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 8px;
+  background: #09090b;
+}
+.os-record[data-latest] .os-record__art {
+  border-color: rgba(200, 149, 47, 0.4);
+}
+@media (min-width: 860px) {
+  .os-record__art {
+    padding: 12px;
+  }
+}
+.os-record__art img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.os-record__badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--accent);
+  color: #09090b;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 7px;
+  font-weight: 500;
+}
+@media (min-width: 860px) {
+  .os-record__badge {
+    top: 22px;
+    right: 22px;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    padding: 6px 10px;
+  }
+}
+.os-record__title {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #fff;
+}
+@media (min-width: 860px) {
+  .os-record__title {
+    margin-top: 16px;
+    font-size: 21px;
+  }
+}
+.os-record__meta {
+  margin-top: 4px;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+@media (min-width: 860px) {
+  .os-record__meta {
+    margin-top: 7px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+}
+
+/* Live / Open Sky Gathering --------------------------------------------------- */
+.os-live {
+  position: relative;
+  padding: 44px var(--gutter);
+  overflow: hidden;
+  background: #09090b;
+}
+@media (min-width: 860px) {
+  .os-live {
+    padding: 110px var(--gutter);
+  }
+}
+.os-live__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.32;
+}
+.os-live__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(9, 9, 11, 0.9) 0%,
+    rgba(9, 9, 11, 0.7) 50%,
+    rgba(9, 9, 11, 0.96) 100%
+  );
+}
+@media (min-width: 860px) {
+  .os-live__scrim {
+    background: linear-gradient(
+      90deg,
+      rgba(9, 9, 11, 0.97) 0%,
+      rgba(9, 9, 11, 0.6) 60%,
+      rgba(9, 9, 11, 0.9) 100%
+    );
+  }
+}
+.os-live__grid {
+  position: relative;
+}
+@media (min-width: 860px) {
+  .os-live__grid {
+    display: grid;
+    grid-template-columns: 1fr 620px;
+    gap: 72px;
+    align-items: center;
+  }
+}
+.os-live__title {
+  margin-top: 12px;
+  font-family: var(--font-heading);
+  font-size: 38px;
+  line-height: 1.06;
+  color: #fff;
+}
+@media (min-width: 860px) {
+  .os-live__title {
+    margin-top: 18px;
+    font-size: 66px;
+    line-height: 1.04;
+  }
+}
+.os-live__body {
+  margin: 16px 0 0;
+  font-size: 15px;
+  line-height: 1.72;
+  color: rgba(255, 255, 255, 0.78);
+  font-weight: 300;
+  text-wrap: pretty;
+}
+@media (min-width: 860px) {
+  .os-live__body {
+    margin-top: 28px;
+    font-size: 18px;
+    line-height: 1.8;
+    max-width: 480px;
+  }
+}
+.os-live__ctas {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+@media (min-width: 860px) {
+  .os-live__ctas {
+    margin-top: 34px;
+    flex-direction: row;
+    gap: 14px;
+  }
+}
+.os-live__posters {
+  margin-top: 22px;
+  display: flex;
+  gap: 12px;
+}
+@media (min-width: 860px) {
+  .os-live__posters {
+    margin-top: 0;
+    gap: 18px;
+  }
+}
+.os-live__poster {
+  width: calc(50% - 6px);
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid rgba(200, 149, 47, 0.3);
+}
+@media (min-width: 860px) {
+  .os-live__poster {
+    width: calc(33.333% - 12px);
+  }
+  .os-live__poster[data-offset] {
+    margin-top: 36px;
+  }
+}
+
+/* Footer / bookings ------------------------------------------------------------ */
+.os-footer {
+  position: relative;
+  padding: 52px var(--gutter) 34px;
+  overflow: hidden;
+  background: #09090b;
+}
+@media (min-width: 860px) {
+  .os-footer {
+    padding: 120px var(--gutter) 56px;
+  }
+}
+.os-footer__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    70% 60% at 50% 118%,
+    rgba(200, 149, 47, 0.32) 0%,
+    rgba(9, 9, 11, 0) 72%
+  );
+}
+.os-footer__inner {
+  position: relative;
+  text-align: center;
+}
+.os-footer__email {
+  display: inline-block;
+  margin-top: 16px;
+  font-family: var(--font-heading);
+  font-size: 23px;
+  color: #fff;
+  border-bottom: 1px solid rgba(200, 149, 47, 0.55);
+  padding-bottom: 10px;
+  word-break: break-word;
+}
+@media (min-width: 860px) {
+  .os-footer__email {
+    margin-top: 26px;
+    font-size: 60px;
+    padding-bottom: 14px;
+  }
+}
+.os-footer__phone {
+  margin-top: 18px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 300;
+}
+@media (min-width: 860px) {
+  .os-footer__phone {
+    margin-top: 28px;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+  }
+}
+.os-footer__socials {
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (min-width: 860px) {
+  .os-footer__socials {
+    margin-top: 44px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+}
+.os-footer__socials a {
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  color: #fff;
+  padding: 13px 8px;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+}
+@media (min-width: 860px) {
+  .os-footer__socials a {
+    padding: 13px 24px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+  }
+}
+.os-footer__base {
+  position: relative;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  text-align: center;
+}
+@media (min-width: 860px) {
+  .os-footer__base {
+    margin-top: 96px;
+    padding-top: 26px;
+  }
+}
+.os-footer__base img {
+  height: 24px;
+  margin: 0 auto;
+}
+@media (min-width: 860px) {
+  .os-footer__base img {
+    height: 30px;
+  }
+}
+.os-footer__tagline {
+  margin-top: 14px;
+  font-size: 9px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+@media (min-width: 860px) {
+  .os-footer__tagline {
+    margin-top: 18px;
+    font-size: 10.5px;
+    letter-spacing: 0.4em;
+  }
+}
+
+/* Beyond Music reuses the shared component; only add the vertical-divider
+   treatment this direction wants on wide screens. */
+@media (min-width: 860px) {
+  [data-theme="open-sky"] .beyond-grid {
+    background-color: var(--line);
+    gap: 1px;
+  }
+  [data-theme="open-sky"] .beyond-grid > div {
+    background: var(--bg-alt);
+    padding: 0 40px;
+  }
+  [data-theme="open-sky"] .beyond-grid > div:first-child {
+    padding-left: 0;
+  }
+  [data-theme="open-sky"] .beyond-grid > div:last-child {
+    padding-right: 0;
+  }
+}
+[data-theme="open-sky"] .beyond-grid__title {
+  font-family: var(--font-heading);
+  font-weight: 400;
 }
 
 /* ---------------------------------------------------------------------------

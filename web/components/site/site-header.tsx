@@ -2,28 +2,26 @@
 
 import { useEffect, useState } from "react";
 
-const NAV_LINKS = [
-  { href: "#about", label: "About" },
-  { href: "#discography", label: "Discography" },
-  { href: "#live", label: "Live" },
-  { href: "#beyond-music", label: "Beyond Music" },
-  { href: "#contact", label: "Bookings", emphasize: true },
-];
+type NavLink = { href: string; label: string; emphasize?: boolean };
 
 export function SiteHeader({
   logoUrl,
   logoUrlLight,
+  navLinks,
+  cta,
 }: {
   logoUrl: string;
   logoUrlLight: string;
+  navLinks: NavLink[];
+  cta?: { label: string; href: string };
 }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Mobile only (see globals.css): the header floats transparently over the
-  // hero on landing and only becomes the solid press-sheet bar once the
-  // user has scrolled well past it. Threshold is derived from the hero's
-  // own height so it still makes sense if that content changes.
+  // The header floats transparently over the hero on landing and only
+  // becomes the solid bar once the user has scrolled well past it.
+  // Threshold is derived from the hero's own height so it still makes
+  // sense if that content changes. Shared by every theme.
   useEffect(() => {
     const hero = document.getElementById("top");
     const threshold = hero ? hero.offsetHeight * 0.6 : 320;
@@ -63,7 +61,7 @@ export function SiteHeader({
         />
       </a>
       <nav className="site-header__nav" aria-label="Primary">
-        {NAV_LINKS.map((link) => (
+        {navLinks.map((link) => (
           <a
             key={link.href}
             href={link.href}
@@ -72,6 +70,11 @@ export function SiteHeader({
             {link.label}
           </a>
         ))}
+        {cta && (
+          <a href={cta.href} className="site-header__cta">
+            {cta.label}
+          </a>
+        )}
       </nav>
       <button
         type="button"
@@ -84,11 +87,20 @@ export function SiteHeader({
         <span />
       </button>
       <div className="mobile-nav" data-open={open} aria-hidden={!open}>
-        {NAV_LINKS.map((link) => (
+        {navLinks.map((link) => (
           <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
             {link.label}
           </a>
         ))}
+        {cta && (
+          <a
+            href={cta.href}
+            className="mobile-nav__cta"
+            onClick={() => setOpen(false)}
+          >
+            {cta.label}
+          </a>
+        )}
       </div>
     </header>
   );

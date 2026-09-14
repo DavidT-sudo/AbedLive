@@ -17,10 +17,8 @@ export default async function AdminSettingsPage() {
           <label>
             Design direction
             <select name="theme" defaultValue={settings?.theme || "press"}>
-              <option value="press">Press Sheet (live)</option>
-              <option value="open-sky" disabled>
-                Open Sky — coming soon
-              </option>
+              <option value="press">Press Sheet</option>
+              <option value="open-sky">Open Sky</option>
             </select>
           </label>
           <div className="admin-actions">

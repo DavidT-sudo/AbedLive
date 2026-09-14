@@ -1,0 +1,49 @@
+import type { getOpenSkyIntro, getOpenSkyEditions } from "@/lib/content";
+
+export function OpenSkyLive({
+  openSky,
+  posters,
+}: {
+  openSky: Awaited<ReturnType<typeof getOpenSkyIntro>>;
+  posters: Awaited<ReturnType<typeof getOpenSkyEditions>>;
+}) {
+  if (!openSky) return null;
+  return (
+    <section className="os-live" id="live">
+      <img className="os-live__bg" src="/media/live-purple.png" alt="" />
+      <div className="os-live__scrim" />
+      <div className="os-live__grid">
+        <div>
+          <div className="os-eyebrow">{openSky.eyebrow}</div>
+          <div className="os-live__title">
+            {openSky.title.split(" ").slice(0, -1).join(" ")}
+            <br />
+            {openSky.title.split(" ").at(-1)}
+          </div>
+          <p className="os-live__body">{openSky.body}</p>
+          <div className="os-live__ctas">
+            <a className="os-btn os-btn--solid" href={openSky.ctaHref}>
+              Next edition
+            </a>
+            <a className="os-btn os-btn--outline" href={openSky.ctaHref}>
+              Past editions
+            </a>
+          </div>
+        </div>
+        {posters.length > 0 && (
+          <div className="os-live__posters">
+            {posters.map((p, i) => (
+              <img
+                key={p.id}
+                className="os-live__poster"
+                data-offset={i === 1 ? true : undefined}
+                src={p.posterUrl ?? ""}
+                alt={`Open Sky Gathering ${p.title}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
