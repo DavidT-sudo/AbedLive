@@ -90,18 +90,24 @@ There are two compose files:
   `POSTGRES_DB` env vars instead of the committed `changeme` dev default
   (the compose file refuses to start without `POSTGRES_PASSWORD` set); and
   it runs under its own Compose project name (`AbedLive-staging`) so it
-  never collides with another stack on the same host. `app` and `tools`
-  are the same multi-stage `Dockerfile` either way — it now also carries
-  its own `HEALTHCHECK`.
+  never collides with another stack on the same host. `app` is the same
+  multi-stage `Dockerfile` either way — it now also carries its own
+  `HEALTHCHECK`.
 
-Both files also have a `tools` service — not for migrations (see above),
-just for one-off admin commands that shouldn't run automatically on every
-boot: `db:seed` (not upsert-safe — running it twice duplicates content)
-and `admin:create`. It builds from the same Dockerfile's `builder` stage
-(full source, full dependencies) and idles forever by default
-(`sleep infinity`) rather than running a command and exiting — see the
-comment in `docker-compose.staging.yaml` for why that specific detail
-matters under Coolify.
+Neither file has a migrate or "tools" service — there is deliberately no
+one-off container of any kind in the stack, because Coolify has two
+compounding upstream bugs that make one dangerous no matter how it's
+gated (ignores `profiles:` — [coolify#6395](https://github.com/coollabsio/coolify/issues/6395);
+and separately tears down the *entire* Compose stack whenever any one
+container in it exits(0), mistaking a one-off job finishing for a crash —
+[coolify#7115](https://github.com/coollabsio/coolify/issues/7115)). Both a
+profile-gated `migrate` service and later an idling `tools` service
+(meant to only run something via `docker compose run`) were tried and
+backed out — a `docker compose run` container is still part of the same
+Compose project, so if Coolify's monitor watches every container under
+that project label rather than just the ones it started via `up`, even a
+one-off `run` invocation isn't safe. The only fix that holds up is having
+nothing that a Compose-based command creates and later exits.
 
 1. In Coolify: **New Resource → Docker Compose**, point it at this GitHub
    repo, and set the **Base Directory** to `web` (the app isn't at the repo
@@ -112,23 +118,37 @@ matters under Coolify.
    TLS via its built-in reverse proxy) and a second domain to `seaweedfs`
    for `S3_PUBLIC_URL` (media is loaded straight from the S3 gateway in the
    browser, never proxied through `app`).
-3. Deploy. This brings up `postgres`, `seaweedfs`, `app` (which migrates
-   itself on boot), and `tools` (idling, ready for the one-time setup
-   below).
+3. Deploy. This brings up `postgres`, `seaweedfs`, and `app` — the last one
+   migrates itself on boot, no separate step needed.
 4. Run the one-time setup, from a shell on the server Coolify deployed to
    (SSH in, or use Coolify's terminal for that server) — `cd` into the
    deployment directory Coolify created, then:
 
    ```bash
-   # create the media bucket (SeaweedFS doesn't auto-create it)
-   docker compose run --rm seaweedfs weed shell -master=seaweedfs:9333 \
+   # create the media bucket (SeaweedFS doesn't auto-create it) — runs
+   # inside the already-running seaweedfs container (`exec`, not `run`),
+   # so this never creates a container of its own either
+   docker compose exec seaweedfs weed shell -master=localhost:9333 \
      <<< "s3.bucket.create -name abedlive-media"
 
-   # seed Abed's real content — not upsert-safe, run once only
-   docker compose run --rm tools npm run db:seed
+   # seed Abed's real content and bootstrap the first admin — genuinely
+   # one-off, so these run as a plain `docker build` + `docker run`,
+   # entirely outside this Compose project (no service, no `docker
+   # compose run`, invisible to Coolify's monitoring either way):
+   docker build --target builder -t abedlive-tools .
 
-   # bootstrap the first admin — see below
-   docker compose run --rm tools npm run admin:create -- \
+   # find this stack's network (created by Compose as <project>_default;
+   # for docker-compose.staging.yaml that's normally abedlive-staging_default
+   # — confirm with `docker network ls` if this doesn't match)
+   NET=abedlive-staging_default
+
+   docker run --rm --network "$NET" --env-file .env \
+     -e DATABASE_URL="postgresql://${POSTGRES_USER:-abedlive}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-abedlive}" \
+     abedlive-tools npm run db:seed
+
+   docker run --rm --network "$NET" --env-file .env \
+     -e DATABASE_URL="postgresql://${POSTGRES_USER:-abedlive}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-abedlive}" \
+     abedlive-tools npm run admin:create -- \
      --email you@example.com --password "..." --name "Your Name"
    ```
 

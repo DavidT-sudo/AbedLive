@@ -11,17 +11,17 @@
 #     stack (e.g. a real `production` deploy) on the same Docker host.
 #   - Postgres credentials come from environment variables you set in
 #     Coolify's UI (POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB)
-#     instead of the committed `changeme` dev default — the app and
-#     tools services build DATABASE_URL from the same variables, so
-#     there's exactly one place to change the password.
+#     instead of the committed `changeme` dev default — `app` builds
+#     DATABASE_URL from the same variables, so there's exactly one place
+#     to change the password.
 #   - Every long-running service gets a health check, a memory/CPU
 #     ceiling, rotated JSON logging (so a runaway container can't fill
 #     the host's disk), and `no-new-privileges` as a baseline hardening
 #     default.
-#   - `app` and `tools` already build through the same multi-stage,
-#     `output: standalone` Dockerfile used locally (non-root user,
-#     production `next build`); the image also carries its own
-#     HEALTHCHECK now, which `docker ps` / Coolify picks up directly.
+#   - `app` builds through the same multi-stage, `output: standalone`
+#     Dockerfile used locally (non-root user, production `next build`);
+#     the image also carries its own HEALTHCHECK now, which `docker ps` /
+#     Coolify picks up directly.
 #   - `seaweedfs`'s S3 identity config is generated at container start
 #     from S3_ACCESS_KEY_ID/S3_SECRET_ACCESS_KEY (docker/seaweedfs-
 #     entrypoint.sh) instead of being a static file with real keys
@@ -34,28 +34,28 @@
 #     <PORT>` env var declared on the service (Coolify scans for it) —
 #     that's what was actually missing before, not the ports/expose
 #     choice. `postgres`, internal-only, gets neither.
-#   - There is no separate migrate service. `app` applies pending schema
-#     migrations itself at boot (db/docker-migrate.mjs, run by the
-#     Dockerfile's CMD before the server starts) — nothing here ever
-#     starts, finishes, and exits(0) as its own service. That matters
+#   - There is no migrate service and no tools service — no one-off
+#     container of any kind lives in this file. `app` applies pending
+#     schema migrations itself at boot (db/docker-migrate.mjs, run by
+#     the Dockerfile's CMD before the server starts). That matters
 #     because Coolify has two compounding upstream bugs that make any
 #     one-off job in a Compose stack dangerous: it doesn't respect
 #     `profiles:` (coollabsio/coolify#6395), and separately, it misreads
 #     a job that legitimately exits(0) after finishing as "a service
 #     went down" and tears down the *entire* stack in response
-#     (coollabsio/coolify#7115). A profile-gated `migrate` service was
-#     tried here first and hit exactly that: Coolify started it anyway,
-#     it finished and exited 0 as designed, and Coolify SIGTERM'd
-#     seaweedfs and app in response. Moving migrations into app's own
-#     boot sequence removes the one-off container entirely, which is the
-#     only fix that holds up given Coolify ignores the profile gate.
-#   - `tools` still exists, for the one thing that can't safely run on
-#     every boot: db:seed (not upsert-safe) and admin:create. Its default
-#     command is a no-op that never exits (`sleep infinity`), not a
-#     command that runs-and-exits — a real command only runs when you
-#     explicitly invoke one via `docker compose run --rm tools ...`, so
-#     if Coolify starts it anyway (it will — see above), it just idles
-#     harmlessly instead of ever hitting the exit-triggers-teardown bug.
+#     (coollabsio/coolify#7115). A profile-gated `migrate` service hit
+#     exactly that. A `tools` service with an idling default command
+#     (meant to only run something via `docker compose run`) was tried
+#     next — but a `docker compose run` container is still part of the
+#     same Compose project, so if Coolify's monitor watches every
+#     container under that project label rather than just the ones it
+#     started via `up`, even a one-off `run` invocation could trip the
+#     same bug. Rather than keep guessing at what Coolify's monitor
+#     does and doesn't count, the reliable fix is to have nothing in
+#     this file that ever starts, finishes, and exits — for the rare
+#     one-off admin commands (db:seed, admin:create), see web/README.md
+#     for the plain `docker build` + `docker run` invocation, which
+#     never touches this Compose project at all.
 #
 # Required environment variables (set these in Coolify, then redeploy):
 # POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, plus everything already
@@ -128,26 +128,6 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-
-  # One-off admin commands only (db:seed, admin:create) — see
-  # web/README.md for `docker compose run --rm tools ...`. Migrations are
-  # NOT run here anymore; app applies those itself at boot. Default
-  # command idles forever rather than running-and-exiting — see the
-  # header comment for why that matters under Coolify specifically.
-  tools:
-    build:
-      context: .
-      target: builder
-    env_file: .env
-    environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-abedlive}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in Coolify's environment variables}@postgres:5432/${POSTGRES_DB:-abedlive}
-    depends_on:
-      postgres:
-        condition: service_healthy
-    command: sh -c "sleep infinity"
-    restart: "no"
-    mem_limit: 512m
-    cpus: "1.0"
 
   app:
     build:

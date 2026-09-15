@@ -34,27 +34,6 @@ services:
       # S3 API — expose only if the app runs outside this compose network too.
       - "8333:8333"
 
-  # Not for migrations anymore — `app` applies those itself at boot (see
-  # db/docker-migrate.mjs and the Dockerfile). This is only a shell for
-  # one-off admin commands that need the full builder-stage source/deps
-  # and aren't safe to run automatically: `docker compose run --rm tools
-  # npm run db:seed` / `npm run admin:create -- ...`. Default command is
-  # deliberately a no-op that never exits — a "run once and exit(0)"
-  # command here is exactly the pattern that confuses Coolify's Compose
-  # healthcheck monitor into tearing down the whole stack (see README),
-  # so this container just idles unless something explicitly runs a
-  # command in it via `docker compose run`.
-  tools:
-    build:
-      context: .
-      target: builder
-    env_file: .env
-    depends_on:
-      postgres:
-        condition: service_healthy
-    command: sh -c "sleep infinity"
-    restart: "no"
-
   app:
     build:
       context: .
