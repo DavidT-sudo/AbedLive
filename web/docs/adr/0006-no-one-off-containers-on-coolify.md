@@ -79,3 +79,12 @@ idling service meant only to be targeted by `docker compose run`.
   could in principle be relaxed — but there's no strong reason to revisit
   it even then, since boot-time migration is arguably simpler regardless
   of Coolify's bugs.
+
+**Amendment, 2026-09-15:** this ADR was necessary but turned out not to be
+the whole story — a deploy with no one-off containers at all still showed
+the same whole-stack teardown. The actual remaining trigger was
+`seaweedfs` crash-looping (`RestartCount=10`) for an unrelated reason —
+see [0007](0007-bake-seaweedfs-entrypoint-into-image.md). Keep this ADR's
+decision (it's still correct and worth keeping), but don't treat it as
+having fully explained every teardown observed during this debugging
+session.

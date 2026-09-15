@@ -127,8 +127,8 @@ img {
   padding: 0 var(--gutter);
   background: rgba(13, 13, 13, 0.32);
   border-bottom: 1px solid transparent;
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   transition: background-color 0.35s ease, border-color 0.35s ease,
     backdrop-filter 0.35s ease;
 }
@@ -140,8 +140,8 @@ img {
 .site-header[data-scrolled="true"] {
   background: var(--bg);
   border-bottom-color: var(--ink-14);
-  backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 .site-header__logo {
   height: 24px;
@@ -461,7 +461,6 @@ img {
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.8);
   font-weight: 300;
-  text-wrap: pretty;
 }
 @media (min-width: 860px) {
   .os-hero__body {
@@ -633,7 +632,6 @@ img {
   color: rgba(255, 255, 255, 0.8);
   font-weight: 300;
   max-width: 640px;
-  text-wrap: pretty;
 }
 @media (min-width: 860px) {
   .os-story__p {
@@ -925,7 +923,6 @@ img {
   line-height: 1.72;
   color: rgba(255, 255, 255, 0.78);
   font-weight: 300;
-  text-wrap: pretty;
 }
 @media (min-width: 860px) {
   .os-live__body {
@@ -975,8 +972,6 @@ img {
   gap: 14px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
   padding-bottom: 2px;
   margin: 0;
 }
@@ -1495,7 +1490,6 @@ img {
   margin: 0;
   font-size: 15.5px;
   line-height: 1.78;
-  text-wrap: pretty;
 }
 @media (min-width: 860px) {
   .about__copy p {
@@ -2016,7 +2010,6 @@ img {
   font-size: 15px;
   line-height: 1.72;
   color: var(--ink-60);
-  text-wrap: pretty;
 }
 @media (min-width: 860px) {
   .open-sky__body {

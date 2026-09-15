@@ -25,7 +25,15 @@
 #   - `seaweedfs`'s S3 identity config is generated at container start
 #     from S3_ACCESS_KEY_ID/S3_SECRET_ACCESS_KEY (docker/seaweedfs-
 #     entrypoint.sh) instead of being a static file with real keys
-#     committed to the repo.
+#     committed to the repo. The script is baked into a small custom
+#     image at build time (docker/seaweedfs.Dockerfile) rather than
+#     bind-mounted from the host — a bind mount's source has to exist at
+#     the exact moment Docker resolves it, and on Coolify specifically a
+#     missing one gets silently auto-vivified as an empty directory that
+#     the deploy's own git checkout never overwrites on any later deploy.
+#     That bug bit this file twice (see
+#     web/docs/adr/0007-bake-seaweedfs-entrypoint-into-image.md) before
+#     the bind mount was removed entirely.
 #   - `app` and `seaweedfs` use `expose:`, not `ports:` — Traefik (which
 #     Coolify uses) reaches containers over the internal Docker network
 #     and never needs a host-published port; `ports:` is explicitly for
@@ -90,9 +98,10 @@ services:
         max-file: "3"
 
   seaweedfs:
-    image: chrislusf/seaweedfs:latest
+    build:
+      context: ./docker
+      dockerfile: seaweedfs.Dockerfile
     restart: unless-stopped
-    entrypoint: ["/bin/sh", "/docker/seaweedfs-entrypoint.sh"]
     command:
       - server
       - -dir=/data
@@ -107,7 +116,6 @@ services:
       SERVICE_FQDN_SEAWEEDFS_8333: abedmedia.omerohmlabs.com
     volumes:
       - seaweed_data:/data
-      - ./docker/seaweedfs-entrypoint.sh:/docker/seaweedfs-entrypoint.sh:ro
     expose:
       - "8333"
     healthcheck:
