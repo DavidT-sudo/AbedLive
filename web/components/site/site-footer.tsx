@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type {getContactInfo, getSocialLinks} from "@/lib/content";
-import { SocialIcon } from "./social-icon";
+import {SocialIcon} from "./social-icon";
 
 export function SiteFooter({
   contact,
@@ -23,7 +23,7 @@ export function SiteFooter({
           <div className="site-footer__phone">
             {contact.phonePrimary}
             {contact.phoneSecondary && (
-              <> &nbsp;//&nbsp; {contact.phoneSecondary}</>
+              <> &nbsp;/&nbsp; {contact.phoneSecondary}</>
             )}
           </div>
         </div>
@@ -35,7 +35,9 @@ export function SiteFooter({
                 <a
                   key={s.id}
                   href={s.url}
-                  aria-label={s.handle ? `${s.platform} — ${s.handle}` : s.platform}
+                  aria-label={
+                    s.handle ? `${s.platform} — ${s.handle}` : s.platform
+                  }
                   title={s.handle ? `${s.platform} — ${s.handle}` : s.platform}
                 >
                   <SocialIcon platform={s.platform} />
@@ -47,7 +49,9 @@ export function SiteFooter({
       </div>
       <div className="site-footer__base">
         <Image src={logoUrl} alt="Abed" width={200} height={52} unoptimized />
-        <div className="site-footer__base-note">{contact.footerTagline}</div>
+        <div className="site-footer__base-note flex">
+          {contact.footerTagline}
+        </div>
         <div className="site-footer__copyright">{contact.copyrightText}</div>
       </div>
     </section>

@@ -37,6 +37,9 @@ yarn-error.log*
 # local dev overrides (machine-specific port mappings, etc.)
 docker-compose.override.yml
 
+# SeaweedFS local runtime data (binary + volume data, not source)
+.seaweed/
+
 # vercel
 .vercel
 

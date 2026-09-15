@@ -29,14 +29,16 @@ export function OpenSkyLive({
             {openSky.title.split(" ").at(-1)}
           </div>
           <p className="os-live__body">{openSky.body}</p>
-          <div className="os-live__ctas">
+          {/* openSky.ctaHref has no real destination yet ("#") — hidden
+              until there's somewhere for it to actually go. */}
+          {/* <div className="os-live__ctas">
             <a className="os-btn os-btn--solid" href={openSky.ctaHref}>
               Next edition
             </a>
             <a className="os-btn os-btn--outline" href={openSky.ctaHref}>
               Past editions
             </a>
-          </div>
+          </div> */}
         </div>
         <div className="os-live__posters">
           <PosterCarousel items={posters} />

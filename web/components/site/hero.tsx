@@ -1,7 +1,14 @@
 import Image from "next/image";
-import type {getHero} from "@/lib/content";
+import type {getHero, getReleases} from "@/lib/content";
+import {ListenButton} from "@/components/site/listen-button";
 
-export function Hero({hero}: {hero: Awaited<ReturnType<typeof getHero>>}) {
+export function Hero({
+  hero,
+  featuredRelease,
+}: {
+  hero: Awaited<ReturnType<typeof getHero>>;
+  featuredRelease?: Awaited<ReturnType<typeof getReleases>>[number];
+}) {
   if (!hero) return null;
   return (
     <section className="hero" id="top">
@@ -27,9 +34,19 @@ export function Hero({hero}: {hero: Awaited<ReturnType<typeof getHero>>}) {
         </div>
         <div className="hero__meta-block hero__meta-block--right">
           <span>{hero.releaseNote}</span>
-          <a className="hero__cta" href={hero.releaseCtaHref}>
-            {hero.releaseCtaLabel}
-          </a>
+          {featuredRelease?.spotifyUrl ? (
+            <ListenButton
+              className="hero__cta"
+              label={hero.releaseCtaLabel}
+              title={featuredRelease.title}
+              subtitle={`${featuredRelease.kind} · ${featuredRelease.year}`}
+              url={featuredRelease.spotifyUrl}
+            />
+          ) : (
+            <a className="hero__cta" href={hero.releaseCtaHref}>
+              {hero.releaseCtaLabel}
+            </a>
+          )}
         </div>
       </div>
     </section>

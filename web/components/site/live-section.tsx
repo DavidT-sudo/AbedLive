@@ -41,9 +41,11 @@ export function LiveSection({
             <div className="open-sky__eyebrow">{openSky.eyebrow}</div>
             <div className="open-sky__title">{openSky.title}</div>
             <p className="open-sky__body">{openSky.body}</p>
-            <a className="open-sky__cta" href={openSky.ctaHref}>
+            {/* openSky.ctaHref has no real destination yet ("#") — hidden
+                until there's somewhere for it to actually go. */}
+            {/* <a className="open-sky__cta" href={openSky.ctaHref}>
               {openSky.ctaLabel}
-            </a>
+            </a> */}
           </div>
           <div className="open-sky__posters">
             <PosterCarousel items={posters} />

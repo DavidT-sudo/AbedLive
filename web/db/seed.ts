@@ -65,12 +65,12 @@ async function main() {
     upsertMedia("cover-as-you-will.png", "As You Will"),
     upsertMedia("cover-o-tsholofelo.png", "O Tsholofelo Live DVD"),
     upsertMedia("cover-phatsima.png", "Phatsima"),
-    // Placeholder artwork — replace with real posters via /admin/open-sky
-    // whenever they're designed; see web/docs for context.
-    upsertMedia("poster-opensky-1.svg", "Open Sky Gathering 1st Edition — Imagine Life"),
+    upsertMedia("poster-opensky-1.jpg", "Open Sky Gathering 1st Edition — 14 May 2022"),
     upsertMedia("poster-opensky-2.png", "Open Sky Gathering 2nd Edition"),
     upsertMedia("poster-opensky-3.png", "Open Sky Gathering 3rd Edition"),
     upsertMedia("poster-opensky-4.png", "Open Sky Gathering 4th Edition"),
+    // 5th Edition hasn't happened yet (2026) — placeholder artwork until a
+    // real flyer exists; replace via /admin/open-sky when it does.
     upsertMedia("poster-opensky-5.svg", "Open Sky Gathering 5th Edition — Amplified"),
     upsertMedia("piano-hands.png", ""),
   ]);
@@ -207,7 +207,7 @@ async function main() {
     id: "default",
     eyebrow: "Event management · 2022—present",
     title: "Open Sky Gathering",
-    body: "Abed's own gathering — four editions of praise, worship, poetry and coffee under an open sky in Molepolole.",
+    body: "Abed's own gathering — five editions of praise, worship, poetry and coffee under an open sky in Molepolole.",
     ctaLabel: "See all editions ↗",
     ctaHref: "#",
   });

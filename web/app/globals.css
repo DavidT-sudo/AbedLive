@@ -315,6 +315,11 @@ img {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-weight: 500;
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  width: 100%;
 }
 @media (min-width: 860px) {
   .os-btn {
@@ -895,14 +900,6 @@ img {
 .os-live__grid {
   position: relative;
 }
-@media (min-width: 860px) {
-  .os-live__grid {
-    display: grid;
-    grid-template-columns: 1fr 620px;
-    gap: 72px;
-    align-items: center;
-  }
-}
 .os-live__title {
   margin-top: 12px;
   font-family: var(--font-heading);
@@ -946,11 +943,18 @@ img {
   }
 }
 .os-live__posters {
+  /* Full-bleed: cancels .os-live's own gutter so the carousel reaches the
+     viewport edges. .os-live has overflow:hidden (to clip the background
+     image), but that's harmless here since this never exceeds .os-live's
+     own already-full-viewport-width box — it only cancels the padding. */
   margin-top: 22px;
+  margin-left: calc(-1 * var(--gutter));
+  margin-right: calc(-1 * var(--gutter));
+  width: calc(100% + 2 * var(--gutter));
 }
 @media (min-width: 860px) {
   .os-live__posters {
-    margin-top: 0;
+    margin-top: 48px;
   }
 }
 
@@ -966,29 +970,70 @@ img {
 --------------------------------------------------------------------------- */
 .poster-carousel {
   position: relative;
+  --carousel-item-w: clamp(240px, 78vw, 320px);
 }
 .poster-carousel__track {
   display: flex;
-  gap: 14px;
+  gap: 18px;
   overflow-x: auto;
+  overflow-anchor: none;
   scroll-snap-type: x mandatory;
-  padding-bottom: 2px;
+  scroll-behavior: smooth;
+  /* Centers the focused card: side padding is however much space is left
+     after the card's own width, split evenly, rather than a flat gutter.
+     scroll-padding (not the box's own padding) is what scroll-snap
+     actually respects as the snap boundary — without it, some browsers
+     snap the first item flush against the scrollport on load, silently
+     scrolling the leading space out of view before the user ever
+     touches the carousel. */
+  padding: 0 calc((100% - var(--carousel-item-w)) / 2) 2px;
+  scroll-padding: 0 calc((100% - var(--carousel-item-w)) / 2);
   margin: 0;
+}
+@media (min-width: 860px) {
+  .poster-carousel__track {
+    gap: 24px;
+    /* Desktop shows several cards at once — back to a flat leading
+       gutter instead of centering a single one. */
+    padding: 0 var(--gutter) 2px;
+    scroll-padding: 0 var(--gutter);
+  }
 }
 .poster-carousel__track::-webkit-scrollbar {
   display: none;
 }
 .poster-carousel__item {
   flex: 0 0 auto;
-  width: clamp(150px, 42vw, 220px);
-  scroll-snap-align: start;
+  /* One card dominant per view on mobile (not two-thin-cards-at-once) —
+     wide enough that only one fits, but short of 100% so the next card's
+     edge still peeks in as a visible "there's more" hint. Each scroll
+     snap step (see poster-carousel.tsx's scroll()) moves exactly one
+     card width, so swiping or an arrow click advances one at a time. */
+  width: var(--carousel-item-w);
+  scroll-snap-align: center;
   margin: 0;
-  overflow: hidden;
+}
+.poster-carousel__caption {
+  transition: opacity 0.35s ease;
+}
+.poster-carousel__item:not(.poster-carousel__item--active) .poster-carousel__caption {
+  opacity: 0.55;
 }
 @media (min-width: 860px) {
   .poster-carousel__item {
     width: clamp(200px, 21vw, 280px);
+    scroll-snap-align: start;
   }
+  /* The focus/recede treatment is a mobile, single-focus-card idea —
+     desktop already shows several cards at once with no single "focused"
+     one, so every card stays at full clarity there. */
+  .poster-carousel__item:not(.poster-carousel__item--active) .poster-carousel__caption {
+    opacity: 1;
+  }
+}
+.poster-carousel__image-wrap {
+  position: relative;
+  overflow: hidden;
 }
 .poster-carousel__image {
   width: 100%;
@@ -1002,6 +1047,32 @@ img {
 }
 [data-theme="open-sky"] .poster-carousel__image {
   border: 1px solid rgba(200, 149, 47, 0.3);
+}
+/* Glassmorphism: a frosted, tinted pane laid over the image rather than
+   blurring the image's own pixels — backdrop-filter blurs what's behind
+   it (the poster), the dark tint recedes it, and the faint white border +
+   inset highlight sell it as a pane of glass sitting on top, not just a
+   blurry photo. Scoped to the image only (not the caption below it) so
+   the title stays legible even for the cards you're not on. */
+.poster-carousel__glass {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: rgba(8, 8, 10, 0.42);
+  backdrop-filter: blur(5px) saturate(1.1);
+  -webkit-backdrop-filter: blur(5px) saturate(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.poster-carousel__item:not(.poster-carousel__item--active) .poster-carousel__glass {
+  opacity: 1;
+}
+@media (min-width: 860px) {
+  .poster-carousel__item:not(.poster-carousel__item--active) .poster-carousel__glass {
+    opacity: 0;
+  }
 }
 .poster-carousel__caption {
   margin: 10px 0 0;
@@ -1019,13 +1090,18 @@ img {
   color: var(--ink-60);
 }
 .poster-carousel__controls {
-  display: none;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 0 var(--gutter);
 }
 @media (min-width: 860px) {
   .poster-carousel__controls {
-    display: flex;
+    justify-content: flex-start;
     gap: 8px;
     margin-top: 18px;
+    padding: 0;
   }
 }
 .poster-carousel__btn {
@@ -1118,21 +1194,21 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.26);
-  color: #fff;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  width: 40px;
+  height: 40px;
+  transition: transform 0.2s ease;
+}
+.os-footer__socials a svg {
+  width: 100%;
+  height: 100%;
 }
 .os-footer__socials a:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  transform: scale(1.1);
 }
 @media (min-width: 860px) {
   .os-footer__socials a {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
   }
 }
 .os-footer__base {
@@ -1220,6 +1296,15 @@ img {
   min-height: 100dvh;
   background: var(--bg-dark);
   overflow: hidden;
+  /* Flex column instead of two independently absolute-positioned blocks
+     (title, meta) with fixed pixel offsets — those could overlap at
+     unusual aspect ratios (short/wide, e.g. mobile landscape) since
+     neither knew how much vertical space the other actually needed.
+     Flex lets the title block take the remaining space and centers it,
+     so title and meta can never collide regardless of viewport shape. */
+  display: flex;
+  flex-direction: column;
+  padding: clamp(16px, 8dvh, 96px) 0 clamp(16px, 4dvh, 44px);
 }
 .hero__image {
   position: absolute;
@@ -1233,64 +1318,94 @@ img {
 .hero__scrim {
   position: absolute;
   inset: 0;
+  /* A base darkening everywhere (not just 0% at dead center) — the title
+     sits right at this gradient's center, and photos vary in brightness
+     there (this one has a bright white jacket right under the text), so
+     text contrast can't depend on the photo happening to be dark. Edges
+     still darken further for the vignette framing this already had. */
   background: radial-gradient(
     120% 90% at 50% 45%,
-    rgba(0, 0, 0, 0) 30%,
-    rgba(0, 0, 0, 0.72) 100%
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.48) 30%,
+    rgba(0, 0, 0, 0.8) 100%
   );
 }
 .hero__title {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 96px;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   color: #fff;
+  padding: 0 var(--gutter);
 }
-@media (min-width: 860px) {
+@media (min-height: 700px) {
   .hero__title {
-    top: 196px;
+    /* Tall/portrait viewports have far more room below the title than a
+       short one — centering it in that whole remaining space leaves it
+       looking lost in the middle of a lot of empty photo. Anchor it
+       higher instead, closer to classic hero composition. */
+    justify-content: flex-start;
+    padding-top: clamp(24px, 12dvh, 140px);
   }
 }
 .hero__title-line {
-  font-size: clamp(44px, 8vw, 112px);
+  /* Bigger floor/coefficient than before — the previous single formula
+     used a height cap (min(8vw, 14dvh)) meant only for short landscape
+     viewports, but it was also suppressing size on tall portrait ones,
+     where there's plenty of vertical room to go bigger. Portrait gets
+     the larger size below by default; the min-height query further down
+     hands short/landscape viewports the height-aware formula instead. */
+  font-size: clamp(52px, 15vw, 112px);
   line-height: 1.05;
-  font-weight: 300;
+  font-weight: 500;
   letter-spacing: 0.22em;
   text-indent: 0.22em;
+  /* A soft dark halo behind the white text — keeps it legible against
+     whatever happens to be behind it (a bright jacket, a spotlight...)
+     without depending entirely on the scrim being dark enough there. */
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.65), 0 1px 4px rgba(0, 0, 0, 0.85);
+}
+@media (max-height: 500px) {
+  .hero__title-line {
+    font-size: clamp(28px, min(15vw, 13dvh), 112px);
+  }
 }
 .hero__kicker {
-  margin-top: 20px;
+  margin-top: clamp(10px, 3dvh, 34px);
   font-size: 9.5px;
   letter-spacing: 0.44em;
   text-indent: 0.44em;
-  font-weight: 500;
+  font-weight: 600;
   color: #fff;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
 }
 @media (min-width: 860px) {
   .hero__kicker {
-    margin-top: 34px;
     font-size: 11px;
     letter-spacing: 0.52em;
     text-indent: 0.52em;
   }
 }
 .hero__meta {
-  position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
-  bottom: 28px;
+  position: relative;
+  flex-shrink: 0;
+  padding: 0 var(--gutter);
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  color: rgba(255, 255, 255, 0.85);
+  gap: clamp(8px, 2dvh, 16px);
+  color: #fff;
   font-size: 10px;
+  font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
 }
 @media (min-width: 860px) {
   .hero__meta {
-    bottom: 44px;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
@@ -1308,51 +1423,60 @@ img {
 }
 .hero__cta {
   color: #fff;
+  background: none;
+  border: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-  padding-bottom: 3px;
+  padding: 0 0 3px;
   width: max-content;
+  font: inherit;
+  cursor: pointer;
 }
 
 /* ---------------------------------------------------------------------------
    Awards strip
 --------------------------------------------------------------------------- */
 .awards-strip {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
   background: var(--bg-dark);
   color: var(--bg);
+  overflow: hidden;
+  padding: 20px 0;
 }
 @media (min-width: 860px) {
   .awards-strip {
-    grid-template-columns: repeat(4, 1fr);
+    padding: 26px 0;
+  }
+}
+.awards-strip__track {
+  display: flex;
+  width: max-content;
+  gap: 40px;
+  white-space: nowrap;
+  animation: abmarq 24s linear infinite;
+}
+@media (min-width: 860px) {
+  .awards-strip__track {
+    gap: 56px;
+    animation-duration: 32s;
   }
 }
 .awards-strip__item {
-  padding: 20px 16px;
-  border-right: 1px solid rgba(243, 241, 236, 0.16);
-  border-bottom: 1px solid rgba(243, 241, 236, 0.16);
   font-size: 9.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  text-align: center;
 }
 @media (min-width: 860px) {
   .awards-strip__item {
-    padding: 26px 32px;
     font-size: 10.5px;
     letter-spacing: 0.2em;
-    border-bottom: none;
   }
 }
-.awards-strip__item:nth-child(2n) {
-  border-right: none;
+.awards-strip__dot {
+  margin-left: 40px;
+  color: rgba(243, 241, 236, 0.4);
 }
 @media (min-width: 860px) {
-  .awards-strip__item:nth-child(2n) {
-    border-right: 1px solid rgba(243, 241, 236, 0.16);
-  }
-  .awards-strip__item:last-child {
-    border-right: none;
+  .awards-strip__dot {
+    margin-left: 56px;
   }
 }
 
@@ -1976,10 +2100,6 @@ img {
 @media (min-width: 860px) {
   .open-sky {
     margin-top: 76px;
-    display: grid;
-    grid-template-columns: 400px 1fr;
-    gap: 64px;
-    align-items: start;
   }
 }
 .open-sky__eyebrow {
@@ -2036,11 +2156,17 @@ img {
   }
 }
 .open-sky__posters {
+  /* Full-bleed: cancels .section's own gutter so the carousel reaches the
+     viewport edges and scrolls fully edge-to-edge, instead of being boxed
+     into a narrow column next to the intro text. */
   margin-top: 22px;
+  margin-left: calc(-1 * var(--gutter));
+  margin-right: calc(-1 * var(--gutter));
+  width: calc(100% + 2 * var(--gutter));
 }
 @media (min-width: 860px) {
   .open-sky__posters {
-    margin-top: 0;
+    margin-top: 40px;
   }
 }
 /* ---------------------------------------------------------------------------
@@ -2171,16 +2297,16 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 1px solid rgba(243, 241, 236, 0.22);
-  color: #f3f1ec;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  width: 40px;
+  height: 40px;
+  transition: transform 0.2s ease;
+}
+.site-footer__socials a svg {
+  width: 100%;
+  height: 100%;
 }
 .site-footer__socials a:hover {
-  border-color: #f3f1ec;
-  color: #fff;
+  transform: scale(1.1);
 }
 .site-footer__base {
   margin-top: 40px;
@@ -2207,6 +2333,8 @@ img {
   }
 }
 .site-footer__base-note {
+  width: 100%;
+  text-align: center;
   font-size: 9.5px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -2214,6 +2342,8 @@ img {
 }
 @media (min-width: 860px) {
   .site-footer__base-note {
+    width: auto;
+    text-align: left;
     font-size: 10.5px;
     letter-spacing: 0.42em;
   }

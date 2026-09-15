@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import {useState} from "react";
 import type {getReleases} from "@/lib/content";
-import {SpotifyDrawer} from "@/components/site/spotify-drawer";
+import {usePlayer} from "@/components/site/player-context";
 
 type Release = Awaited<ReturnType<typeof getReleases>>[number];
 
@@ -12,7 +11,10 @@ export function OpenSkyDiscography({
 }: {
   releases: Awaited<ReturnType<typeof getReleases>>;
 }) {
-  const [active, setActive] = useState<Release | null>(null);
+  const {active: playing, play} = usePlayer();
+  const active: Release | undefined = releases.find(
+    (r) => r.spotifyUrl === playing?.url
+  );
 
   if (!releases.length) return null;
 
@@ -39,13 +41,26 @@ export function OpenSkyDiscography({
               role={playable ? "button" : undefined}
               tabIndex={playable ? 0 : undefined}
               aria-pressed={playable ? isActive : undefined}
-              onClick={playable ? () => setActive(r) : undefined}
+              onClick={
+                playable
+                  ? () =>
+                      play({
+                        title: r.title,
+                        subtitle: `${r.year} · ${r.kind}`,
+                        url: r.spotifyUrl!,
+                      })
+                  : undefined
+              }
               onKeyDown={
                 playable
                   ? (e) => {
                       if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
-                        setActive(r);
+                        play({
+                          title: r.title,
+                          subtitle: `${r.year} · ${r.kind}`,
+                          url: r.spotifyUrl!,
+                        });
                       }
                     }
                   : undefined
@@ -78,15 +93,6 @@ export function OpenSkyDiscography({
           );
         })}
       </div>
-
-      {active && active.spotifyUrl && (
-        <SpotifyDrawer
-          title={active.title}
-          subtitle={`${active.year} · ${active.kind}`}
-          url={active.spotifyUrl}
-          onClose={() => setActive(null)}
-        />
-      )}
     </section>
   );
 }

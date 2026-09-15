@@ -1,5 +1,6 @@
 import { getHomepageData } from "@/lib/content";
 import { ScrollSnap } from "@/components/site/scroll-snap";
+import { PlayerProvider } from "@/components/site/player-context";
 import { SiteHeader } from "@/components/site/site-header";
 import { Hero } from "@/components/site/hero";
 import { AwardsStrip } from "@/components/site/awards-strip";
@@ -40,10 +41,12 @@ const OPEN_SKY_NAV = [
 export default async function HomePage() {
   const data = await getHomepageData();
   const theme = data.settings?.theme || "press";
+  const featuredRelease =
+    data.discography.find((r) => r.isLatest) || data.discography[0];
 
   if (theme === "open-sky") {
     return (
-      <>
+      <PlayerProvider>
         <ScrollSnap />
         <SiteHeader
           logoUrl="/media/signature-white.png"
@@ -52,7 +55,11 @@ export default async function HomePage() {
           cta={{ label: "Book Abed", href: "#contact" }}
         />
         <main>
-          <OpenSkyHero hero={data.hero} />
+          <OpenSkyHero
+            hero={data.hero}
+            featuredRelease={featuredRelease}
+            editionsCount={data.openSkyPosters.length}
+          />
           <OpenSkyMarquee stats={data.stats} />
           <OpenSkyStory about={data.about} releaseCount={data.discography.length} />
           <OpenSkyDiscography releases={data.discography} />
@@ -61,12 +68,12 @@ export default async function HomePage() {
           <BeyondMusic items={data.beyondMusic} />
         </main>
         <OpenSkyFooter contact={data.contact} socials={data.socials} />
-      </>
+      </PlayerProvider>
     );
   }
 
   return (
-    <>
+    <PlayerProvider>
       <ScrollSnap />
       <SiteHeader
         logoUrl="/media/signature-black.png"
@@ -74,7 +81,7 @@ export default async function HomePage() {
         navLinks={PRESS_NAV}
       />
       <main>
-        <Hero hero={data.hero} />
+        <Hero hero={data.hero} featuredRelease={featuredRelease} />
         <AwardsStrip stats={data.stats} />
         <About about={data.about} />
         <Discography releases={data.discography} />
@@ -95,6 +102,6 @@ export default async function HomePage() {
         socials={data.socials}
         logoUrl="/media/signature-white.png"
       />
-    </>
+    </PlayerProvider>
   );
 }
