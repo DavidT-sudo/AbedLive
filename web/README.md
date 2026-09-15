@@ -52,6 +52,12 @@ needs a real database connection (see `app/layout.tsx`), so the image
 builds cleanly with no secrets present at build time — every variable
 below is only read at container *runtime*.
 
+Schema migrations are **automatic** — `app` applies any pending ones
+itself at container boot, before it starts serving (`db/docker-migrate.mjs`,
+run by the Dockerfile's `CMD`, using `drizzle-orm`'s own lightweight
+migrator rather than the `drizzle-kit` CLI). There's no separate migrate
+step to run or remember, on either compose file, on any deploy.
+
 ### Required environment variables
 
 | Variable | Notes |
@@ -78,15 +84,24 @@ There are two compose files:
 
 - `docker-compose.yml` — local development (what the steps above use).
 - `docker-compose.staging.yaml` — the staging/production one, for Coolify.
-  Same three services, but every long-running container gets a health
-  check, a memory/CPU ceiling, rotated logging, and `no-new-privileges`;
-  Postgres's credentials come from `POSTGRES_USER` / `POSTGRES_PASSWORD` /
+  Same services, but every long-running container gets a health check, a
+  memory/CPU ceiling, rotated logging, and `no-new-privileges`; Postgres's
+  credentials come from `POSTGRES_USER` / `POSTGRES_PASSWORD` /
   `POSTGRES_DB` env vars instead of the committed `changeme` dev default
   (the compose file refuses to start without `POSTGRES_PASSWORD` set); and
   it runs under its own Compose project name (`AbedLive-staging`) so it
-  never collides with another stack on the same host. The app/migrate
-  images are the same multi-stage `Dockerfile` either way — it now also
-  carries its own `HEALTHCHECK`.
+  never collides with another stack on the same host. `app` and `tools`
+  are the same multi-stage `Dockerfile` either way — it now also carries
+  its own `HEALTHCHECK`.
+
+Both files also have a `tools` service — not for migrations (see above),
+just for one-off admin commands that shouldn't run automatically on every
+boot: `db:seed` (not upsert-safe — running it twice duplicates content)
+and `admin:create`. It builds from the same Dockerfile's `builder` stage
+(full source, full dependencies) and idles forever by default
+(`sleep infinity`) rather than running a command and exiting — see the
+comment in `docker-compose.staging.yaml` for why that specific detail
+matters under Coolify.
 
 1. In Coolify: **New Resource → Docker Compose**, point it at this GitHub
    repo, and set the **Base Directory** to `web` (the app isn't at the repo
@@ -97,37 +112,28 @@ There are two compose files:
    TLS via its built-in reverse proxy) and a second domain to `seaweedfs`
    for `S3_PUBLIC_URL` (media is loaded straight from the S3 gateway in the
    browser, never proxied through `app`).
-3. Deploy. This brings up `postgres`, `seaweedfs`, and `app` — `migrate`
-   is intentionally excluded from normal startup (it's profile-gated).
-   Coolify's Docker Compose healthcheck monitor currently misreads a
-   one-off job that exits(0) as "a service went down" and stops the
-   whole stack in response (open upstream bug,
-   [coollabsio/coolify#7115](https://github.com/coollabsio/coolify/issues/7115)),
-   so — unlike plain `docker-compose.yml` — migrations here are run
-   manually, every deploy that changes the schema, not automatically.
-4. Run the setup commands once per deploy, from a shell on the server
-   Coolify deployed to (SSH in, or use Coolify's terminal for that
-   server) — `cd` into the deployment directory Coolify created, then:
+3. Deploy. This brings up `postgres`, `seaweedfs`, `app` (which migrates
+   itself on boot), and `tools` (idling, ready for the one-time setup
+   below).
+4. Run the one-time setup, from a shell on the server Coolify deployed to
+   (SSH in, or use Coolify's terminal for that server) — `cd` into the
+   deployment directory Coolify created, then:
 
    ```bash
-   # apply pending schema migrations — every deploy that changes the schema
-   docker compose run --rm migrate
-
-   # first deploy only: create the media bucket (SeaweedFS doesn't auto-create it)
+   # create the media bucket (SeaweedFS doesn't auto-create it)
    docker compose run --rm seaweedfs weed shell -master=seaweedfs:9333 \
      <<< "s3.bucket.create -name abedlive-media"
 
-   # first deploy only: seed Abed's real content — not upsert-safe, run once only
-   docker compose run --rm migrate npm run db:seed
+   # seed Abed's real content — not upsert-safe, run once only
+   docker compose run --rm tools npm run db:seed
 
-   # first deploy only: bootstrap the first admin — see below
-   docker compose run --rm migrate npm run admin:create -- \
+   # bootstrap the first admin — see below
+   docker compose run --rm tools npm run admin:create -- \
      --email you@example.com --password "..." --name "Your Name"
    ```
 
-The bucket/seed/admin:create block only runs once, on first deploy —
-but `docker compose run --rm migrate` needs to be repeated after every
-deploy that adds a new migration.
+That block only ever runs once, on first deploy. Every deploy after that
+is just a redeploy in Coolify — schema migrations happen automatically.
 
 ### Adding the first admin user
 
@@ -153,7 +159,9 @@ or SeaweedFS containers — those need to live elsewhere reachable over the
 network (e.g. a small VPS running just `docker compose up postgres
 seaweedfs`, or managed equivalents like Vercel Postgres / Neon for the
 database and any S3-compatible bucket for media, since the storage layer
-already speaks the S3 API). Steps:
+already speaks the S3 API). Vercel doesn't run this repo's Docker image,
+so it doesn't get the automatic migrate-on-boot step above — run
+migrations by hand instead. Steps:
 
 1. Push this repo to GitHub and import it in Vercel.
 2. Set the same environment variables from `.env.example` in the Vercel
@@ -170,7 +178,7 @@ already speaks the S3 API). Steps:
 | --- | --- |
 | `npm run dev` / `build` / `start` | Next.js dev server / production build / start |
 | `npm run db:generate` | Generate a new Drizzle migration after a schema change |
-| `npm run db:migrate` | Apply migrations |
+| `npm run db:migrate` | Apply migrations (local dev / Vercel — uses the `drizzle-kit` CLI) |
 | `npm run db:seed` | Seed the real Abed Live content (safe to run once, on an empty DB) |
 | `npm run db:studio` | Open Drizzle Studio to browse the database |
 | `npm run admin:create` | Bootstrap the first admin user |

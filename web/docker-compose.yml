@@ -34,11 +34,17 @@ services:
       # S3 API — expose only if the app runs outside this compose network too.
       - "8333:8333"
 
-  # Runs on every `up` — applies pending schema migrations, then exits;
-  # `app` waits for it to finish (service_completed_successfully below).
-  # db:seed is NOT part of this — it's not upsert-safe, so it stays a
-  # manual one-time step: `docker compose run --rm migrate npm run db:seed`.
-  migrate:
+  # Not for migrations anymore — `app` applies those itself at boot (see
+  # db/docker-migrate.mjs and the Dockerfile). This is only a shell for
+  # one-off admin commands that need the full builder-stage source/deps
+  # and aren't safe to run automatically: `docker compose run --rm tools
+  # npm run db:seed` / `npm run admin:create -- ...`. Default command is
+  # deliberately a no-op that never exits — a "run once and exit(0)"
+  # command here is exactly the pattern that confuses Coolify's Compose
+  # healthcheck monitor into tearing down the whole stack (see README),
+  # so this container just idles unless something explicitly runs a
+  # command in it via `docker compose run`.
+  tools:
     build:
       context: .
       target: builder
@@ -46,7 +52,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: sh -c "npm run db:migrate"
+    command: sh -c "sleep infinity"
     restart: "no"
 
   app:
@@ -62,8 +68,6 @@ services:
         condition: service_healthy
       seaweedfs:
         condition: service_started
-      migrate:
-        condition: service_completed_successfully
     ports:
       - "3000:3000"
 

@@ -26,6 +26,16 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Next's standalone output only bundles what it traces through the app's own
+# import graph, which never imports the migrator (db/docker-migrate.mjs is
+# outside that graph by design — see its own comment). Copy these two
+# packages in full so `drizzle-orm/postgres-js/migrator` is guaranteed
+# present rather than relying on tracing to have picked up that sub-path.
+COPY --from=deps /app/node_modules/drizzle-orm ./node_modules/drizzle-orm
+COPY --from=deps /app/node_modules/postgres ./node_modules/postgres
+COPY --from=builder /app/drizzle ./drizzle
+COPY --from=builder /app/db/docker-migrate.mjs ./db/docker-migrate.mjs
+
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000
@@ -36,4 +46,4 @@ ENV HOSTNAME="0.0.0.0"
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
   CMD node -e "require('http').get('http://127.0.0.1:3000/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"
 
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "node db/docker-migrate.mjs && node server.js"]
