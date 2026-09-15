@@ -1,5 +1,6 @@
 import Image from "next/image";
-import type { getContactInfo, getSocialLinks } from "@/lib/content";
+import type {getContactInfo, getSocialLinks} from "@/lib/content";
+import { SocialIcon } from "./social-icon";
 
 export function SiteFooter({
   contact,
@@ -21,7 +22,9 @@ export function SiteFooter({
           </a>
           <div className="site-footer__phone">
             {contact.phonePrimary}
-            {contact.phoneSecondary && <> &nbsp;//&nbsp; {contact.phoneSecondary}</>}
+            {contact.phoneSecondary && (
+              <> &nbsp;//&nbsp; {contact.phoneSecondary}</>
+            )}
           </div>
         </div>
         {socials.length > 0 && (
@@ -29,9 +32,13 @@ export function SiteFooter({
             <div className="site-footer__kicker">Follow</div>
             <div className="site-footer__socials">
               {socials.map((s) => (
-                <a key={s.id} href={s.url}>
-                  {s.platform}
-                  {s.handle && <> — {s.handle}</>}
+                <a
+                  key={s.id}
+                  href={s.url}
+                  aria-label={s.handle ? `${s.platform} — ${s.handle}` : s.platform}
+                  title={s.handle ? `${s.platform} — ${s.handle}` : s.platform}
+                >
+                  <SocialIcon platform={s.platform} />
                 </a>
               ))}
             </div>

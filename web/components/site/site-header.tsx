@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
-type NavLink = { href: string; label: string; emphasize?: boolean };
+type NavLink = {href: string; label: string; emphasize?: boolean};
 
 export function SiteHeader({
   logoUrl,
@@ -14,7 +14,7 @@ export function SiteHeader({
   logoUrl: string;
   logoUrlLight: string;
   navLinks: NavLink[];
-  cta?: { label: string; href: string };
+  cta?: {label: string; href: string};
 }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -40,7 +40,7 @@ export function SiteHeader({
     };
 
     update();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, {passive: true});
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 

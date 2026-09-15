@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { authClient } from "@/lib/auth-client";
+import {useEffect, useState, useCallback} from "react";
+import {authClient} from "@/lib/auth-client";
 
 type Member = {
   id: string;
@@ -11,7 +11,7 @@ type Member = {
   banned?: boolean | null;
 };
 
-export function TeamManager({ currentUserId }: { currentUserId: string }) {
+export function TeamManager({currentUserId}: {currentUserId: string}) {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,8 +24,8 @@ export function TeamManager({ currentUserId }: { currentUserId: string }) {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await authClient.admin.listUsers({
-      query: { limit: 100 },
+    const {data, error} = await authClient.admin.listUsers({
+      query: {limit: 100},
     });
     setLoading(false);
     if (error) {
@@ -48,7 +48,7 @@ export function TeamManager({ currentUserId }: { currentUserId: string }) {
     // Better Auth's client types default to "user" | "admin"; our server
     // config uses "editor" | "admin" via defaultRole/adminRoles instead of
     // full access-control statements, so the literal type doesn't match.
-    const { error } = await authClient.admin.createUser({
+    const {error} = await authClient.admin.createUser({
       name,
       email,
       password,
@@ -67,22 +67,25 @@ export function TeamManager({ currentUserId }: { currentUserId: string }) {
   }
 
   async function onSetRole(userId: string, newRole: string) {
-    await authClient.admin.setRole({ userId, role: newRole as unknown as "admin" });
+    await authClient.admin.setRole({
+      userId,
+      role: newRole as unknown as "admin",
+    });
     load();
   }
 
   async function onToggleBan(member: Member) {
     if (member.banned) {
-      await authClient.admin.unbanUser({ userId: member.id });
+      await authClient.admin.unbanUser({userId: member.id});
     } else {
-      await authClient.admin.banUser({ userId: member.id });
+      await authClient.admin.banUser({userId: member.id});
     }
     load();
   }
 
   async function onRemove(userId: string) {
     if (!confirm("Remove this team member? This cannot be undone.")) return;
-    await authClient.admin.removeUser({ userId });
+    await authClient.admin.removeUser({userId});
     load();
   }
 
@@ -98,7 +101,11 @@ export function TeamManager({ currentUserId }: { currentUserId: string }) {
                 <div className="admin-list-item__body">
                   <div className="admin-list-item__title">
                     {m.name || m.email}
-                    {m.banned && <span className="admin-badge" style={{ marginLeft: 8 }}>Banned</span>}
+                    {m.banned && (
+                      <span className="admin-badge" style={{marginLeft: 8}}>
+                        Banned
+                      </span>
+                    )}
                   </div>
                   <div className="admin-list-item__meta">{m.email}</div>
                 </div>
@@ -134,13 +141,17 @@ export function TeamManager({ currentUserId }: { currentUserId: string }) {
         )}
       </div>
 
-      <h2 style={{ fontSize: 15, marginTop: 32 }}>Add a team member</h2>
+      <h2 style={{fontSize: 15, marginTop: 32}}>Add a team member</h2>
       <div className="admin-card">
         <form className="admin-form" onSubmit={onCreate}>
           <div className="admin-form-row">
             <label>
               Name
-              <input value={name} onChange={(e) => setName(e.target.value)} required />
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </label>
             <label>
               Email

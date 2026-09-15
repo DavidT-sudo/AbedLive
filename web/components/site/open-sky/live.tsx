@@ -1,6 +1,6 @@
 import Image from "next/image";
-import type { getOpenSkyIntro, getOpenSkyEditions } from "@/lib/content";
-import { PosterCarousel } from "@/components/site/poster-carousel";
+import type {getOpenSkyIntro, getOpenSkyEditions} from "@/lib/content";
+import {PosterCarousel} from "@/components/site/poster-carousel";
 
 export function OpenSkyLive({
   openSky,
@@ -12,7 +12,13 @@ export function OpenSkyLive({
   if (!openSky) return null;
   return (
     <section className="os-live" id="live">
-      <Image className="os-live__bg" src="/media/live-purple.png" alt="" width={1600} height={900} />
+      <Image
+        className="os-live__bg"
+        src="/media/live-purple.png"
+        alt=""
+        width={1600}
+        height={900}
+      />
       <div className="os-live__scrim" />
       <div className="os-live__grid">
         <div>

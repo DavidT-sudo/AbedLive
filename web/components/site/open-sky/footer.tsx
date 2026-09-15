@@ -1,5 +1,6 @@
 import Image from "next/image";
-import type { getContactInfo, getSocialLinks } from "@/lib/content";
+import type {getContactInfo, getSocialLinks} from "@/lib/content";
+import { SocialIcon } from "../social-icon";
 
 export function OpenSkyFooter({
   contact,
@@ -19,19 +20,31 @@ export function OpenSkyFooter({
         </a>
         <div className="os-footer__phone">
           {contact.phonePrimary}
-          {contact.phoneSecondary && <> &nbsp;//&nbsp; {contact.phoneSecondary}</>}
+          {contact.phoneSecondary && (
+            <> &nbsp;//&nbsp; {contact.phoneSecondary}</>
+          )}
         </div>
         {socials.length > 0 && (
           <div className="os-footer__socials">
             {socials.map((s) => (
-              <a key={s.id} href={s.url}>
-                {s.platform}
+              <a
+                key={s.id}
+                href={s.url}
+                aria-label={s.handle ? `${s.platform} — ${s.handle}` : s.platform}
+                title={s.handle ? `${s.platform} — ${s.handle}` : s.platform}
+              >
+                <SocialIcon platform={s.platform} />
               </a>
             ))}
           </div>
         )}
         <div className="os-footer__base">
-          <Image src="/media/signature-white.png" alt="Abed" width={220} height={64} />
+          <Image
+            src="/media/signature-white.png"
+            alt="Abed"
+            width={220}
+            height={64}
+          />
           <div className="os-footer__tagline">{contact.footerTagline}</div>
         </div>
       </div>

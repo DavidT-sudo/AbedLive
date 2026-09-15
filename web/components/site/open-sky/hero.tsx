@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { getHero } from "@/lib/content";
+import type {getHero} from "@/lib/content";
 
 export function OpenSkyHero({
   hero,
@@ -9,7 +9,13 @@ export function OpenSkyHero({
   if (!hero) return null;
   return (
     <section className="os-hero" id="top">
-      <Image className="os-hero__image" src="/media/live-stage.png" alt="" width={1600} height={900} />
+      <Image
+        className="os-hero__image"
+        src="/media/live-stage.png"
+        alt=""
+        width={1600}
+        height={900}
+      />
       <div className="os-hero__glow" />
       <div className="os-hero__scrim" />
       <div className="os-hero__tagline">Purpose in every note</div>

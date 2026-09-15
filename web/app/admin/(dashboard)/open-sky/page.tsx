@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getOpenSkyIntro, getOpenSkyEditions } from "@/lib/content";
+import {getOpenSkyIntro, getOpenSkyEditions} from "@/lib/content";
 import {
   updateOpenSkyIntro,
   addOpenSkyEdition,
@@ -9,7 +9,10 @@ import {
 } from "./actions";
 
 export default async function AdminOpenSkyPage() {
-  const [intro, editions] = await Promise.all([getOpenSkyIntro(), getOpenSkyEditions()]);
+  const [intro, editions] = await Promise.all([
+    getOpenSkyIntro(),
+    getOpenSkyEditions(),
+  ]);
 
   return (
     <>
@@ -43,48 +46,71 @@ export default async function AdminOpenSkyPage() {
             </label>
           </div>
           <div className="admin-actions">
-            <button className="admin-btn" type="submit">Save</button>
+            <button className="admin-btn" type="submit">
+              Save
+            </button>
           </div>
         </form>
       </div>
 
-      <h2 style={{ fontSize: 15, marginTop: 32 }}>Editions</h2>
+      <h2 style={{fontSize: 15, marginTop: 32}}>Editions</h2>
       <div className="admin-card">
         <div className="admin-list">
           {editions.map((e, i) => (
             <div className="admin-list-item" key={e.id}>
               <div className="admin-order-btns">
                 <form action={moveOpenSkyEdition.bind(null, e.id, -1)}>
-                  <button type="submit" disabled={i === 0}>↑</button>
+                  <button type="submit" disabled={i === 0}>
+                    ↑
+                  </button>
                 </form>
                 <form action={moveOpenSkyEdition.bind(null, e.id, 1)}>
-                  <button type="submit" disabled={i === editions.length - 1}>↓</button>
+                  <button type="submit" disabled={i === editions.length - 1}>
+                    ↓
+                  </button>
                 </form>
               </div>
               {e.posterUrl && (
-                <Image src={e.posterUrl} alt="" width={120} height={120} unoptimized />
+                <Image
+                  src={e.posterUrl}
+                  alt=""
+                  width={120}
+                  height={120}
+                  unoptimized
+                />
               )}
               <form
-                style={{ flex: 1, display: "flex", gap: 10, alignItems: "center" }}
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  gap: 10,
+                  alignItems: "center",
+                }}
                 action={updateOpenSkyEdition.bind(null, e.id)}
               >
-                <input name="title" defaultValue={e.title} style={{ flex: 1 }} />
+                <input name="title" defaultValue={e.title} style={{flex: 1}} />
                 <input type="file" name="poster" accept="image/*" />
                 <div className="admin-actions">
-                  <button className="admin-btn admin-btn--ghost" type="submit">Save</button>
+                  <button className="admin-btn admin-btn--ghost" type="submit">
+                    Save
+                  </button>
                 </div>
               </form>
               <form action={deleteOpenSkyEdition.bind(null, e.id)}>
-                <button className="admin-btn admin-btn--danger" type="submit">Remove</button>
+                <button className="admin-btn admin-btn--danger" type="submit">
+                  Remove
+                </button>
               </form>
             </div>
           ))}
         </div>
-        <h3 style={{ fontSize: 13, marginTop: 20 }}>Add an edition</h3>
+        <h3 style={{fontSize: 13, marginTop: 20}}>Add an edition</h3>
         <form className="admin-form-row" action={addOpenSkyEdition}>
           <input name="title" placeholder="e.g. 5th Edition" required />
           <input type="file" name="poster" accept="image/*" />
-          <button className="admin-btn" type="submit">Add</button>
+          <button className="admin-btn" type="submit">
+            Add
+          </button>
         </form>
       </div>
     </>

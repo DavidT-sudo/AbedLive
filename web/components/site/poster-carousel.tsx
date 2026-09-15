@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import {useRef} from "react";
 
 export type PosterCarouselItem = {
   id: string;
@@ -14,7 +14,7 @@ export type PosterCarouselItem = {
   description?: string | null;
 };
 
-export function PosterCarousel({ items }: { items: PosterCarouselItem[] }) {
+export function PosterCarousel({items}: {items: PosterCarouselItem[]}) {
   const trackRef = useRef<HTMLDivElement>(null);
 
   function scroll(direction: 1 | -1) {
@@ -22,8 +22,10 @@ export function PosterCarousel({ items }: { items: PosterCarouselItem[] }) {
     if (!track) return;
     const item = track.querySelector<HTMLElement>("[data-carousel-item]");
     const gap = 16;
-    const step = item ? item.getBoundingClientRect().width + gap : track.clientWidth * 0.8;
-    track.scrollBy({ left: direction * step, behavior: "smooth" });
+    const step = item
+      ? item.getBoundingClientRect().width + gap
+      : track.clientWidth * 0.8;
+    track.scrollBy({left: direction * step, behavior: "smooth"});
   }
 
   if (!items.length) return null;
@@ -32,7 +34,12 @@ export function PosterCarousel({ items }: { items: PosterCarouselItem[] }) {
     <div className="poster-carousel">
       <div className="poster-carousel__track" ref={trackRef} role="list">
         {items.map((item) => (
-          <figure className="poster-carousel__item" data-carousel-item role="listitem" key={item.id}>
+          <figure
+            className="poster-carousel__item"
+            data-carousel-item
+            role="listitem"
+            key={item.id}
+          >
             {item.posterUrl && (
               <Image
                 className="poster-carousel__image"
@@ -46,7 +53,9 @@ export function PosterCarousel({ items }: { items: PosterCarouselItem[] }) {
             <figcaption className="poster-carousel__caption">
               {item.title}
               {item.description && (
-                <span className="poster-carousel__desc">{item.description}</span>
+                <span className="poster-carousel__desc">
+                  {item.description}
+                </span>
               )}
             </figcaption>
           </figure>

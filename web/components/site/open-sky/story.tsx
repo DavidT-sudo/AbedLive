@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { getAbout } from "@/lib/content";
+import type {getAbout} from "@/lib/content";
 
 export function OpenSkyStory({
   about,

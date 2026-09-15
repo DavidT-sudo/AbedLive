@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { getMediaSlot } from "@/lib/content";
+import type {getMediaSlot} from "@/lib/content";
 
 export function PurposeBreak({
   slot,

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { SpotifyEmbed } from "@/components/site/spotify-embed";
-import { spotifyEmbedHeight } from "@/lib/spotify";
+import {useEffect, useRef, useState} from "react";
+import {SpotifyEmbed} from "@/components/site/spotify-embed";
+import {spotifyEmbedHeight} from "@/lib/spotify";
 
 export function SpotifyDrawer({
   title,
@@ -18,7 +18,7 @@ export function SpotifyDrawer({
   const fullHeight = spotifyEmbedHeight(url);
   const [bodyHeight, setBodyHeight] = useState(() => spotifyEmbedHeight(url));
   const [dragging, setDragging] = useState(false);
-  const drag = useRef<{ startY: number; startHeight: number } | null>(null);
+  const drag = useRef<{startY: number; startHeight: number} | null>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -61,7 +61,7 @@ export function SpotifyDrawer({
         tabIndex={0}
         onPointerDown={(e) => {
           e.currentTarget.setPointerCapture(e.pointerId);
-          drag.current = { startY: e.clientY, startHeight: bodyHeight };
+          drag.current = {startY: e.clientY, startHeight: bodyHeight};
           setDragging(true);
         }}
         onPointerMove={(e) => {

@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
+import {useState, Suspense} from "react";
+import {useRouter, useSearchParams} from "next/navigation";
+import {authClient} from "@/lib/auth-client";
 import "../admin.css";
 
 function LoginForm() {
@@ -19,7 +19,7 @@ function LoginForm() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const { error } = await authClient.signIn.email({ email, password });
+    const {error} = await authClient.signIn.email({email, password});
     setLoading(false);
     if (error) {
       setError(error.message || "Could not sign in.");
@@ -40,7 +40,9 @@ function LoginForm() {
       />
       <div>
         <h1>Admin</h1>
-        <p className="admin-auth-card__subtitle">Sign in to edit abedlive.com</p>
+        <p className="admin-auth-card__subtitle">
+          Sign in to edit abedlive.com
+        </p>
       </div>
       <label>
         Email

@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import type { getReleases } from "@/lib/content";
-import { SpotifyDrawer } from "@/components/site/spotify-drawer";
+import {useState} from "react";
+import type {getReleases} from "@/lib/content";
+import {SpotifyDrawer} from "@/components/site/spotify-drawer";
 
 type Release = Awaited<ReturnType<typeof getReleases>>[number];
 

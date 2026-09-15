@@ -1,7 +1,7 @@
 import Image from "next/image";
-import type { getHero } from "@/lib/content";
+import type {getHero} from "@/lib/content";
 
-export function Hero({ hero }: { hero: Awaited<ReturnType<typeof getHero>> }) {
+export function Hero({hero}: {hero: Awaited<ReturnType<typeof getHero>>}) {
   if (!hero) return null;
   return (
     <section className="hero" id="top">

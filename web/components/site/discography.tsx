@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import type { getReleases } from "@/lib/content";
-import { SpotifyDrawer } from "@/components/site/spotify-drawer";
+import {useState} from "react";
+import type {getReleases} from "@/lib/content";
+import {SpotifyDrawer} from "@/components/site/spotify-drawer";
 
 type Release = Awaited<ReturnType<typeof getReleases>>[number];
 
@@ -69,7 +69,7 @@ export function Discography({
                     )}
                   </div>
                 )}
-                <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{flex: 1, minWidth: 0}}>
                   <div className="release-row__title">
                     {r.title} {r.subtitle && <span>{r.subtitle}</span>}
                   </div>
