@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getReleases } from "@/lib/content";
 import { addRelease, updateRelease, deleteRelease, moveRelease } from "./actions";
 
@@ -20,7 +21,9 @@ export default async function AdminDiscographyPage() {
                   <button type="submit" disabled={i === releases.length - 1}>↓</button>
                 </form>
               </div>
-              {r.coverUrl && <img src={r.coverUrl} alt="" />}
+              {r.coverUrl && (
+                <Image src={r.coverUrl} alt="" width={120} height={120} unoptimized />
+              )}
               <form
                 className="admin-form"
                 style={{ flex: 1 }}

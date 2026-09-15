@@ -16,14 +16,9 @@ export function SpotifyDrawer({
   onClose: () => void;
 }) {
   const fullHeight = spotifyEmbedHeight(url);
-  const [bodyHeight, setBodyHeight] = useState(fullHeight);
+  const [bodyHeight, setBodyHeight] = useState(() => spotifyEmbedHeight(url));
   const [dragging, setDragging] = useState(false);
   const drag = useRef<{ startY: number; startHeight: number } | null>(null);
-
-  // A newly selected track/album always opens expanded.
-  useEffect(() => {
-    setBodyHeight(spotifyEmbedHeight(url));
-  }, [url]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

@@ -1,4 +1,5 @@
-import type { getAbout, getReleases } from "@/lib/content";
+import Image from "next/image";
+import type { getAbout } from "@/lib/content";
 
 export function OpenSkyStory({
   about,
@@ -12,7 +13,12 @@ export function OpenSkyStory({
   return (
     <section className="os-story" id="about">
       <div className="os-story__portrait">
-        <img src="/media/portrait-white-jacket.png" alt="Abednico Wadingalo" />
+        <Image
+          src="/media/portrait-white-jacket.png"
+          alt="Abednico Wadingalo"
+          width={800}
+          height={900}
+        />
         <div className="os-story__portrait-scrim" />
       </div>
       <div className="os-story__copy">

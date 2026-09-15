@@ -127,7 +127,15 @@ nothing that a Compose-based command creates and later exits.
    ```bash
    # create the media bucket (SeaweedFS doesn't auto-create it) — runs
    # inside the already-running seaweedfs container (`exec`, not `run`),
-   # so this never creates a container of its own either
+   # so this never creates a container of its own either. `seaweed_data`
+   # is a persistent volume, so if this has already been run once against
+   # it (e.g. re-run during troubleshooting, or after a redeploy that
+   # didn't touch the volume), you'll see a "BucketAlreadyExists" error —
+   # SeaweedFS returns that even for the same owner re-creating the same
+   # bucket (seaweedfs/seaweedfs#2069), unlike AWS S3's more forgiving
+   # same-owner semantics. That error means the goal state is already
+   # met; it's not a failure. Check first if unsure:
+   #   docker compose exec seaweedfs weed shell -master=localhost:9333 <<< "s3.bucket.list"
    docker compose exec seaweedfs weed shell -master=localhost:9333 \
      <<< "s3.bucket.create -name abedlive-media"
 

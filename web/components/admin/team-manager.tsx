@@ -36,7 +36,9 @@ export function TeamManager({ currentUserId }: { currentUserId: string }) {
   }, []);
 
   useEffect(() => {
-    load();
+    void (async () => {
+      await load();
+    })();
   }, [load]);
 
   async function onCreate(e: React.FormEvent) {

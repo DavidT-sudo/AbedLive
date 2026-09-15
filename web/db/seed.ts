@@ -26,6 +26,26 @@ async function upsertMedia(fileName: string, alt: string) {
 }
 
 async function main() {
+  // Guard against re-running against a database that's already seeded.
+  // Most tables here use a random uuid() primary key with no other unique
+  // constraint, so db:seed is NOT an upsert — re-running it would insert a
+  // second, duplicate copy of every release/edition/award/etc. rather than
+  // erroring or updating in place. Seed scripts are a one-time bootstrap
+  // for an empty database, not an ongoing production tool; once real
+  // content exists, further changes belong in /admin (or a migration for
+  // schema changes), not here. See web/docs/adr for the deploy story this
+  // fits into.
+  const alreadySeeded = await db.select({ id: releases.id }).from(releases).limit(1);
+  if (alreadySeeded.length > 0) {
+    console.error(
+      "Refusing to seed: the releases table already has rows, so this " +
+        "database has already been seeded (or has real content). Re-running " +
+        "db:seed here would duplicate rows, not update them. If you really " +
+        "need to reset to seed data, wipe the relevant tables first."
+    );
+    process.exit(1);
+  }
+
   console.log("Seeding local media rows...");
   const [
     portrait,
@@ -33,9 +53,11 @@ async function main() {
     coverAsYouWill,
     coverOTsholofelo,
     coverPhatsima,
+    poster1,
     poster2,
     poster3,
     poster4,
+    poster5,
     pianoHands,
   ] = await Promise.all([
     upsertMedia("portrait-white-jacket.png", "Abednico Wadingalo on stage"),
@@ -43,9 +65,13 @@ async function main() {
     upsertMedia("cover-as-you-will.png", "As You Will"),
     upsertMedia("cover-o-tsholofelo.png", "O Tsholofelo Live DVD"),
     upsertMedia("cover-phatsima.png", "Phatsima"),
+    // Placeholder artwork — replace with real posters via /admin/open-sky
+    // whenever they're designed; see web/docs for context.
+    upsertMedia("poster-opensky-1.svg", "Open Sky Gathering 1st Edition — Imagine Life"),
     upsertMedia("poster-opensky-2.png", "Open Sky Gathering 2nd Edition"),
     upsertMedia("poster-opensky-3.png", "Open Sky Gathering 3rd Edition"),
     upsertMedia("poster-opensky-4.png", "Open Sky Gathering 4th Edition"),
+    upsertMedia("poster-opensky-5.svg", "Open Sky Gathering 5th Edition — Amplified"),
     upsertMedia("piano-hands.png", ""),
   ]);
 
@@ -74,6 +100,7 @@ async function main() {
     { label: "Winner — Best Contemporary Gospel", sortOrder: 1 },
     { label: "Winner — Best Songwriter", sortOrder: 2 },
     { label: "4 releases · 2017—2025", sortOrder: 3 },
+    { label: "Winner — Best Contemporary Gospel (AGA, 2026)", sortOrder: 4 },
   ]);
 
   console.log("Seeding about...");
@@ -118,7 +145,7 @@ async function main() {
       title: "O Tsholofelo",
       subtitle: "",
       kind: "Live DVD",
-      note: "Live in concert",
+      note: "Live in concert · Westwood",
       year: 2018,
       coverImageId: coverOTsholofelo.id,
       spotifyUrl: "https://open.spotify.com/album/5NStkZM40JZTfh4DrP5erv",
@@ -127,11 +154,11 @@ async function main() {
     {
       // No spotifyUrl: on Spotify this isn't a distinct release — "Phatsima"
       // is a track on the O Tsholofelo album there, not a standalone 2017
-      // album. Left as its own release here since that's how it's
+      // release. Left as its own release here since that's how it's
       // documented in Abed's own bio material; don't invent a link for it.
       title: "Phatsima",
       subtitle: "",
-      kind: "Album · Debut",
+      kind: "Single · Debut",
       note: "Studio",
       year: 2017,
       coverImageId: coverPhatsima.id,
@@ -185,9 +212,11 @@ async function main() {
     ctaHref: "#",
   });
   await db.insert(openSkyEditions).values([
-    { title: "2nd Edition", posterImageId: poster2.id, sortOrder: 0 },
-    { title: "3rd Edition", posterImageId: poster3.id, sortOrder: 1 },
-    { title: "4th Edition", posterImageId: poster4.id, sortOrder: 2 },
+    { title: "1st Edition — Imagine Life (2022)", posterImageId: poster1.id, sortOrder: 0 },
+    { title: "2nd Edition — To The Light (2023)", posterImageId: poster2.id, sortOrder: 1 },
+    { title: "3rd Edition — With God (2024)", posterImageId: poster3.id, sortOrder: 2 },
+    { title: "4th Edition — Founded (2025)", posterImageId: poster4.id, sortOrder: 3 },
+    { title: "5th Edition — Amplified (2026)", posterImageId: poster5.id, sortOrder: 4 },
   ]);
 
   console.log("Seeding Beyond Music...");
@@ -210,6 +239,18 @@ async function main() {
       body: "Conversations from behind the music — process, faith and the road.",
       sortOrder: 2,
     },
+    {
+      kicker: "Podcast · Season 1 · 2020",
+      title: "The Interview",
+      body: "Abed Live Moments' debut season.",
+      sortOrder: 3,
+    },
+    {
+      kicker: "Podcast · Season 2 · 2021",
+      title: "Church Boy Thoughts",
+      body: "A 15-episode season of Abed Live Moments.",
+      sortOrder: 4,
+    },
   ]);
 
   console.log("Seeding contact + socials...");
@@ -221,11 +262,14 @@ async function main() {
     footerTagline: "Purpose in every note",
     copyrightText: "© 2025 Abed Live",
   });
+  // Exactly the buttons/links from Abed's own bio (2026-09), in the same
+  // left-to-right order they appear there. No X/Twitter — it's not one of
+  // the bio's buttons.
   await db.insert(socialLinks).values([
-    { platform: "Instagram", handle: "abed_bw", url: "#", sortOrder: 0 },
-    { platform: "Facebook", handle: "ABed Live", url: "#", sortOrder: 1 },
-    { platform: "YouTube", handle: "abedlivebw", url: "#", sortOrder: 2 },
-    { platform: "X", handle: "Abednico", url: "#", sortOrder: 3 },
+    { platform: "Facebook", handle: "Abed Live", url: "https://www.facebook.com/AbedWadiengalo/", sortOrder: 0 },
+    { platform: "Instagram", handle: "abed_bw", url: "https://www.instagram.com/abed_bw/", sortOrder: 1 },
+    { platform: "TikTok", handle: "abedlivebw", url: "https://www.tiktok.com/@abedlivebw", sortOrder: 2 },
+    { platform: "YouTube", handle: "Abednico", url: "https://www.youtube.com/channel/UCjgcj9pl0ITW6NdXOgGP0lg", sortOrder: 3 },
   ]);
 
   console.log("Seeding media slots...");

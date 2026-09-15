@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import type { getReleases } from "@/lib/content";
 import { SpotifyDrawer } from "@/components/site/spotify-drawer";
@@ -53,7 +54,15 @@ export function OpenSkyDiscography({
               <div
                 className={`os-record__art${playable ? " os-record__art--playable" : ""}`}
               >
-                {r.coverUrl && <img src={r.coverUrl} alt={r.coverAlt || r.title} />}
+                {r.coverUrl && (
+                  <Image
+                    src={r.coverUrl}
+                    alt={r.coverAlt || r.title}
+                    width={240}
+                    height={240}
+                    unoptimized
+                  />
+                )}
                 {r.isLatest && <span className="os-record__badge">Latest</span>}
                 {playable && (
                   <span className="os-record__play" aria-hidden="true">

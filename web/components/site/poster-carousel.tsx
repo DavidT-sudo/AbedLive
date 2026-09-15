@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef } from "react";
 
 export type PosterCarouselItem = {
@@ -33,10 +34,13 @@ export function PosterCarousel({ items }: { items: PosterCarouselItem[] }) {
         {items.map((item) => (
           <figure className="poster-carousel__item" data-carousel-item role="listitem" key={item.id}>
             {item.posterUrl && (
-              <img
+              <Image
                 className="poster-carousel__image"
                 src={item.posterUrl}
                 alt={item.posterAlt || `Open Sky Gathering ${item.title}`}
+                width={320}
+                height={420}
+                unoptimized
               />
             )}
             <figcaption className="poster-carousel__caption">

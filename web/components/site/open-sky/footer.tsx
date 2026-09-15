@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { getContactInfo, getSocialLinks } from "@/lib/content";
 
 export function OpenSkyFooter({
@@ -30,7 +31,7 @@ export function OpenSkyFooter({
           </div>
         )}
         <div className="os-footer__base">
-          <img src="/media/signature-white.png" alt="Abed" />
+          <Image src="/media/signature-white.png" alt="Abed" width={220} height={64} />
           <div className="os-footer__tagline">{contact.footerTagline}</div>
         </div>
       </div>

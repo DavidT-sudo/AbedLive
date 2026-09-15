@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 type NavLink = { href: string; label: string; emphasize?: boolean };
@@ -49,15 +50,19 @@ export function SiteHeader({
   return (
     <header className="site-header" data-scrolled={solid}>
       <a href="#top" onClick={() => setOpen(false)}>
-        <img
+        <Image
           className="site-header__logo site-header__logo--dark"
           src={logoUrl}
           alt="Abed"
+          width={200}
+          height={52}
         />
-        <img
+        <Image
           className="site-header__logo site-header__logo--light"
           src={logoUrlLight}
           alt="Abed"
+          width={200}
+          height={52}
         />
       </a>
       <nav className="site-header__nav" aria-label="Primary">

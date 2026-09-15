@@ -75,6 +75,8 @@ services:
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
+    ports:
+      - "5434:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-abedlive}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in Coolify's environment variables}
@@ -102,6 +104,10 @@ services:
       context: ./docker
       dockerfile: seaweedfs.Dockerfile
     restart: unless-stopped
+    ports:
+      - "8333:8333"
+      - "9333:9333"
+      - "8080:8080"
     command:
       - server
       - -dir=/data
@@ -141,6 +147,8 @@ services:
     build:
       context: .
     restart: unless-stopped
+    ports:
+      - "3000:3000"
     env_file: .env
     environment:
       NODE_ENV: production

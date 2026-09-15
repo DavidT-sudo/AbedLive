@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getHero } from "@/lib/content";
 import { updateHero } from "./actions";
 
@@ -51,10 +52,13 @@ export default async function AdminHeroPage() {
           <label>
             Background image
             {hero?.imageUrl && (
-              <img
+              <Image
                 src={hero.imageUrl}
                 alt=""
-                style={{ width: 160, height: 100, objectFit: "cover", margin: "6px 0" }}
+                width={160}
+                height={100}
+                unoptimized
+                style={{ objectFit: "cover", margin: "6px 0" }}
               />
             )}
             <input type="file" name="image" accept="image/*" />

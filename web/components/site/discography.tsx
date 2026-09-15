@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import type { getReleases } from "@/lib/content";
 import { SpotifyDrawer } from "@/components/site/spotify-drawer";
@@ -53,10 +54,13 @@ export function Discography({
               >
                 {r.coverUrl && (
                   <div className="release-row__cover-wrap">
-                    <img
+                    <Image
                       className="release-row__cover"
                       src={r.coverUrl}
                       alt={r.coverAlt || r.title}
+                      width={120}
+                      height={120}
+                      unoptimized
                     />
                     {playable && (
                       <span className="release-row__play" aria-hidden="true">

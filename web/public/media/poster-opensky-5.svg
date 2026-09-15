@@ -1,0 +1,17 @@
+<svg width="800" height="1000" viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="sky5" cx="50%" cy="28%" r="70%">
+      <stop offset="0%" stop-color="#1a1610"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#sky5)"/>
+  <circle cx="400" cy="300" r="90" fill="none" stroke="#c8952f" stroke-width="2" opacity="0.5"/>
+  <circle cx="400" cy="300" r="60" fill="#c8952f" opacity="0.15"/>
+  <line x1="0" y1="620" x2="800" y2="620" stroke="#c8952f" stroke-width="1" opacity="0.35"/>
+  <text x="400" y="480" text-anchor="middle" font-family="Georgia, serif" font-size="20" letter-spacing="6" fill="#c8952f">OPEN SKY GATHERING</text>
+  <text x="400" y="560" text-anchor="middle" font-family="Georgia, serif" font-size="64" fill="#ffffff">5th Edition</text>
+  <text x="400" y="610" text-anchor="middle" font-family="Georgia, serif" font-size="30" font-style="italic" fill="#c8952f">Amplified</text>
+  <text x="400" y="900" text-anchor="middle" font-family="Georgia, serif" font-size="18" letter-spacing="4" fill="rgba(255,255,255,0.6)">2026 &#183; MOLEPOLOLE</text>
+  <text x="400" y="950" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="rgba(255,255,255,0.35)">Placeholder artwork &#8212; replace via /admin/open-sky</text>
+</svg>

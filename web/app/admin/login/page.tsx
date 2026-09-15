@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
@@ -29,7 +31,13 @@ function LoginForm() {
 
   return (
     <form onSubmit={onSubmit} className="admin-auth-card">
-      <img className="admin-auth-card__mark" src="/media/signature-black.png" alt="Abed" />
+      <Image
+        className="admin-auth-card__mark"
+        src="/media/signature-black.png"
+        alt="Abed"
+        width={180}
+        height={52}
+      />
       <div>
         <h1>Admin</h1>
         <p className="admin-auth-card__subtitle">Sign in to edit abedlive.com</p>
@@ -69,9 +77,9 @@ export default function LoginPage() {
       <Suspense fallback={null}>
         <LoginForm />
       </Suspense>
-      <a className="admin-auth-shell__back" href="/">
+      <Link className="admin-auth-shell__back" href="/">
         ← Back to abedlive.com
-      </a>
+      </Link>
     </div>
   );
 }

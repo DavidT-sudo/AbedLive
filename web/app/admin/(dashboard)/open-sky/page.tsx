@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getOpenSkyIntro, getOpenSkyEditions } from "@/lib/content";
 import {
   updateOpenSkyIntro,
@@ -60,7 +61,9 @@ export default async function AdminOpenSkyPage() {
                   <button type="submit" disabled={i === editions.length - 1}>↓</button>
                 </form>
               </div>
-              {e.posterUrl && <img src={e.posterUrl} alt="" />}
+              {e.posterUrl && (
+                <Image src={e.posterUrl} alt="" width={120} height={120} unoptimized />
+              )}
               <form
                 style={{ flex: 1, display: "flex", gap: 10, alignItems: "center" }}
                 action={updateOpenSkyEdition.bind(null, e.id)}

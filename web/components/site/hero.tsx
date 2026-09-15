@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { getHero } from "@/lib/content";
 
 export function Hero({ hero }: { hero: Awaited<ReturnType<typeof getHero>> }) {
@@ -5,10 +6,12 @@ export function Hero({ hero }: { hero: Awaited<ReturnType<typeof getHero>> }) {
   return (
     <section className="hero" id="top">
       {hero.imageUrl && (
-        <img
+        <Image
           className="hero__image"
           src={hero.imageUrl}
           alt={hero.imageAlt || ""}
+          width={1600}
+          height={900}
         />
       )}
       <div className="hero__scrim" />
