@@ -49,9 +49,7 @@ export function SiteFooter({
       </div>
       <div className="site-footer__base">
         <Image src={logoUrl} alt="Abed" width={200} height={52} unoptimized />
-        <div className="site-footer__base-note flex">
-          {contact.footerTagline}
-        </div>
+        <div className="site-footer__base-note">{contact.footerTagline}</div>
         <div className="site-footer__copyright">{contact.copyrightText}</div>
       </div>
     </section>
