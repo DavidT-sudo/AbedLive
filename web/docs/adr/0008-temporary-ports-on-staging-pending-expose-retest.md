@@ -1,9 +1,12 @@
 # 0008 — Temporary: `ports:` re-added to staging services, pending an `expose:`-only retest
 
 ## Status
-Accepted (temporary) — 2026-09-15. Deliberately deviates from
-[0003](0003-coolify-domain-routing-via-service-fqdn.md); do not change
-either direction without a controlled test (see Next step).
+**Reverted, 2026-09-15 (same day).** The retest this ADR called for
+happened faster than planned — not as a controlled test, but because the
+very next Coolify redeploy failed outright. `ports:` has been removed
+from `docker-compose.staging.yaml` again; the file now matches
+[0003](0003-coolify-domain-routing-via-service-fqdn.md) once more. See
+Resolution below.
 
 ## Context
 After the SeaweedFS crash-loop was fixed by baking its entrypoint into a
@@ -59,3 +62,31 @@ Before removing `ports:` from `docker-compose.staging.yaml`: redeploy with
 and serve correctly, and confirm no port collision with `OmerOhmLABS`.
 Only revert this ADR's decision (back to 0003's original state) once that
 test has actually been run — not on the assumption that it'll work.
+
+## Resolution
+The very next redeploy after this ADR was written (commit `e20ba1b`,
+2026-09-15 11:47) failed outright:
+
+```
+Error response from daemon: failed to set up container networking:
+driver failed programming external connectivity on endpoint
+seaweedfs-trhkib2ylcxj0avc0klkzewc-094723146935: Bind for 0.0.0.0:8080
+failed: port is already allocated
+```
+
+`seaweedfs`'s `ports: - "8080:8080"` collided with something else already
+bound to `8080` on the shared host. Coolify had already removed the old
+containers before attempting to start the new ones, so the deploy left
+the resource with no running `app`/`seaweedfs` at all — both
+`abedlive.omerohmlabs.com` and `abedmedia.omerohmlabs.com` returned
+Traefik's "no available server" until this was fixed. This is the same
+class of failure 0003 originally documented (a port collision on a shared
+host caused by `ports:`), just on `8080` instead of `3000` this time —
+confirming the risk this ADR flagged was real, not hypothetical.
+
+`ports:` has been removed from `postgres`, `seaweedfs`, and `app` in
+`docker-compose.staging.yaml`. The file is back to `expose:`-only,
+matching 0003. The `docker-compose.staging.override.yml` idea from
+Consequences (above) is still the right way to get local host-port access
+for testing without risking this again — worth doing before anyone next
+needs local access to the staging stack's containers.

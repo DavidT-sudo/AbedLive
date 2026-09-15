@@ -9,12 +9,12 @@ Context, Decision, Consequences.
 | --- | --- | --- |
 | [0001](0001-separate-compose-files-for-local-vs-coolify.md) | Separate Compose files for local dev vs. Coolify staging/production | Accepted |
 | [0002](0002-runtime-generated-seaweedfs-credentials.md) | Generate SeaweedFS S3 credentials at container runtime, not commit them | Accepted |
-| [0003](0003-coolify-domain-routing-via-service-fqdn.md) | Coolify domain routing via `expose:` + `SERVICE_FQDN_<ID>_<PORT>`, not `ports:` | Accepted (see amendment — currently deviated, see 0008) |
+| [0003](0003-coolify-domain-routing-via-service-fqdn.md) | Coolify domain routing via `expose:` + `SERVICE_FQDN_<ID>_<PORT>`, not `ports:` | Accepted |
 | [0004](0004-manual-profile-gated-migrations-on-coolify.md) | Run DB migrations as a manual, profile-gated one-off on Coolify | Superseded by 0006 |
 | [0005](0005-structured-sections-over-freeform-page-builder.md) | Admin content stays structured typed sections — no freeform page builder | **Proposed — flagged for decision** |
 | [0006](0006-no-one-off-containers-on-coolify.md) | No one-off containers of any kind in the Coolify Compose stack | Accepted (see amendment) |
 | [0007](0007-bake-seaweedfs-entrypoint-into-image.md) | Bake the SeaweedFS entrypoint script into a custom image, don't bind-mount it | Accepted |
-| [0008](0008-temporary-ports-on-staging-pending-expose-retest.md) | Temporary: `ports:` re-added to staging services, pending an `expose:`-only retest | **Accepted (temporary) — pending retest** |
+| [0008](0008-temporary-ports-on-staging-pending-expose-retest.md) | Temporary: `ports:` re-added to staging services, pending an `expose:`-only retest | Reverted — broke the next deploy, see 0003 |
 
 Add a new ADR whenever a decision would be expensive to reverse or non-obvious
 to a future reader from the code alone (a library/pattern choice made *because*

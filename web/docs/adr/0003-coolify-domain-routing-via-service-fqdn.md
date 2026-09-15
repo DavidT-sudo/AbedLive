@@ -45,9 +45,11 @@ Coolify's proxy entirely for direct host-interface access.
   on the same server — a working file's specific choices aren't
   necessarily *why* it works.
 
-**Amendment, 2026-09-15:** `docker-compose.staging.yaml` currently has
-`ports:` again on `postgres`/`seaweedfs`/`app`, reintroducing exactly the
-risk this ADR describes — deliberately, and temporarily, pending a
-controlled retest. See
-[0008](0008-temporary-ports-on-staging-pending-expose-retest.md) before
-assuming this file matches this ADR's decision today.
+**Amendment, 2026-09-15:** `docker-compose.staging.yaml` briefly had
+`ports:` reintroduced on `postgres`/`seaweedfs`/`app` the same day — and
+it broke the very next deploy (`seaweedfs`'s port `8080` collided with
+something else on the shared host, taking the whole resource offline).
+`ports:` has been removed again; the file matches this ADR's decision
+once more. Full story in
+[0008](0008-temporary-ports-on-staging-pending-expose-retest.md) — worth
+reading if anyone's ever tempted to add `ports:` back to this file again.
