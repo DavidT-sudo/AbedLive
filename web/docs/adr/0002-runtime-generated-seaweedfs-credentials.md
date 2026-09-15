@@ -42,3 +42,10 @@ container start, before `exec`-ing into `weed` itself.
   (`S3_ACCESS_KEY_ID`/`S3_SECRET_ACCESS_KEY`) should be rotated once
   staging is stable, since they were exposed in plaintext conversation
   even though never committed to git.
+
+**Note:** this ADR is about generating the credentials at container
+*runtime* from env vars — that part is unchanged and still accurate. How
+the generating *script itself* gets into the container changed later: it
+was originally bind-mounted, which caused real, repeated production
+failures — see [0007](0007-bake-seaweedfs-entrypoint-into-image.md),
+which moved it to being baked into a custom image at build time instead.
