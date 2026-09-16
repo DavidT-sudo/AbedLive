@@ -1,6 +1,6 @@
-import Image from "next/image";
 import type {getHero, getReleases} from "@/lib/content";
 import {ListenButton} from "@/components/site/listen-button";
+import {SafeImage} from "@/components/site/safe-image";
 
 export function Hero({
   hero,
@@ -13,7 +13,7 @@ export function Hero({
   return (
     <section className="hero" id="top">
       {hero.imageUrl && (
-        <Image
+        <SafeImage
           className="hero__image"
           src={hero.imageUrl}
           alt={hero.imageAlt || ""}

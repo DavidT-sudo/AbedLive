@@ -1,11 +1,16 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { releases } from "@/db/schema";
 import { requireEditor } from "@/lib/session";
-import { uploadMediaFromForm } from "@/lib/media-actions";
+import {
+  uploadMediaFromForm,
+  removeMedia,
+  MediaValidationError,
+} from "@/lib/media-actions";
 import { parseSpotifyUrl } from "@/lib/spotify";
 
 /** Only ever stores a value that parses as a real Spotify content URL. */
@@ -25,7 +30,15 @@ export async function addRelease(formData: FormData) {
   const rows = await db.select().from(releases);
   const maxOrder = rows.reduce((m, r) => Math.max(m, r.sortOrder), -1);
   const title = String(formData.get("title") || "");
-  const coverImageId = await uploadMediaFromForm(formData, "cover", { alt: title });
+  let coverImageId: string | null;
+  try {
+    coverImageId = await uploadMediaFromForm(formData, "cover", { alt: title });
+  } catch (err) {
+    if (err instanceof MediaValidationError) {
+      redirect(`/admin/discography?error=${encodeURIComponent(err.message)}`);
+    }
+    throw err;
+  }
 
   await db.insert(releases).values({
     title,
@@ -44,7 +57,15 @@ export async function addRelease(formData: FormData) {
 export async function updateRelease(id: string, formData: FormData) {
   await requireEditor();
   const title = String(formData.get("title") || "");
-  const coverImageId = await uploadMediaFromForm(formData, "cover", { alt: title });
+  let coverImageId: string | null;
+  try {
+    coverImageId = await uploadMediaFromForm(formData, "cover", { alt: title });
+  } catch (err) {
+    if (err instanceof MediaValidationError) {
+      redirect(`/admin/discography?error=${encodeURIComponent(err.message)}`);
+    }
+    throw err;
+  }
 
   await db
     .update(releases)
@@ -65,6 +86,18 @@ export async function updateRelease(id: string, formData: FormData) {
 export async function deleteRelease(id: string) {
   await requireEditor();
   await db.delete(releases).where(eq(releases.id, id));
+  refresh();
+}
+
+export async function removeReleaseCover(id: string) {
+  await requireEditor();
+  const [row] = await db.select().from(releases).where(eq(releases.id, id));
+  if (!row?.coverImageId) return;
+
+  const oldImageId = row.coverImageId;
+  await db.update(releases).set({ coverImageId: null }).where(eq(releases.id, id));
+  await removeMedia(oldImageId);
+
   refresh();
 }
 

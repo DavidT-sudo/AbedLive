@@ -1,18 +1,36 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { heroContent } from "@/db/schema";
 import { requireEditor } from "@/lib/session";
-import { uploadMediaFromForm } from "@/lib/media-actions";
+import {
+  uploadMediaFromForm,
+  removeMedia,
+  MediaValidationError,
+} from "@/lib/media-actions";
+
+function refresh() {
+  revalidatePath("/");
+  revalidatePath("/admin/hero");
+}
 
 export async function updateHero(formData: FormData) {
   await requireEditor();
 
-  const imageId = await uploadMediaFromForm(formData, "image", {
-    alt: "Hero image",
-  });
+  let imageId: string | null;
+  try {
+    imageId = await uploadMediaFromForm(formData, "image", {
+      alt: "Hero image",
+    });
+  } catch (err) {
+    if (err instanceof MediaValidationError) {
+      redirect(`/admin/hero?error=${encodeURIComponent(err.message)}`);
+    }
+    throw err;
+  }
 
   await db
     .update(heroContent)
@@ -30,6 +48,20 @@ export async function updateHero(formData: FormData) {
     })
     .where(eq(heroContent.id, "default"));
 
-  revalidatePath("/");
-  revalidatePath("/admin/hero");
+  refresh();
+}
+
+export async function removeHeroImage() {
+  await requireEditor();
+  const [row] = await db.select().from(heroContent).where(eq(heroContent.id, "default"));
+  if (!row?.imageId) return;
+
+  const oldImageId = row.imageId;
+  await db
+    .update(heroContent)
+    .set({ imageId: null, updatedAt: new Date() })
+    .where(eq(heroContent.id, "default"));
+  await removeMedia(oldImageId);
+
+  refresh();
 }

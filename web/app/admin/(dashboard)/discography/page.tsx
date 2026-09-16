@@ -1,14 +1,27 @@
 import Image from "next/image";
 import {getReleases} from "@/lib/content";
-import {addRelease, updateRelease, deleteRelease, moveRelease} from "./actions";
+import {ACCEPTED_IMAGE_ACCEPT_ATTR, ACCEPTED_IMAGE_FORMATS_LABEL} from "@/lib/media-validation";
+import {
+  addRelease,
+  updateRelease,
+  deleteRelease,
+  moveRelease,
+  removeReleaseCover,
+} from "./actions";
 
-export default async function AdminDiscographyPage() {
+export default async function AdminDiscographyPage({
+  searchParams,
+}: {
+  searchParams: Promise<{error?: string}>;
+}) {
   const releases = await getReleases();
+  const {error} = await searchParams;
 
   return (
     <>
       <h1>Discography</h1>
       <p className="admin-subtitle">Releases shown in order, newest first.</p>
+      {error && <p className="admin-error" style={{marginBottom: 20}}>{error}</p>}
       <div className="admin-card">
         <div className="admin-list">
           {releases.map((r, i) => (
@@ -30,13 +43,24 @@ export default async function AdminDiscographyPage() {
                 </form>
               </div>
               {r.coverUrl && (
-                <Image
-                  src={r.coverUrl}
-                  alt=""
-                  width={120}
-                  height={120}
-                  unoptimized
-                />
+                <div style={{display: "flex", flexDirection: "column", gap: 6, flex: "none"}}>
+                  <Image
+                    src={r.coverUrl}
+                    alt=""
+                    width={120}
+                    height={120}
+                    unoptimized
+                  />
+                  <form action={removeReleaseCover.bind(null, r.id)}>
+                    <button
+                      className="admin-btn admin-btn--ghost"
+                      type="submit"
+                      style={{fontSize: 11, padding: "5px 8px", width: "100%"}}
+                    >
+                      Remove
+                    </button>
+                  </form>
+                </div>
               )}
               <form
                 className="admin-form"
@@ -85,7 +109,10 @@ export default async function AdminDiscographyPage() {
                     />
                     Mark as latest
                   </label>
-                  <input type="file" name="cover" accept="image/*" />
+                  <div style={{display: "flex", flexDirection: "column", gap: 4}}>
+                    <input type="file" name="cover" accept={ACCEPTED_IMAGE_ACCEPT_ATTR} />
+                    <span className="admin-file-hint">{ACCEPTED_IMAGE_FORMATS_LABEL}. Max 15MB.</span>
+                  </div>
                 </div>
                 <input
                   name="spotifyUrl"
@@ -120,7 +147,10 @@ export default async function AdminDiscographyPage() {
             <input name="note" placeholder="Note" />
             <input name="year" type="number" placeholder="Year" required />
           </div>
-          <input type="file" name="cover" accept="image/*" />
+          <div style={{display: "flex", flexDirection: "column", gap: 4}}>
+            <input type="file" name="cover" accept={ACCEPTED_IMAGE_ACCEPT_ATTR} />
+            <span className="admin-file-hint">Accepted formats: {ACCEPTED_IMAGE_FORMATS_LABEL}. Max 15MB.</span>
+          </div>
           <input
             name="spotifyUrl"
             placeholder="Spotify link (track, album, or artist — open.spotify.com/...)"

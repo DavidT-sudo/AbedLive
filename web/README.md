@@ -39,6 +39,21 @@ hero, awards strip, about, discography, live highlights, Open Sky Gathering
 upload straight to the S3-compatible bucket and are tracked in a `media`
 table.
 
+**Image uploads** (`lib/media-validation.ts`) are sniffed by their real
+bytes with `sharp` before ever reaching storage — never trusted by file
+extension or the browser-supplied MIME type — and rejected with an inline
+error on the admin page if they're not a decodable JPG, PNG, WebP, or GIF
+(max 15MB), or if they're too large. This catches mislabeled/corrupt files
+(e.g. an iPhone HEIC saved with a `.jpg` extension) that would otherwise
+upload successfully and then silently fail to render on the site. Each
+admin section with an image (Hero, Discography, Open Sky editions) has its
+own "Remove" button to clear just that image without deleting the parent
+record. On the public site, `components/site/safe-image.tsx` wraps every
+uploaded image and falls back to a generic placeholder
+(`public/media/image-placeholder.svg`) if the real file ever fails to load
+at runtime — e.g. an object deleted from the bucket out from under a row
+that still references it.
+
 There is no public sign-up — the first admin is created with
 `npm run admin:create`, and that admin adds teammates from `/admin/team`
 (Better Auth's admin plugin: roles are `admin` and `editor`).

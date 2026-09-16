@@ -1,5 +1,5 @@
-import Image from "next/image";
 import type {getMediaSlot} from "@/lib/content";
+import {SafeImage} from "@/components/site/safe-image";
 
 export function PurposeBreak({
   slot,
@@ -11,7 +11,7 @@ export function PurposeBreak({
   return (
     <div className="purpose-break">
       {slot?.url && (
-        <Image
+        <SafeImage
           className="purpose-break__image"
           src={slot.url}
           alt={slot.alt || ""}

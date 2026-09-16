@@ -1,23 +1,31 @@
 import Image from "next/image";
 import {getOpenSkyIntro, getOpenSkyEditions} from "@/lib/content";
+import {ACCEPTED_IMAGE_ACCEPT_ATTR, ACCEPTED_IMAGE_FORMATS_LABEL} from "@/lib/media-validation";
 import {
   updateOpenSkyIntro,
   addOpenSkyEdition,
   updateOpenSkyEdition,
   deleteOpenSkyEdition,
   moveOpenSkyEdition,
+  removeOpenSkyEditionPoster,
 } from "./actions";
 
-export default async function AdminOpenSkyPage() {
+export default async function AdminOpenSkyPage({
+  searchParams,
+}: {
+  searchParams: Promise<{error?: string}>;
+}) {
   const [intro, editions] = await Promise.all([
     getOpenSkyIntro(),
     getOpenSkyEditions(),
   ]);
+  const {error} = await searchParams;
 
   return (
     <>
       <h1>Open Sky Gathering</h1>
       <p className="admin-subtitle">Intro copy and edition posters.</p>
+      {error && <p className="admin-error" style={{marginBottom: 20}}>{error}</p>}
 
       <div className="admin-card">
         <form className="admin-form" action={updateOpenSkyIntro}>
@@ -71,13 +79,24 @@ export default async function AdminOpenSkyPage() {
                 </form>
               </div>
               {e.posterUrl && (
-                <Image
-                  src={e.posterUrl}
-                  alt=""
-                  width={120}
-                  height={120}
-                  unoptimized
-                />
+                <div style={{display: "flex", flexDirection: "column", gap: 6, flex: "none"}}>
+                  <Image
+                    src={e.posterUrl}
+                    alt=""
+                    width={120}
+                    height={120}
+                    unoptimized
+                  />
+                  <form action={removeOpenSkyEditionPoster.bind(null, e.id)}>
+                    <button
+                      className="admin-btn admin-btn--ghost"
+                      type="submit"
+                      style={{fontSize: 11, padding: "5px 8px", width: "100%"}}
+                    >
+                      Remove
+                    </button>
+                  </form>
+                </div>
               )}
               <form
                 style={{
@@ -89,7 +108,10 @@ export default async function AdminOpenSkyPage() {
                 action={updateOpenSkyEdition.bind(null, e.id)}
               >
                 <input name="title" defaultValue={e.title} style={{flex: 1}} />
-                <input type="file" name="poster" accept="image/*" />
+                <div style={{display: "flex", flexDirection: "column", gap: 4}}>
+                  <input type="file" name="poster" accept={ACCEPTED_IMAGE_ACCEPT_ATTR} />
+                  <span className="admin-file-hint">{ACCEPTED_IMAGE_FORMATS_LABEL}. Max 15MB.</span>
+                </div>
                 <div className="admin-actions">
                   <button className="admin-btn admin-btn--ghost" type="submit">
                     Save
@@ -107,7 +129,10 @@ export default async function AdminOpenSkyPage() {
         <h3 style={{fontSize: 13, marginTop: 20}}>Add an edition</h3>
         <form className="admin-form-row" action={addOpenSkyEdition}>
           <input name="title" placeholder="e.g. 5th Edition" required />
-          <input type="file" name="poster" accept="image/*" />
+          <div style={{display: "flex", flexDirection: "column", gap: 4}}>
+            <input type="file" name="poster" accept={ACCEPTED_IMAGE_ACCEPT_ATTR} />
+            <span className="admin-file-hint">Accepted formats: {ACCEPTED_IMAGE_FORMATS_LABEL}. Max 15MB.</span>
+          </div>
           <button className="admin-btn" type="submit">
             Add
           </button>

@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import {useEffect, useRef, useState} from "react";
+import {SafeImage} from "@/components/site/safe-image";
 
 export type PosterCarouselItem = {
   id: string;
@@ -96,13 +96,12 @@ export function PosterCarousel({items}: {items: PosterCarouselItem[]}) {
           >
             {item.posterUrl && (
               <div className="poster-carousel__image-wrap">
-                <Image
+                <SafeImage
                   className="poster-carousel__image"
                   src={item.posterUrl}
                   alt={item.posterAlt || `Open Sky Gathering ${item.title}`}
                   width={320}
                   height={420}
-                  unoptimized
                 />
                 <div className="poster-carousel__glass" aria-hidden="true" />
               </div>

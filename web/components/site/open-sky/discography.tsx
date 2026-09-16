@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import type {getReleases} from "@/lib/content";
 import {usePlayer} from "@/components/site/player-context";
+import {SafeImage} from "@/components/site/safe-image";
 
 type Release = Awaited<ReturnType<typeof getReleases>>[number];
 
@@ -70,12 +70,11 @@ export function OpenSkyDiscography({
                 className={`os-record__art${playable ? " os-record__art--playable" : ""}`}
               >
                 {r.coverUrl && (
-                  <Image
+                  <SafeImage
                     src={r.coverUrl}
                     alt={r.coverAlt || r.title}
                     width={240}
                     height={240}
-                    unoptimized
                   />
                 )}
                 {r.isLatest && <span className="os-record__badge">Latest</span>}

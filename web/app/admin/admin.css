@@ -345,6 +345,15 @@
   resize: vertical;
   min-height: 80px;
 }
+.admin-file-hint {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--admin-ink-softer);
+}
+.admin-image-preview {
+  display: inline-block;
+  width: fit-content;
+}
 .admin-form-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));

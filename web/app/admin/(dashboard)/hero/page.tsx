@@ -1,9 +1,15 @@
 import Image from "next/image";
 import {getHero} from "@/lib/content";
-import {updateHero} from "./actions";
+import {ACCEPTED_IMAGE_ACCEPT_ATTR, ACCEPTED_IMAGE_FORMATS_LABEL} from "@/lib/media-validation";
+import {updateHero, removeHeroImage} from "./actions";
 
-export default async function AdminHeroPage() {
+export default async function AdminHeroPage({
+  searchParams,
+}: {
+  searchParams: Promise<{error?: string}>;
+}) {
   const hero = await getHero();
+  const {error} = await searchParams;
 
   return (
     <>
@@ -11,6 +17,7 @@ export default async function AdminHeroPage() {
       <p className="admin-subtitle">
         The full-bleed section at the top of the homepage.
       </p>
+      {error && <p className="admin-error" style={{marginBottom: 20}}>{error}</p>}
       <div className="admin-card">
         <form className="admin-form" action={updateHero}>
           <div className="admin-form-row">
@@ -68,17 +75,27 @@ export default async function AdminHeroPage() {
           <label>
             Background image
             {hero?.imageUrl && (
-              <Image
-                src={hero.imageUrl}
-                alt=""
-                width={160}
-                height={100}
-                unoptimized
-                style={{objectFit: "cover", margin: "6px 0"}}
-              />
+              <div className="admin-image-preview">
+                <Image
+                  src={hero.imageUrl}
+                  alt=""
+                  width={160}
+                  height={100}
+                  unoptimized
+                  style={{objectFit: "cover"}}
+                />
+              </div>
             )}
-            <input type="file" name="image" accept="image/*" />
+            <input type="file" name="image" accept={ACCEPTED_IMAGE_ACCEPT_ATTR} />
+            <span className="admin-file-hint">Accepted formats: {ACCEPTED_IMAGE_FORMATS_LABEL}. Max 15MB.</span>
           </label>
+          {hero?.imageUrl && (
+            <form action={removeHeroImage}>
+              <button className="admin-btn admin-btn--ghost" type="submit">
+                Remove background image
+              </button>
+            </form>
+          )}
           <div className="admin-actions">
             <button className="admin-btn" type="submit">
               Save
