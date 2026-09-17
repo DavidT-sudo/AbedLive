@@ -1,0 +1,33 @@
+{
+  "name": "AbedLive_devContainer",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+
+  "forwardPorts": [3000, 5432, 8333, 9333],
+  "portsAttributes": {
+    "3000": { "label": "Next.js app", "onAutoForward": "openBrowser" },
+    "5432": { "label": "Postgres" },
+    "8333": { "label": "SeaweedFS S3 API" },
+    "9333": { "label": "SeaweedFS master" }
+  },
+
+  // Installs real deps, creates the SeaweedFS bucket, and migrates +
+  // seeds the database — see .devcontainer/setup.sh for what each step
+  // does and why.
+  "postCreateCommand": "sh .devcontainer/setup.sh",
+
+  "customizations": {
+    "vscode": {
+      // Matches this repo's actual tooling — no Prettier config/dependency
+      // here, so nothing is added that would reformat code to rules the
+      // project doesn't define.
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg"
+      ]
+    }
+  }
+}

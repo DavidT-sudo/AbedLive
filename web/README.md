@@ -30,6 +30,20 @@ and edit content.
 
 Generate a secret for `BETTER_AUTH_SECRET` with `openssl rand -base64 32`.
 
+### Or: Dev Container
+
+`.devcontainer/` sets up the same three pieces (app, Postgres, SeaweedFS)
+as an isolated Docker Compose stack (project name `AbedLive_devContainer`)
+for editors that support Dev Containers (VS Code's "Reopen in Container",
+the `devcontainer` CLI, GitHub Codespaces, JetBrains Gateway). It still
+needs `web/.env` created first (`cp .env.example .env`) — Compose reads it
+before the container-creation hook that would otherwise set it up. After
+that, opening the container installs dependencies, creates the SeaweedFS
+bucket, and migrates + seeds the database automatically
+(`.devcontainer/setup.sh`); just run `npm run dev` once it's ready. This is
+a separate, dev-only compose file — it doesn't replace or affect
+`docker-compose.yml` or `docker-compose.staging.yaml`.
+
 ## Content model
 
 Everything editable from `/admin` lives in Postgres (`db/schema.ts`):

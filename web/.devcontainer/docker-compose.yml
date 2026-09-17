@@ -1,0 +1,86 @@
+# Dev Container stack — for interactive local development in an editor
+# (VS Code "Reopen in Container", the devcontainer CLI, GitHub Codespaces,
+# JetBrains Gateway, etc.), or just `docker compose -f .devcontainer/
+# docker-compose.yml up` on its own. This is deliberately separate from
+# both web/docker-compose.yml (plain local dev via the production
+# Dockerfile) and web/docker-compose.staging.yaml (Coolify) — this one
+# trades production-parity for a fast edit/reload loop: the app service
+# bind-mounts the real source tree instead of building an image from it,
+# so changes on disk are picked up immediately by `npm run dev`.
+#
+# Services are named app / db / seaweed to match what's asked for; they
+# play the same roles as app / postgres / seaweedfs in the other two
+# compose files.
+
+name: AbedLive_devContainer
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: abedlive
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: abedlive
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U abedlive"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      # Host access for a local DB client (psql, TablePlus, etc.) alongside
+      # the container's own DATABASE_URL, which uses the service name.
+      - "5432:5432"
+
+  seaweed:
+    build:
+      context: ../docker
+      dockerfile: seaweedfs.Dockerfile
+    restart: unless-stopped
+    command:
+      - server
+      - -dir=/data
+      - -s3
+      - -s3.config=/etc/seaweedfs/s3.json
+      - -s3.port=8333
+    env_file:
+      - ../.env
+    volumes:
+      - seaweed_data:/data
+    ports:
+      - "8333:8333" # S3 API — also what S3_PUBLIC_URL should point at
+      - "9333:9333" # master UI/status, handy for `weed shell` from the host
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    environment:
+      # Override just the hostnames from .env: inside this network the
+      # other services are reachable by service name, not localhost.
+      DATABASE_URL: postgresql://abedlive:changeme@db:5432/abedlive
+      S3_ENDPOINT: http://seaweed:8333
+    volumes:
+      # Bind-mount the whole app directory for live editing; node_modules
+      # gets its own named volume so the container's own (Linux-native)
+      # install never fights with anything installed on the host OS.
+      - ..:/workspace:cached
+      - node_modules:/workspace/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+      seaweed:
+        condition: service_started
+    ports:
+      - "3000:3000"
+    command: sleep infinity
+
+volumes:
+  postgres_data:
+  seaweed_data:
+  node_modules:
