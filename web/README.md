@@ -54,6 +54,15 @@ uploaded image and falls back to a generic placeholder
 at runtime — e.g. an object deleted from the bucket out from under a row
 that still references it.
 
+Uploads go through a Server Action, which Next.js caps at 1MB by default
+regardless of anything this app does — well under a real poster flyer or
+phone photo. `next.config.ts` raises this
+(`experimental.serverActions.bodySizeLimit`) to 20MB, comfortably above
+`MAX_IMAGE_BYTES`, so a file within our own limit never gets rejected by
+Next's earlier, stricter one first. If an upload ever fails with "Body
+exceeded ... limit" instead of one of our own validation messages, that
+ceiling needs raising to match.
+
 There is no public sign-up — the first admin is created with
 `npm run admin:create`, and that admin adds teammates from `/admin/team`
 (Better Auth's admin plugin: roles are `admin` and `editor`).
