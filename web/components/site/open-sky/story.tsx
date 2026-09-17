@@ -37,7 +37,7 @@ export function OpenSkyStory({
         </div>
         <div className="os-story__stats">
           <div>
-            <div className="os-story__stat-num">3×</div>
+            <div className="os-story__stat-num">4×</div>
             <div className="os-story__stat-label">
               Gospel Awards
               <br />
@@ -45,7 +45,7 @@ export function OpenSkyStory({
             </div>
           </div>
           <div>
-            <div className="os-story__stat-num">2×</div>
+            <div className="os-story__stat-num">3×</div>
             <div className="os-story__stat-label">
               Award
               <br />

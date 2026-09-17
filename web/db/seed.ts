@@ -96,11 +96,11 @@ async function main() {
 
   console.log("Seeding award stats...");
   await db.insert(awardStats).values([
-    { label: "3× Botswana Gospel Awards nominee", sortOrder: 0 },
-    { label: "Winner — Best Contemporary Gospel", sortOrder: 1 },
-    { label: "Winner — Best Songwriter", sortOrder: 2 },
+    { label: "4× Botswana Gospel Awards nominee", sortOrder: 0 },
+    { label: "Winner — Best Contemporary Gospel (2019, for O Tsholofelo)", sortOrder: 1 },
+    { label: "Winner — Best Songwriter (2019)", sortOrder: 2 },
     { label: "4 releases · 2017—2025", sortOrder: 3 },
-    { label: "Winner — Best Contemporary Gospel (AGA, 2026)", sortOrder: 4 },
+    { label: "Winner — Best Contemporary Gospel (AGA, 2026 — for Kgosi Jeso EP)", sortOrder: 4 },
   ]);
 
   console.log("Seeding about...");
@@ -113,7 +113,7 @@ async function main() {
     paragraph1:
       "Abednico Wadingalo is a singer, songwriter and recording artist whose music blends Contemporary Gospel, Afro-Jazz, Praise and Worship. Born 16 February 1994 and based in Molepolole, his sound is rooted in faith, joy and the transformative power of salvation. A self-taught musician and director of Abed Live, he approaches his craft with a deep sense of purpose, infusing his performances with an uplifting energy that resonates with audiences.",
     paragraph2:
-      "Beyond music, Abed is a Real Estate Surveyor with a focus on Sustainable Development, embodying a balance between profession and passion. His work extends to vocal training through Transformative Drive, event management with Open Sky Gathering and the Abed Live Moments podcast series.",
+      "Beyond music, Abed is a Real Estate Professional, embodying a balance between profession and passion. His work extends to vocal training through Transformative Drive, event management with Open Sky Gathering and the Abed Live Moments podcast series.",
     quoteLabel: "His belief",
     quote: "With God, it can only get better.",
   });
@@ -121,7 +121,7 @@ async function main() {
   console.log("Seeding discography...");
   await db.insert(releases).values([
     {
-      title: "With Kgosi Jeso",
+      title: "Kgosi Jeso",
       subtitle: "(Live)",
       kind: "Extended play · Live",
       note: "Latest offering",
@@ -197,9 +197,9 @@ async function main() {
 
   console.log("Seeding live highlights...");
   await db.insert(liveHighlights).values([
-    { title: "Shout Praise Music Concert", subtitle: "Worship leader", sortOrder: 0 },
-    { title: "We Praise Music Show", subtitle: "Featured artist", sortOrder: 1 },
-    { title: "Contagious Youth Week Festival", subtitle: "Headline set", sortOrder: 2 },
+    { title: "Shout Praise Music Concert", subtitle: "Featured/Guest Artist · Selibe Phikwe", sortOrder: 0 },
+    { title: "We Praise Music Show", subtitle: "Featured/Guest Artist · Maun", sortOrder: 1 },
+    { title: "Contagious Youth Week Festival", subtitle: "Featured/Guest Artist · Selibe Phikwe", sortOrder: 2 },
   ]);
 
   console.log("Seeding Open Sky Gathering...");
@@ -207,7 +207,7 @@ async function main() {
     id: "default",
     eyebrow: "Event management · 2022—present",
     title: "Open Sky Gathering",
-    body: "Abed's own gathering — five editions of praise, worship, poetry and coffee under an open sky in Molepolole.",
+    body: "An annual gathering bringing people together for praise, worship, poetry and coffee under an open sky in Molepolole.",
     ctaLabel: "See all editions ↗",
     ctaHref: "#",
   });
